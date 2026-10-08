@@ -7,7 +7,7 @@
 - 저장소: KSNAM97/network-project
 - README.md: 구조, 단계, 설계 요약 / docs/: 전체 설계와 일정
 - 컨피그 저장: configs/<사이트>/<장비명>.cfg
-- 브랜치: feature/<역할>-<내용>, PR 후 Policy 담당 승인을 받아 main에 merge
+- 브랜치: feature/<역할>-<내용>, PR 후 본인 검토를 거쳐 main에 merge
 - 설계 반영: DC 서버 VLAN(50)은 DNS1(주 용도 DHCP)과 DB1 두 대로 구성 (DB 종류·DHCP 방식·접근 포트는 미확정)
 
 ■ 2. Jira

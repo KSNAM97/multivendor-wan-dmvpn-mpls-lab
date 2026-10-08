@@ -10,7 +10,7 @@ feature/policy-*
 ```
 
 작업은 각자의 `feature/<역할>-<내용>` 브랜치에서 진행하고, PR을 올려
-Policy 담당의 Review 승인 후 `main`에 merge합니다.
+본인 검토 후 `main`에 merge합니다.
 
 ## 브랜치 보호 설정 (레포 관리자가 1회 설정)
 
@@ -47,7 +47,7 @@ KAN-33: [Policy][vlan-br1-user] DMVPN Spoke 구성
 
 ### 역할 라벨
 
-2인 체제(확정): `Net-Cloud` / `Policy`
+1인 체제: 담당자는 한 명이며, 라벨 `Net-Cloud` / `Policy`는 작업 영역 구분용으로만 씁니다.
 
 ## Jira 연동
 

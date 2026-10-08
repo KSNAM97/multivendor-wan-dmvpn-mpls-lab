@@ -16,7 +16,7 @@
 | 장비 구성 | HQ (HQ-R1·HQ-R2, HQ-SW-1 ~ HQ-SW-3), DC (DC-R1 ~ DC-R4, DC-SW1 ~ DC-SW4-L3, DC-SW1·2-L2, DNS1, DB1), BR1 (BR1-R1·R2, BR1-SW1 ~ SW3-L3), BR2 (BR2-R1·R2, BR2-SW1·SW2-L3, BR2-SW3-L2), 호스트 H1·H2, ISP-1·ISP-2 (ISP-n-PE-A·P1·P2·PE-B 각 4대), Private Internet (PrivI-net) |
 | 핵심 기술 | 사이트 OSPF, ISP eBGP(라우터별 개별 AS), 정적 경로 + 재분배(IP SLA/track), DMVPN Phase3, IPsec, HSRP / VARP, EtherChannel, QoS, ACL 화이트리스트 |
 | 시뮬레이터 | GNS3 (Cisco 7200 / IOU, Arista cEOS) |
-| 일정 | 3.5주(2026-10-12 ~ 11-04), 2인 체제 (Net-Cloud 남기석 / Policy 남인탁) |
+| 일정 | 3.5주(2026-10-12 ~ 11-04), 1인 체제 (남기석) |
 | 검증 | 이중화 장애 실측 (FHRP, EtherChannel, ISP 장애, DMVPN Hub 장애), 트러블슈팅 로그 |
 
 ---
@@ -55,12 +55,14 @@ network-project/
 ├── docs/
 │   ├── network-project-final.md
 │   ├── port-mapping.md
-│   ├── schedule-2person.md
+│   ├── schedule.md
 │   └── archive/
-│       └── schedule-3person.md   (2인 체제 확정 전 계획, 보관)
+│       ├── schedule-2person.md   (2인 체제 계획, 보관)
+│       └── schedule-3person.md   (3인 체제 계획, 보관)
 ├── jira/
 │   ├── jira-tickets-3person.csv   (현재 Jira KAN 이슈 29개의 등록 기준, 라벨 net-cloud / policy, 마감일 포함)
-│   └── jira-tickets-2person.csv   (2인 체제 라벨 net-cloud 기준 참고안)
+│   └── archive/
+│       └── jira-tickets-2person.csv   (2인 체제 참고안, 보관)
 ├── slack/
 │   └── slack-announcement.md
 ├── topology/
@@ -89,7 +91,7 @@ network-project/
 | **3주** | 정책, 이중화 실측 | QoS 정책, 접근통제 ACL, 통합 테스트, FHRP / EtherChannel / ISP 장애 / DMVPN Hub 장애 실측, 트러블슈팅 로그 |
 | **3.5주** | 정리 | PPT 제작, 리허설 |
 
-> 역할 분담과 일별 목표 → [`docs/schedule-2person.md`](./docs/schedule-2person.md)  
+> 역할 분담과 일별 목표 → [`docs/schedule.md`](./docs/schedule.md)  
 > 전체 설계 → [`docs/network-project-final.md`](./docs/network-project-final.md)
 
 ---

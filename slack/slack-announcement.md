@@ -9,14 +9,13 @@ DC 내부 스위치 6대(L3 4대 + 서버용 L2 2대)만 Arista cEOS, 나머지�
 DC 서버 VLAN(50)은 DNS1(주 용도 DHCP)과 DB1 두 대로 구성합니다 (DB 종류·DHCP 방식·접근 포트는 미확정).
 
 ■ 역할 분담
-- Net-Cloud(남기석): DC 전체, HQ, ISP-1, ISP-2 (eBGP 8세션, 정적경로+track), Private Internet, DNS/DB 서버, QoS
-- Policy(남인탁): BR1, BR2, DMVPN Spoke+IPsec, ACL/컨벤션/문서
+- 담당: 남기석 (전 사이트). 작업 영역은 Net-Cloud(DC, HQ, ISP-1, ISP-2, Private Internet, DNS/DB 서버, QoS)와 Policy(BR1, BR2, DMVPN Spoke+IPsec, ACL/컨벤션/문서)로 구분
 
 ■ 컨벤션
 - VLAN: 10=HQ-USER-A, 20=HQ-USER-B, 50=DC-SERVER(DNS1, DB1), 100=MGMT, 999=NATIVE
   (BR1·BR2는 각 VLAN 10)
 - 인터페이스/IP 매핑은 docs/network-project-final.md 참고, 실제 케이블링과 반드시 대조
-- 브랜치: feature/<역할>-<내용>, PR 후 Policy 담당 승인을 받아 main에 merge
+- 브랜치: feature/<역할>-<내용>, PR 후 본인 검토를 거쳐 main에 merge
 - 커밋 메시지: <Jira키>: [역할][VLAN태그] 내용
   예) KAN-14: [Network][vlan-dc-server] DNS1 ACL 추가
   Jira 프로젝트 키는 KAN이고, 커밋 맨 앞에 키를 적으면 이슈에 자동 연결됩니다.
@@ -32,6 +31,6 @@ DC 서버 VLAN(50)은 DNS1(주 용도 DHCP)과 DB1 두 대로 구성합니다 (D
 
 ■ 문서·링크
 - GitHub: KSNAM97/network-project
-  README.md, docs/network-project-final.md(전체 설계), docs/schedule-2person.md(일정)
+  README.md, docs/network-project-final.md(전체 설계), docs/schedule.md(일정)
 - Jira: KAN 프로젝트 (티켓 목록은 jira/jira-tickets-3person.csv 기준으로 등록)
 #team-net-cloud #team-policy #dev-issues
