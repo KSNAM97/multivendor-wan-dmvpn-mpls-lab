@@ -28,7 +28,7 @@
 ```text
 HQ(65001) ─┬─ ISP-1 ─┐
            └─ ISP-2 ─┤
-DC(65002) ─┬─ ISP-1 ─┼─ (ISP 내부는 eBGP, 사이트는 OSPF)
+DC(65002) ─┬─ ISP-1 ─┼─ ISP 내부: eBGP
            └─ ISP-2 ─┤
 BR1        ─┬─ ISP-1 ─┤
            └─ ISP-2 ─┤

@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "verification/hq/core/l3-interface.md",
+                "file": "verification/dc/distribution/vlan-trunk.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "l3-interface"
+              "title": "vlan-trunk"
             }
           }
         ]
@@ -99,7 +99,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "verification/hq/core/l3-interface.md",
+                "file": "verification/dc/distribution/vlan-trunk.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -118,7 +118,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "verification/hq/core/l3-interface.md",
+                "file": "verification/dc/distribution/vlan-trunk.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -161,7 +161,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "verification/hq/core/l3-interface.md",
+                "file": "verification/dc/distribution/vlan-trunk.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -190,6 +190,10 @@
   },
   "active": "5aff95b4dcd4e49e",
   "lastOpenFiles": [
+    "verification/dc/distribution/l3-interface.md",
+    "verification/hq/core/l3-interface.md",
+    "verification/dc/distribution/images/dc-sw4-l3-vlan.png",
+    "verification/dc/distribution/images/dc-sw3-l3-vlan.png",
     "configs/private-internet/core/Private-net.ios",
     "configs/private-internet/core",
     "configs/isp2/core/ISP-2-PE-B.ios",
@@ -200,9 +204,7 @@
     "configs/isp1/core/ISP-1-PE-B.ios",
     "configs/isp1/core/ISP-1-PE-A.ios",
     "configs/isp1/core/ISP-1-P2.ios",
-    "configs/isp1/core/ISP-1-P1.ios",
     "verification/hq/core/images/hq-r1-ip-int-br.webp",
-    "verification/hq/core/l3-interface.md",
     "verification/hq/access/l3-interface.md",
     "verification/hq/distribution/stp.md",
     "verification/hq/core/images/hq-r2-ip-int-br.webp",
@@ -216,8 +218,6 @@
     "CONTRIBUTING.md",
     "verification/dc/access/vlan-trunk.md",
     "verification/hq/distribution/l3-interface.md",
-    "verification/hq/distribution/images/Pasted image 20261012000638.png",
-    "verification/hq/distribution/images/Pasted image 20261012000408.png",
     "verification/hq/distribution/vrrp.md",
     "verification/scenarios/vrrp-failover.md",
     "verification/scenarios/isp1-failure.md",

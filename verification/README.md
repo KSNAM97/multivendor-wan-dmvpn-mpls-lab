@@ -62,7 +62,7 @@ verification/
 | KAN-8 | 1주 목 | HQ VLAN/트렁크 | `hq/*/vlan-trunk.md`, `hq/*/po-channel.md`, `hq/access/l3-interface.md`, `hq/distribution/l3-interface.md` | 기록됨 |
 | KAN-9 | 1주 목 | HQ VRRP + Po1-3 | `hq/distribution/vrrp.md`, `hq/*/stp.md` | 기록됨 |
 | KAN-7 | 1주 화 | 인터페이스 매핑(HQ 라우터 포함) | `hq/core/l3-interface.md` | 기록됨 |
-| KAN-10 | 1주 수 | DC VLAN/트렁크 | `dc/*/vlan-trunk.md`, `dc/distribution/po-channel.md` | 기록됨(일부 미확인) |
+| KAN-10 | 1주 수 | DC VLAN/트렁크 | `dc/*/vlan-trunk.md`, `dc/distribution/po-channel.md` | 기록됨(통과) |
 | KAN-11 | 1주 수 | DC VRRP + MSTP 루트 | `dc/distribution/vrrp.md`, `dc/*/stp.md` | 기록됨 |
 | KAN-12 | 1주 수 | BR1 VLAN/트렁크/VRRP | `br1/*/` | 서식 준비 |
 | KAN-13 | 1주 목 | BR2 VLAN/트렁크/VRRP | `br2/*/` | 서식 준비 |
