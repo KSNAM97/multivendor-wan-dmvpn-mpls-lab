@@ -24,7 +24,7 @@ DMVPN Phase 3(mGRE over IPsec) 구성을 정리한 문서. 값은 참고 저장�
 | Transform set | `TS-AES256`: esp-aes 256 esp-sha-hmac, mode tunnel |
 | IPsec profile | `DMVPN-PROFILE`: transform-set `TS-AES256`, pfs group5, SA lifetime 3600초 |
 | 터널 보호 | `tunnel protection ipsec profile DMVPN-PROFILE shared` |
-| 사전 공유 키 | 컨피그에만 기재(문서에는 기재하지 않음) |
+| 사전 공유 키 | `crypto isakmp key DMVPN-HUB address 0.0.0.0 0.0.0.0` |
 
 ## 3. Tunnel0 공통 설정
 
@@ -33,7 +33,7 @@ DMVPN Phase 3(mGRE over IPsec) 구성을 정리한 문서. 값은 참고 저장�
 | 모드 | `tunnel mode gre multipoint` |
 | 터널 key | 100 |
 | MTU, MSS | `ip mtu 1400`, `ip tcp adjust-mss 1360` |
-| NHRP | `ip nhrp network-id 100`, `ip nhrp holdtime 600`, `ip nhrp authentication`(키는 컨피그에만 기재) |
+| NHRP | `ip nhrp network-id 100`, `ip nhrp holdtime 600`, `ip nhrp authentication NHRPKEY1` |
 | OSPF | 네트워크 타입 broadcast, Hub priority 255, Spoke priority 0 |
 
 ## 4. 역할별 NHRP 설정

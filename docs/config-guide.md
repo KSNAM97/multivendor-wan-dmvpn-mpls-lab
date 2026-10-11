@@ -35,12 +35,17 @@
 
 ```
 hostname HQ-R2
+enable secret admin1234
 no ip domain-lookup
 service timestamps debug datetime msec
 service timestamps log datetime msec
+!
 line con 0
  logging synchronous
  exec-timeout 0 0
+line vty 0 4
+ password admin1234
+ login
 !
 interface Loopback0
  ip address 11.11.11.2 255.255.255.255
@@ -51,6 +56,9 @@ interface GigabitEthernet0/0
  no shutdown
 ```
 
+- 콘솔에서 `enable`, `configure terminal`로 설정 모드에 진입한 뒤 위 내용을 붙여 넣음(진입 명령은 파일에 기재하지 않음).
+- 접속 설정(`enable secret`, `line vty`)은 모든 Cisco 장비에 같은 형식으로 적용. Arista는 `username admin secret admin1234`.
+- 실습 환경이므로 접속 비밀번호는 `admin1234`로 통일하고 컨피그와 문서에 그대로 기재(7절).
 - 모든 인터페이스에 `description`(연결 상대와 포트)을 입력하고 `no shutdown`을 명시.
 
 ### 3.2 OSPF(사이트 프로세스)
@@ -108,7 +116,7 @@ crypto isakmp policy 10
  authentication pre-share
  group 5
  lifetime 86400
-crypto isakmp key <사전 공유 키> address 0.0.0.0 0.0.0.0
+crypto isakmp key DMVPN-HUB address 0.0.0.0 0.0.0.0
 crypto isakmp keepalive 10 3
 crypto ipsec transform-set TS-AES256 esp-aes 256 esp-sha-hmac
  mode tunnel
@@ -126,7 +134,7 @@ interface Tunnel0
  tunnel key 100
  ip nhrp network-id 100
  ip nhrp holdtime 600
- ip nhrp authentication <NHRP 키>
+ ip nhrp authentication NHRPKEY1
  ip nhrp nhs 172.16.0.1
  ip nhrp map 172.16.0.1 203.0.113.5
  ip nhrp map multicast 203.0.113.5
@@ -137,7 +145,7 @@ interface Tunnel0
  tunnel protection ipsec profile DMVPN-PROFILE shared
 ```
 
-- 예시는 Spoke `HQ-R2`. Hub(`DC-R2`)는 `ip nhrp map multicast dynamic`, `ip nhrp redirect`, `ip ospf priority 255`를 사용하고 NHS·map·shortcut 줄 제외. 키 값은 컨피그에만 기재.
+- 예시는 Spoke `HQ-R2`. Hub(`DC-R2`)는 `ip nhrp map multicast dynamic`, `ip nhrp redirect`, `ip ospf priority 255`를 사용하고 NHS·map·shortcut 줄 제외.
 
 ### 3.6 Private Internet 언더레이와 ACL
 
@@ -239,6 +247,46 @@ interface GigabitEthernet1/0
 - 사용자 VLAN의 SVI는 `passive-interface`로 설정하고 사이트 OSPF Area에 포함. DHCP 풀은 `docs/dhcp-dns-design.md` 3절.
 - 이미지(`vios_l2`)에서 `no switchport`와 `ip routing` 동작은 첫 장비에 적용해 확인 후 나머지 장비에 반복.
 
+### 4.3 L2 스위치 예시(BR2-SW3-L2)
+
+- L3 기능 없이 트렁크 2포트(L3 스위치 방향)와 호스트 액세스 2포트만 설정.
+
+```
+hostname BR2-SW3-L2
+spanning-tree mode rapid-pvst
+vlan 10
+ name BR2-USER
+vlan 100
+ name MGMT
+vlan 999
+ name NATIVE
+!
+interface GigabitEthernet0/0
+ description to BR2-SW1-L3 Gi2/0
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk native vlan 999
+ switchport trunk allowed vlan 10,100
+interface GigabitEthernet0/1
+ description to BR2-SW2-L3 Gi2/0
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk native vlan 999
+ switchport trunk allowed vlan 10,100
+interface GigabitEthernet3/0
+ description to BR2-PC1 eth0
+ switchport mode access
+ switchport access vlan 10
+ spanning-tree portfast
+interface GigabitEthernet3/1
+ description to BR2-PC2 eth0
+ switchport mode access
+ switchport access vlan 10
+ spanning-tree portfast
+interface Vlan100
+ ip address 10.4.100.23 255.255.255.0
+```
+
 ## 5. Arista cEOS(DC)
 
 대상: `DC-SW1-L3` ~ `DC-SW4-L3`, `DC-SW1-L2`, `DC-SW2-L2`. 인터페이스 이름은 `Ethernet<번호>`, 접두 3칸 들여쓰기.
@@ -279,7 +327,41 @@ router ospf 10
 ```
 
 - 예시는 `DC-SW3-L3`. `DC-SW4-L3`은 SVI 주소 `.3`, STP priority 8192. `DC-SW1-L3`, `DC-SW2-L3`은 VLAN 설정 없이 라우티드 포트와 OSPF만 사용.
-- L2 스위치(`DC-SW1-L2`, `DC-SW2-L2`)는 `ip routing` 없이 트렁크(Et1, Et2)와 서버 액세스(Et12, VLAN 50)만 설정. EOS의 스위치포트는 기본값이므로 라우티드 포트에만 `no switchport` 명시.
+### 5.1 DC L2 스위치(DC-SW1-L2, DC-SW2-L2)
+
+- `ip routing`, OSPF 없이 트렁크(Et1, Et2)와 서버 액세스(Et12, VLAN 50)만 설정. EOS의 포트는 기본이 스위치포트이므로 `no switchport` 불필요.
+
+```
+hostname DC-SW1-L2
+spanning-tree mode rstp
+!
+vlan 50
+   name SERVER
+vlan 100
+   name MGMT
+vlan 999
+   name NATIVE
+!
+interface Ethernet1
+   description to DC-SW3-L3 Et7
+   switchport mode trunk
+   switchport trunk native vlan 999
+   switchport trunk allowed vlan 50,100
+interface Ethernet2
+   description to DC-SW4-L3 Et7
+   switchport mode trunk
+   switchport trunk native vlan 999
+   switchport trunk allowed vlan 50,100
+interface Ethernet12
+   description to DC-DNS-1 eth0
+   switchport mode access
+   switchport access vlan 50
+   spanning-tree portfast
+interface Vlan100
+   ip address 10.2.100.21/24
+```
+
+- `DC-SW2-L2`는 호스트네임 `DC-SW2-L2`, 업링크 설명 `to DC-SW3-L3 Et8`(Et1), `to DC-SW4-L3 Et8`(Et2), 서버 포트 설명 `to DC-DNS-2 eth0`, MGMT 주소 `10.2.100.22/24`로 변경.
 
 ## 6. 알파인 노드
 
@@ -290,7 +372,7 @@ router ospf 10
 
 - 변경 전 장비에서 `copy running-config flash:<장비명>-backup-<날짜>.cfg`로 백업.
 - 변경 후 `copy running-config startup-config`(EOS는 `write`)로 저장하고, 확인한 컨피그를 `configs/<사이트>/<장비명>.cfg`에 반영.
-- 컨피그 파일에는 사전 공유 키와 계정 비밀번호를 기재하지 않음(키 자리는 `<사전 공유 키>`, `<NHRP 키>`로 표기).
+- 실습 환경이므로 접속 비밀번호(`admin1234`)와 DMVPN 키(ISAKMP `DMVPN-HUB`, NHRP `NHRPKEY1`)를 컨피그와 문서에 그대로 기재.
 
 ## 8. 설정 후 확인
 
