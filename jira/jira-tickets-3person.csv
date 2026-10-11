@@ -13,7 +13,7 @@ Summary,Issue Type,Label,Priority,Description,Due Date
 [2주] ISP-1 내부 eBGP 4세션,Task,net-cloud,High,"PE-A/P1/P2/PE-B, AS65111-65114 / 일정: 2주 월(10/19)",2026-10-19
 [2주] ISP-2 내부 eBGP 4세션,Task,net-cloud,High,"PE-A/P1/P2/PE-B, AS65121-65124 / 일정: 2주 월(10/19)",2026-10-19
 [2주] PE 고객 대역 network 광고,Task,net-cloud,High,사이트별 /16 announce / 일정: 2주 화(10/20),2026-10-20
-[2주] 사이트-ISP 정적경로 + track,Task,net-cloud;policy,High,"IP SLA/track, OSPF redistribute static / 일정: 2주 월~화(10/19~10/20)",2026-10-20
+[2주] 사이트-ISP 정적경로 + track,Task,net-cloud;policy,High,"정적 기본 경로, IP SLA/track, OSPF default-information originate / 일정: 2주 월~화(10/19~10/20)",2026-10-20
 [2주] Private Internet ACL 화이트리스트,Task,net-cloud,High,"5개 링크, OSPF/GRE/ESP/UDP500만 허용 / 일정: 2주 수(10/21)",2026-10-21
 [2주] Private Internet OSPF(프로세스2) 구성,Task,net-cloud,High,"Area100, 언더레이 전용 / 일정: 2주 수(10/21), 전 사이트 상호도달 확인 포함",2026-10-21
 [2주] DMVPN Hub 구성(DC-R2),Task,net-cloud,High,"mGRE, NHRP, IPsec profile / 일정: 2주 목(10/22)",2026-10-22

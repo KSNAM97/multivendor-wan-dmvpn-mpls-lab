@@ -30,9 +30,9 @@
 |  | 목 | HQ VLAN/트렁크, HSRP, Po1-3 / BR2 VLAN/트렁크, HSRP |
 |  | 금 | 사이트 내부 OSPF, DC/HQ 내부통신 검증 / 사이트 내부 OSPF, BR1/BR2 내부통신 검증 |
 | 2주 (10/19~10/23) | 월 | ISP-1, ISP-2 내부 eBGP 8세션 / BR1/BR2↔ISP 정적경로+track |
-|  | 화 | PE 고객 대역 광고, DC/HQ↔ISP 정적경로+재분배 |
+|  | 화 | PE 고객 대역 광고, DC/HQ↔ISP 정적 기본 경로+OSPF 기본 경로 광고 |
 |  | 수 | PI 기본연결+OSPF(프로세스2), PI ACL 화이트리스트 / 전 사이트 상호도달 확인 |
-|  | 목 | DMVPN Hub(DC-R2) crypto / DMVPN Spoke(BR1, BR2) |
+|  | 목 | DMVPN Hub(DC-R2) crypto / DMVPN Spoke(HQ, BR1, BR2) |
 |  | 금 | DC-DNS-1·DC-DNS-2(Alpine) 배치+검증, 사이트 DHCP / Phase3 shortcut 검증 |
 | 3주 (10/26~10/30) | 월 | QoS 20포트 중 DC/HQ 12대 / QoS 20포트 중 BR 8대 |
 |  | 화 | 접근통제 ACL, 통합 테스트 |
