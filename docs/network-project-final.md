@@ -42,7 +42,7 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ BR
 |---|---|---|---|---|
 | HQ | 10 | HQ-USER-A | 10.1.10.0/24 | HSRP (HQ-SW-2 .2 / HQ-SW-3 .3, VIP .1) |
 | HQ | 20 | HQ-USER-B | 10.1.20.0/24 | HSRP |
-| DC | 50 | SERVER (DNS1, DNS2) | 10.2.50.0/24 | VARP/VRRP (DC-SW3-L3 .2 / DC-SW4-L3 .3, VIP .1) |
+| DC | 50 | SERVER (DC-DNS-1, DC-DNS-2) | 10.2.50.0/24 | VARP/VRRP (DC-SW3-L3 .2 / DC-SW4-L3 .3, VIP .1) |
 | BR1 | 10 | BR1-USER | 10.3.10.0/24 | HSRP |
 | BR2 | 10 | BR2-USER | 10.4.10.0/24 | HSRP |
 | 전 사이트 | 100 | MGMT | 10.X.100.0/24 | - |
@@ -63,7 +63,7 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ BR
 | DC | DC-SW1-L3 / DC-SW2-L3 | SW211 / SW212 | L3 스위치(Arista cEOS) | 확인 필요 |
 | DC | DC-SW3-L3 / DC-SW4-L3 | SW201 / SW202 | L3 스위치(Arista cEOS, VARP) | 확인 필요 |
 | DC | DC-SW1-L2 / DC-SW2-L2 | SW-SVR1 / SW-SVR2 | 서버용 L2 스위치(Arista cEOS) | 확인 필요 |
-| DC | (GNS3에 없음) | DNS1(주) / DNS2(백업) | 서버(VLAN50, Alpine Linux) | 노드 생성 필요 |
+| DC | (GNS3에 없음) | DC-DNS-1(주) / DC-DNS-2(백업) | 서버(VLAN50, Alpine Linux) | 노드 생성 필요 |
 | ISP-1 | ISP-1-PE-A / ISP-1-P1 / ISP-1-P2 / ISP-1-PE-B | PE-A / P1 / P2 / PE-B | eBGP | |
 | ISP-2 | ISP-2-PE-A / ISP-2-P1 / ISP-2-P2 / ISP-2-PE-B | PE-A / P1 / P2 / PE-B | eBGP | |
 | BR1 | BR1-R1 / BR1-R2 | R1 / R2 | 라우터(R1이 DMVPN Spoke) | |
@@ -124,8 +124,8 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ BR
 | DC-SW3-L3 Et8 | DC-SW2-L2 Et1 | 트렁크 (L2 쪽 포트는 제안값) |
 | DC-SW4-L3 Et7 | DC-SW1-L2 Et2 | 트렁크 (L2 쪽 포트는 제안값) |
 | DC-SW4-L3 Et8 | DC-SW2-L2 Et2 | 트렁크 (L2 쪽 포트는 제안값) |
-| DC-SW1-L2 Et3 | DNS1 (VLAN50 access) |
-| DC-SW2-L2 Et3 | DNS2 (VLAN50 access, 백업) |
+| DC-SW1-L2 Et3 | DC-DNS-1 (VLAN50 access) |
+| DC-SW2-L2 Et3 | DC-DNS-2 (VLAN50 access, 백업) |
 | **QoS 대상** | DC-R3 Gi0/0,Gi1/0 / DC-R4 Gi0/0,Gi1/0 / DC-R1 Gi0/0,Gi1/0 / DC-R2 Gi0/0,Gi1/0 |
 
 ### BR1 (BR2는 10.3→10.4, 장비명 BR2-*, ISP 링크 하단 표 참고)
@@ -182,7 +182,7 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ BR
 - 부모 정책: shape average (병목 검증용 예시값, 실측 시 조정)
 
 ### 접근 통제
-- DC VLAN50(DNS1, DNS2): 각 사이트 → UDP/TCP 53만 허용, 그 외 차단. DHCP는 각 사이트 게이트웨이에서 제공하는 것으로 제안하므로 서버 VLAN으로 DHCP(UDP 67/68)를 허용하지 않습니다.
+- DC VLAN50(DC-DNS-1, DC-DNS-2): 각 사이트 → UDP/TCP 53만 허용, 그 외 차단. DHCP는 각 사이트 게이트웨이에서 제공하는 것으로 제안하므로 서버 VLAN으로 DHCP(UDP 67/68)를 허용하지 않습니다.
 
 ## 6. 빌드 순서 (3.5주, 1인 체제)
 
@@ -197,5 +197,5 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ BR
 
 ## 7. 미확정 항목
 - HQ의 DMVPN 스포크 편입 여부 (편입 시 Area 번호 재조정 필요)
-- DC 서버 VLAN50: DNS1(주)과 DNS2(백업) 두 대, Alpine Linux 가상 이미지. IP와 DNS 소프트웨어는 미확정. DHCP는 각 사이트 게이트웨이 장비(IOS DHCP 서버)에서 제공하는 것으로 제안하며 풀 범위와 담당 장비는 미확정
+- DC 서버 VLAN50: DC-DNS-1(주)과 DC-DNS-2(백업) 두 대, Alpine Linux 가상 이미지. IP와 DNS 소프트웨어는 미확정. DHCP는 각 사이트 게이트웨이 장비(IOS DHCP 서버)에서 제공하는 것으로 제안하며 풀 범위와 담당 장비는 미확정
 - 스위치(IOU L2/cEOS) QoS 지원 여부 실측
