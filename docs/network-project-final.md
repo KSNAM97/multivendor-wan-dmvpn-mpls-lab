@@ -58,23 +58,24 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ BR
 | HQ | HQ-R1 / HQ-R2 | R11 / R12 | 라우터 | |
 | HQ | HQ-SW-1 | SW110 | L3 스위치 | 확인 필요 |
 | HQ | HQ-SW-2 / HQ-SW-3 | SW101 / SW102 | L3 스위치(HSRP) | 확인 필요 |
+| HQ | HQ-PC1 / HQ-PC2 | - | 호스트(Alpine Linux, docker) | |
 | DC | DC-R1 / DC-R2 | R23 / R24 | 라우터(PI 연결) | R24가 DMVPN Hub, 확인 필요 |
 | DC | DC-R3 / DC-R4 | R21 / R22 | 라우터(ISP 연결) | 확인 필요 |
 | DC | DC-SW1-L3 / DC-SW2-L3 | SW211 / SW212 | L3 스위치(Arista cEOS) | 확인 필요 |
 | DC | DC-SW3-L3 / DC-SW4-L3 | SW201 / SW202 | L3 스위치(Arista cEOS, VARP) | 확인 필요 |
 | DC | DC-SW1-L2 / DC-SW2-L2 | SW-SVR1 / SW-SVR2 | 서버용 L2 스위치(Arista cEOS) | 확인 필요 |
-| DC | (GNS3에 없음) | DC-DNS-1(주) / DC-DNS-2(백업) | 서버(VLAN50, Alpine Linux) | 노드 생성 필요 |
+| DC | DC-DNS-1 / DC-DNS-2 | DNS1(주) / DNS2(백업) | 서버(VLAN50, Alpine Linux, docker) | |
 | ISP-1 | ISP-1-PE-A / ISP-1-P1 / ISP-1-P2 / ISP-1-PE-B | PE-A / P1 / P2 / PE-B | eBGP | |
 | ISP-2 | ISP-2-PE-A / ISP-2-P1 / ISP-2-P2 / ISP-2-PE-B | PE-A / P1 / P2 / PE-B | eBGP | |
 | BR1 | BR1-R1 / BR1-R2 | R1 / R2 | 라우터(R1이 DMVPN Spoke) | |
 | BR1 | BR1-SW1-L3 / BR1-SW2-L3 / BR1-SW3-L3 | SW1 / SW2 / SW3 | 스위치(SW3은 호스트 연결) | |
-| BR1 | (GNS3에 없음) | H1 / H2 | 호스트 | 노드 생성 필요 |
+| BR1 | BR1-PC1 / BR1-PC2 | H1 / H2 | 호스트(Alpine Linux, docker) | |
 | BR2 | BR2-R1 / BR2-R2 | R1 / R2 | 라우터(R2가 DMVPN Spoke) | |
 | BR2 | BR2-SW1-L3 / BR2-SW2-L3 | SW1 / SW2 | L3 스위치 | 확인 필요 |
 | BR2 | BR2-SW3-L2 | SW3 | 호스트 연결 L2 스위치 | GNS3 장비명 변경 필요(현재 BR2-SW1-L2) |
-| BR2 | (GNS3에 없음) | H1 / H2 | 호스트 | 노드 생성 필요 |
+| BR2 | BR2-PC1 / BR2-PC2 | H1 / H2 | 호스트(Alpine Linux, docker) | |
 
-## 4. 인터페이스 · 포트 매핑 (제안값 — 실제 케이블링과 대조 필요)
+## 4. 인터페이스 · 포트 매핑 (GNS3 연결 대조 완료 — 2026-10-11)
 
 링크 단위로 풀어 쓴 전체 표는 [`docs/port-mapping.md`](./port-mapping.md)를 참고하세요.
 
@@ -95,6 +96,8 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ BR
 | HQ-SW-1 Gi1/3 | HQ-SW-3 Gi0/1 | Po2 |
 | HQ-SW-2 Gi0/2 | HQ-SW-3 Gi0/2 | Po3 |
 | HQ-SW-2 Gi0/3 | HQ-SW-3 Gi0/3 | Po3 |
+| HQ-PC1 eth0 | HQ-SW-1 Gi3/0 | VLAN10 access |
+| HQ-PC2 eth0 | HQ-SW-1 Gi3/1 | VLAN20 access |
 | **QoS 대상** | HQ-R1 Gi0/0, Gi1/0 / HQ-R2 Gi0/0, Gi1/0 |
 
 ### DC
@@ -120,12 +123,12 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ BR
 | DC-R4 Gi3/0 | ISP-2-PE-A Gi3/0 | 100.2.22.0/30 |
 | DC-SW3-L3 Et5 | DC-SW4-L3 Et5 | Po1 (VLAN50/100) |
 | DC-SW3-L3 Et6 | DC-SW4-L3 Et6 | Po1 |
-| DC-SW3-L3 Et7 | DC-SW1-L2 Et1 | 트렁크 (L2 쪽 포트는 제안값) |
-| DC-SW3-L3 Et8 | DC-SW2-L2 Et1 | 트렁크 (L2 쪽 포트는 제안값) |
-| DC-SW4-L3 Et7 | DC-SW1-L2 Et2 | 트렁크 (L2 쪽 포트는 제안값) |
-| DC-SW4-L3 Et8 | DC-SW2-L2 Et2 | 트렁크 (L2 쪽 포트는 제안값) |
-| DC-SW1-L2 Et3 | DC-DNS-1 (VLAN50 access) |
-| DC-SW2-L2 Et3 | DC-DNS-2 (VLAN50 access, 백업) |
+| DC-SW3-L3 Et7 | DC-SW1-L2 Et1 | 트렁크 (연결 확인됨) |
+| DC-SW3-L3 Et8 | DC-SW2-L2 Et1 | 트렁크 (연결 확인됨) |
+| DC-SW4-L3 Et7 | DC-SW1-L2 Et2 | 트렁크 (연결 확인됨) |
+| DC-SW4-L3 Et8 | DC-SW2-L2 Et2 | 트렁크 (연결 확인됨) |
+| DC-SW1-L2 Et12 | DC-DNS-1 (VLAN50 access) |
+| DC-SW2-L2 Et12 | DC-DNS-2 (VLAN50 access, 백업) |
 | **QoS 대상** | DC-R3 Gi0/0,Gi1/0 / DC-R4 Gi0/0,Gi1/0 / DC-R1 Gi0/0,Gi1/0 / DC-R2 Gi0/0,Gi1/0 |
 
 ### BR1 (BR2는 10.3→10.4, 장비명 BR2-*, ISP 링크 하단 표 참고)
@@ -141,9 +144,10 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ BR
 | BR1-R1 Gi4/0 | PrivI-net Gi3/0 | 203.0.113.12/30 (Tunnel0 source, DMVPN Spoke) |
 | BR1-SW1-L3 Gi1/0 | BR1-SW2-L3 Gi1/0 | Po1 (VLAN10/100) |
 | BR1-SW1-L3 Gi1/1 | BR1-SW2-L3 Gi1/1 | Po1 |
-| BR1-SW1-L3 Gi2/0 | BR1-SW3-L3 Gi0/0 | 트렁크 (포트는 제안값) |
-| BR1-SW2-L3 Gi2/0 | BR1-SW3-L3 Gi0/1 | 트렁크 (포트는 제안값) |
-| H1/H2 | BR1-SW3-L3 (VLAN10 access) |
+| BR1-SW1-L3 Gi2/0 | BR1-SW3-L3 Gi0/0 | 트렁크 (연결 확인됨) |
+| BR1-SW2-L3 Gi2/0 | BR1-SW3-L3 Gi0/1 | 트렁크 (연결 확인됨) |
+| BR1-PC1 eth0 | BR1-SW3-L3 Gi3/0 | VLAN10 access |
+| BR1-PC2 eth0 | BR1-SW3-L3 Gi3/1 | VLAN10 access |
 | **QoS 대상** | BR1-R1 Gi0/0,Gi1/0 / BR1-R2 Gi0/0,Gi1/0 |
 
 ### BR2 (BR1과 동일 패턴, 장비명 BR2-*, 스포크는 BR2-R2)

@@ -11,8 +11,8 @@
 | Cisco IOU 스위치 L3·L2 (`HQ-SW-*`, `BR*-SW*-L3`, `BR2-SW3-L2`) | `Gi0/0` ~ `Gi3/3` | 16포트 |
 | Arista cEOS 스위치 L3·L2 (`DC-SW*-L3`, `DC-SW*-L2`) | `Management1`, `Ethernet1` ~ `Ethernet12` (`Et1` ~ `Et12`) | 12포트 + 관리 |
 
-- 포트와 서브넷은 설계 단계의 **제안값**입니다. GNS3에서 실제로 선을 연결한 뒤 이 표와 대조하고, 다르면 이 표를 고칩니다.
-- `제안값`: 설계 문서에 없어서 같은 패턴으로 채운 값입니다. `미정`: 아직 정해지지 않은 값입니다.
+- 이 표는 2026-10-11에 저장된 GNS3 프로젝트의 연결과 대조해 맞춘 것입니다(연결 80개). `연결 확인됨`은 GNS3에 실제로 연결돼 있는 값이고, 서브넷과 IP는 컨피그 작업 전이라 아직 장비에 적용되지 않았습니다.
+- `미정`: 아직 정해지지 않은 값입니다.
 - 서브넷이 `-`인 링크는 L2 링크(트렁크, EtherChannel, access)입니다.
 - ISP-1과 ISP-2는 같은 구조이고 `100.1.x.x`, `100.2.x.x`로 구분합니다. 번호 `#`는 이 문서 안의 링크 번호입니다.
 
@@ -36,95 +36,97 @@
 | 12 | HQ-SW-1 | Gi1/3 | HQ-SW-3 | Gi0/1 | - | Po2 |
 | 13 | HQ-SW-2 | Gi0/2 | HQ-SW-3 | Gi0/2 | - | Po3 |
 | 14 | HQ-SW-2 | Gi0/3 | HQ-SW-3 | Gi0/3 | - | Po3 |
+| 15 | HQ-PC1 | eth0 | HQ-SW-1 | Gi3/0 | - | VLAN 10 access (Alpine Linux, 연결 확인됨) |
+| 16 | HQ-PC2 | eth0 | HQ-SW-1 | Gi3/1 | - | VLAN 20 access (Alpine Linux, 연결 확인됨) |
 
 ### DC
 
 | # | A 장비 | A 포트 | B 장비 | B 포트 | 서브넷 | 비고 |
 |---|---|---|---|---|---|---|
-| 15 | DC-R1 | Gi0/0 | DC-SW1-L3 | Et1 | 10.2.0.0/30 | - |
-| 16 | DC-R1 | Gi1/0 | DC-SW2-L3 | Et1 | 10.2.0.4/30 | - |
-| 17 | DC-R2 | Gi0/0 | DC-SW1-L3 | Et2 | 10.2.0.8/30 | - |
-| 18 | DC-R2 | Gi1/0 | DC-SW2-L3 | Et2 | 10.2.0.12/30 | - |
-| 19 | DC-SW1-L3 | Et3 | DC-SW2-L3 | Et3 | 10.2.0.16/30 | - |
-| 20 | DC-SW1-L3 | Et4 | DC-SW3-L3 | Et1 | - | - |
-| 21 | DC-SW1-L3 | Et5 | DC-SW4-L3 | Et1 | - | - |
-| 22 | DC-SW2-L3 | Et4 | DC-SW3-L3 | Et2 | - | - |
-| 23 | DC-SW2-L3 | Et5 | DC-SW4-L3 | Et2 | - | - |
-| 24 | DC-SW3-L3 | Et3 | DC-R3 | Gi0/0 | - | - |
-| 25 | DC-SW3-L3 | Et4 | DC-R4 | Gi0/0 | - | - |
-| 26 | DC-SW4-L3 | Et3 | DC-R3 | Gi1/0 | - | - |
-| 27 | DC-SW4-L3 | Et4 | DC-R4 | Gi1/0 | - | - |
-| 28 | DC-R3 | Gi2/0 | DC-R4 | Gi2/0 | 10.2.0.52/30 | - |
-| 29 | DC-R1 | Gi2/0 | PrivI-net | Gi0/0 | 203.0.113.0/30 | PI 연결 |
-| 30 | DC-R2 | Gi2/0 | PrivI-net | Gi1/0 | 203.0.113.4/30 | PI 연결, DMVPN Hub Tunnel0 source |
-| 31 | DC-R3 | Gi3/0 | ISP-1-PE-A | Gi3/0 | 100.1.21.0/30 | ISP-1 연결 |
-| 32 | DC-R4 | Gi3/0 | ISP-2-PE-A | Gi3/0 | 100.2.22.0/30 | ISP-2 연결 |
-| 33 | DC-SW3-L3 | Et5 | DC-SW4-L3 | Et5 | - | Po1 (VLAN 50/100) |
-| 34 | DC-SW3-L3 | Et6 | DC-SW4-L3 | Et6 | - | Po1 |
-| 35 | DC-SW3-L3 | Et7 | DC-SW1-L2 | Et1 | - | 트렁크 (L2 쪽 포트는 제안값) |
-| 36 | DC-SW3-L3 | Et8 | DC-SW2-L2 | Et1 | - | 트렁크 (L2 쪽 포트는 제안값) |
-| 37 | DC-SW4-L3 | Et7 | DC-SW1-L2 | Et2 | - | 트렁크 (L2 쪽 포트는 제안값) |
-| 38 | DC-SW4-L3 | Et8 | DC-SW2-L2 | Et2 | - | 트렁크 (L2 쪽 포트는 제안값) |
-| 39 | DC-SW1-L2 | Et3 | DC-DNS-1 | eth0 | - | VLAN 50 access (주 DNS, Alpine Linux) |
-| 40 | DC-SW2-L2 | Et3 | DC-DNS-2 | eth0 | - | VLAN 50 access (백업 DNS, Alpine Linux) |
+| 17 | DC-R1 | Gi0/0 | DC-SW1-L3 | Et1 | 10.2.0.0/30 | - |
+| 18 | DC-R1 | Gi1/0 | DC-SW2-L3 | Et1 | 10.2.0.4/30 | - |
+| 19 | DC-R2 | Gi0/0 | DC-SW1-L3 | Et2 | 10.2.0.8/30 | - |
+| 20 | DC-R2 | Gi1/0 | DC-SW2-L3 | Et2 | 10.2.0.12/30 | - |
+| 21 | DC-SW1-L3 | Et3 | DC-SW2-L3 | Et3 | 10.2.0.16/30 | - |
+| 22 | DC-SW1-L3 | Et4 | DC-SW3-L3 | Et1 | - | - |
+| 23 | DC-SW1-L3 | Et5 | DC-SW4-L3 | Et1 | - | - |
+| 24 | DC-SW2-L3 | Et4 | DC-SW3-L3 | Et2 | - | - |
+| 25 | DC-SW2-L3 | Et5 | DC-SW4-L3 | Et2 | - | - |
+| 26 | DC-SW3-L3 | Et3 | DC-R3 | Gi0/0 | - | - |
+| 27 | DC-SW3-L3 | Et4 | DC-R4 | Gi0/0 | - | - |
+| 28 | DC-SW4-L3 | Et3 | DC-R3 | Gi1/0 | - | - |
+| 29 | DC-SW4-L3 | Et4 | DC-R4 | Gi1/0 | - | - |
+| 30 | DC-R3 | Gi2/0 | DC-R4 | Gi2/0 | 10.2.0.52/30 | - |
+| 31 | DC-R1 | Gi2/0 | PrivI-net | Gi0/0 | 203.0.113.0/30 | PI 연결 |
+| 32 | DC-R2 | Gi2/0 | PrivI-net | Gi1/0 | 203.0.113.4/30 | PI 연결, DMVPN Hub Tunnel0 source |
+| 33 | DC-R3 | Gi3/0 | ISP-1-PE-A | Gi3/0 | 100.1.21.0/30 | ISP-1 연결 |
+| 34 | DC-R4 | Gi3/0 | ISP-2-PE-A | Gi3/0 | 100.2.22.0/30 | ISP-2 연결 |
+| 35 | DC-SW3-L3 | Et5 | DC-SW4-L3 | Et5 | - | Po1 (VLAN 50/100) |
+| 36 | DC-SW3-L3 | Et6 | DC-SW4-L3 | Et6 | - | Po1 |
+| 37 | DC-SW3-L3 | Et7 | DC-SW1-L2 | Et1 | - | 트렁크 (연결 확인됨) |
+| 38 | DC-SW3-L3 | Et8 | DC-SW2-L2 | Et1 | - | 트렁크 (연결 확인됨) |
+| 39 | DC-SW4-L3 | Et7 | DC-SW1-L2 | Et2 | - | 트렁크 (연결 확인됨) |
+| 40 | DC-SW4-L3 | Et8 | DC-SW2-L2 | Et2 | - | 트렁크 (연결 확인됨) |
+| 41 | DC-SW1-L2 | Et12 | DC-DNS-1 | eth0 | - | VLAN 50 access (주 DNS, Alpine Linux, 연결 확인됨) |
+| 42 | DC-SW2-L2 | Et12 | DC-DNS-2 | eth0 | - | VLAN 50 access (백업 DNS, Alpine Linux, 연결 확인됨) |
 
 ### BR1
 
 | # | A 장비 | A 포트 | B 장비 | B 포트 | 서브넷 | 비고 |
 |---|---|---|---|---|---|---|
-| 41 | BR1-SW1-L3 | Gi0/0 | BR1-R1 | Gi0/0 | - | 서브넷 미정 |
-| 42 | BR1-SW1-L3 | Gi0/1 | BR1-R2 | Gi0/0 | - | 서브넷 미정 |
-| 43 | BR1-SW2-L3 | Gi0/0 | BR1-R1 | Gi1/0 | - | 서브넷 미정 |
-| 44 | BR1-SW2-L3 | Gi0/1 | BR1-R2 | Gi1/0 | - | 서브넷 미정 |
-| 45 | BR1-R1 | Gi2/0 | BR1-R2 | Gi2/0 | 10.3.0.16/30 | - |
-| 46 | BR1-R1 | Gi3/0 | ISP-1-PE-B | Gi2/0 | 100.1.31.0/30 | ISP-1 연결 |
-| 47 | BR1-R2 | Gi3/0 | ISP-2-PE-B | Gi2/0 | 100.2.32.0/30 | ISP-2 연결 |
-| 48 | BR1-R1 | Gi4/0 | PrivI-net | Gi3/0 | 203.0.113.12/30 | PI 연결, DMVPN Spoke Tunnel0 source |
-| 49 | BR1-SW1-L3 | Gi1/0 | BR1-SW2-L3 | Gi1/0 | - | Po1 (VLAN 10/100) |
-| 50 | BR1-SW1-L3 | Gi1/1 | BR1-SW2-L3 | Gi1/1 | - | Po1 |
-| 51 | BR1-SW1-L3 | Gi2/0 | BR1-SW3-L3 | Gi0/0 | - | 트렁크 (포트는 제안값) |
-| 52 | BR1-SW2-L3 | Gi2/0 | BR1-SW3-L3 | Gi0/1 | - | 트렁크 (포트는 제안값) |
-| 53 | H1 | 미정 | BR1-SW3-L3 | 미정 | - | VLAN 10 access (호스트 노드 없음) |
-| 54 | H2 | 미정 | BR1-SW3-L3 | 미정 | - | VLAN 10 access (호스트 노드 없음) |
+| 43 | BR1-SW1-L3 | Gi0/0 | BR1-R1 | Gi0/0 | - | 서브넷 미정 |
+| 44 | BR1-SW1-L3 | Gi0/1 | BR1-R2 | Gi0/0 | - | 서브넷 미정 |
+| 45 | BR1-SW2-L3 | Gi0/0 | BR1-R1 | Gi1/0 | - | 서브넷 미정 |
+| 46 | BR1-SW2-L3 | Gi0/1 | BR1-R2 | Gi1/0 | - | 서브넷 미정 |
+| 47 | BR1-R1 | Gi2/0 | BR1-R2 | Gi2/0 | 10.3.0.16/30 | - |
+| 48 | BR1-R1 | Gi3/0 | ISP-1-PE-B | Gi2/0 | 100.1.31.0/30 | ISP-1 연결 |
+| 49 | BR1-R2 | Gi3/0 | ISP-2-PE-B | Gi2/0 | 100.2.32.0/30 | ISP-2 연결 |
+| 50 | BR1-R1 | Gi4/0 | PrivI-net | Gi3/0 | 203.0.113.12/30 | PI 연결, DMVPN Spoke Tunnel0 source |
+| 51 | BR1-SW1-L3 | Gi1/0 | BR1-SW2-L3 | Gi1/0 | - | Po1 (VLAN 10/100) |
+| 52 | BR1-SW1-L3 | Gi1/1 | BR1-SW2-L3 | Gi1/1 | - | Po1 |
+| 53 | BR1-SW1-L3 | Gi2/0 | BR1-SW3-L3 | Gi0/0 | - | 트렁크 (연결 확인됨) |
+| 54 | BR1-SW2-L3 | Gi2/0 | BR1-SW3-L3 | Gi0/1 | - | 트렁크 (연결 확인됨) |
+| 55 | BR1-PC1 | eth0 | BR1-SW3-L3 | Gi3/0 | - | VLAN 10 access (Alpine Linux, 연결 확인됨) |
+| 56 | BR1-PC2 | eth0 | BR1-SW3-L3 | Gi3/1 | - | VLAN 10 access (Alpine Linux, 연결 확인됨) |
 
 ### BR2 (BR1과 같은 패턴)
 
 | # | A 장비 | A 포트 | B 장비 | B 포트 | 서브넷 | 비고 |
 |---|---|---|---|---|---|---|
-| 55 | BR2-SW1-L3 | Gi0/0 | BR2-R1 | Gi0/0 | - | 서브넷 미정 |
-| 56 | BR2-SW1-L3 | Gi0/1 | BR2-R2 | Gi0/0 | - | 서브넷 미정 |
-| 57 | BR2-SW2-L3 | Gi0/0 | BR2-R1 | Gi1/0 | - | 서브넷 미정 |
-| 58 | BR2-SW2-L3 | Gi0/1 | BR2-R2 | Gi1/0 | - | 서브넷 미정 |
-| 59 | BR2-R1 | Gi2/0 | BR2-R2 | Gi2/0 | 10.4.0.16/30 | - |
-| 60 | BR2-R1 | Gi3/0 | ISP-1-PE-B | Gi3/0 | 100.1.41.0/30 | ISP-1 연결 |
-| 61 | BR2-R2 | Gi3/0 | ISP-2-PE-B | Gi3/0 | 100.2.42.0/30 | ISP-2 연결 |
-| 62 | BR2-R2 | Gi4/0 | PrivI-net | Gi4/0 | 203.0.113.16/30 | PI 연결, DMVPN Spoke Tunnel0 source |
-| 63 | BR2-SW1-L3 | Gi1/0 | BR2-SW2-L3 | Gi1/0 | - | Po1 (VLAN 10/100) |
-| 64 | BR2-SW1-L3 | Gi1/1 | BR2-SW2-L3 | Gi1/1 | - | Po1 |
-| 65 | BR2-SW1-L3 | Gi2/0 | BR2-SW3-L2 | Gi0/0 | - | 트렁크 (포트는 제안값) |
-| 66 | BR2-SW2-L3 | Gi2/0 | BR2-SW3-L2 | Gi0/1 | - | 트렁크 (포트는 제안값) |
-| 67 | H1 | 미정 | BR2-SW3-L2 | 미정 | - | VLAN 10 access (호스트 노드 없음) |
-| 68 | H2 | 미정 | BR2-SW3-L2 | 미정 | - | VLAN 10 access (호스트 노드 없음) |
+| 57 | BR2-SW1-L3 | Gi0/0 | BR2-R1 | Gi0/0 | - | 서브넷 미정 |
+| 58 | BR2-SW1-L3 | Gi0/1 | BR2-R2 | Gi0/0 | - | 서브넷 미정 |
+| 59 | BR2-SW2-L3 | Gi0/0 | BR2-R1 | Gi1/0 | - | 서브넷 미정 |
+| 60 | BR2-SW2-L3 | Gi0/1 | BR2-R2 | Gi1/0 | - | 서브넷 미정 |
+| 61 | BR2-R1 | Gi2/0 | BR2-R2 | Gi2/0 | 10.4.0.16/30 | - |
+| 62 | BR2-R1 | Gi3/0 | ISP-1-PE-B | Gi3/0 | 100.1.41.0/30 | ISP-1 연결 |
+| 63 | BR2-R2 | Gi3/0 | ISP-2-PE-B | Gi3/0 | 100.2.42.0/30 | ISP-2 연결 |
+| 64 | BR2-R2 | Gi4/0 | PrivI-net | Gi4/0 | 203.0.113.16/30 | PI 연결, DMVPN Spoke Tunnel0 source |
+| 65 | BR2-SW1-L3 | Gi1/0 | BR2-SW2-L3 | Gi1/0 | - | Po1 (VLAN 10/100) |
+| 66 | BR2-SW1-L3 | Gi1/1 | BR2-SW2-L3 | Gi1/1 | - | Po1 |
+| 67 | BR2-SW1-L3 | Gi2/0 | BR2-SW3-L2 | Gi0/0 | - | 트렁크 (연결 확인됨) |
+| 68 | BR2-SW2-L3 | Gi2/0 | BR2-SW3-L2 | Gi0/1 | - | 트렁크 (연결 확인됨) |
+| 69 | BR2-PC1 | eth0 | BR2-SW3-L2 | Gi3/0 | - | VLAN 10 access (Alpine Linux, 연결 확인됨) |
+| 70 | BR2-PC2 | eth0 | BR2-SW3-L2 | Gi3/1 | - | VLAN 10 access (Alpine Linux, 연결 확인됨) |
 
 ### ISP-1
 
 | # | A 장비 | A 포트 | B 장비 | B 포트 | 서브넷 | 비고 |
 |---|---|---|---|---|---|---|
-| 69 | ISP-1-PE-A | Gi0/0 | ISP-1-P1 | Gi0/0 | 100.1.0.0/30 | - |
-| 70 | ISP-1-PE-A | Gi1/0 | ISP-1-P2 | Gi0/0 | 100.1.0.4/30 | - |
-| 71 | ISP-1-PE-B | Gi0/0 | ISP-1-P1 | Gi1/0 | 100.1.0.8/30 | - |
-| 72 | ISP-1-PE-B | Gi1/0 | ISP-1-P2 | Gi1/0 | 100.1.0.12/30 | - |
-| 73 | ISP-1-P1 | Gi2/0 | ISP-1-P2 | Gi2/0 | 100.1.0.16/30 | - |
+| 71 | ISP-1-PE-A | Gi0/0 | ISP-1-P1 | Gi0/0 | 100.1.0.0/30 | - |
+| 72 | ISP-1-PE-A | Gi1/0 | ISP-1-P2 | Gi0/0 | 100.1.0.4/30 | - |
+| 73 | ISP-1-PE-B | Gi0/0 | ISP-1-P1 | Gi1/0 | 100.1.0.8/30 | - |
+| 74 | ISP-1-PE-B | Gi1/0 | ISP-1-P2 | Gi1/0 | 100.1.0.12/30 | - |
+| 75 | ISP-1-P1 | Gi2/0 | ISP-1-P2 | Gi2/0 | 100.1.0.16/30 | - |
 
 ### ISP-2
 
 | # | A 장비 | A 포트 | B 장비 | B 포트 | 서브넷 | 비고 |
 |---|---|---|---|---|---|---|
-| 74 | ISP-2-PE-A | Gi0/0 | ISP-2-P1 | Gi0/0 | 100.2.0.0/30 | - |
-| 75 | ISP-2-PE-A | Gi1/0 | ISP-2-P2 | Gi0/0 | 100.2.0.4/30 | - |
-| 76 | ISP-2-PE-B | Gi0/0 | ISP-2-P1 | Gi1/0 | 100.2.0.8/30 | - |
-| 77 | ISP-2-PE-B | Gi1/0 | ISP-2-P2 | Gi1/0 | 100.2.0.12/30 | - |
-| 78 | ISP-2-P1 | Gi2/0 | ISP-2-P2 | Gi2/0 | 100.2.0.16/30 | - |
+| 76 | ISP-2-PE-A | Gi0/0 | ISP-2-P1 | Gi0/0 | 100.2.0.0/30 | - |
+| 77 | ISP-2-PE-A | Gi1/0 | ISP-2-P2 | Gi0/0 | 100.2.0.4/30 | - |
+| 78 | ISP-2-PE-B | Gi0/0 | ISP-2-P1 | Gi1/0 | 100.2.0.8/30 | - |
+| 79 | ISP-2-PE-B | Gi1/0 | ISP-2-P2 | Gi1/0 | 100.2.0.12/30 | - |
+| 80 | ISP-2-P1 | Gi2/0 | ISP-2-P2 | Gi2/0 | 100.2.0.16/30 | - |
 
 
 ## 2. 장비별 사용 포트
@@ -136,25 +138,25 @@
 | BR1-R2 | Gi0/0, Gi1/0, Gi2/0, Gi3/0 | 4 |
 | BR1-SW1-L3 | Gi0/0, Gi0/1, Gi1/0, Gi1/1, Gi2/0 | 5 |
 | BR1-SW2-L3 | Gi0/0, Gi0/1, Gi1/0, Gi1/1, Gi2/0 | 5 |
-| BR1-SW3-L3 | Gi0/0, Gi0/1 | 2 |
+| BR1-SW3-L3 | Gi0/0, Gi0/1, Gi3/0, Gi3/1 | 4 |
 | BR2-R1 | Gi0/0, Gi1/0, Gi2/0, Gi3/0 | 4 |
 | BR2-R2 | Gi0/0, Gi1/0, Gi2/0, Gi3/0, Gi4/0 | 5 |
 | BR2-SW1-L3 | Gi0/0, Gi0/1, Gi1/0, Gi1/1, Gi2/0 | 5 |
 | BR2-SW2-L3 | Gi0/0, Gi0/1, Gi1/0, Gi1/1, Gi2/0 | 5 |
-| BR2-SW3-L2 | Gi0/0, Gi0/1 | 2 |
+| BR2-SW3-L2 | Gi0/0, Gi0/1, Gi3/0, Gi3/1 | 4 |
 | DC-R1 | Gi0/0, Gi1/0, Gi2/0 | 3 |
 | DC-R2 | Gi0/0, Gi1/0, Gi2/0 | 3 |
 | DC-R3 | Gi0/0, Gi1/0, Gi2/0, Gi3/0 | 4 |
 | DC-R4 | Gi0/0, Gi1/0, Gi2/0, Gi3/0 | 4 |
-| DC-SW1-L2 | Et1, Et2, Et3 | 3 |
+| DC-SW1-L2 | Et1, Et2, Et12 | 3 |
 | DC-SW1-L3 | Et1, Et2, Et3, Et4, Et5 | 5 |
-| DC-SW2-L2 | Et1, Et2, Et3 | 3 |
+| DC-SW2-L2 | Et1, Et2, Et12 | 3 |
 | DC-SW2-L3 | Et1, Et2, Et3, Et4, Et5 | 5 |
 | DC-SW3-L3 | Et1, Et2, Et3, Et4, Et5, Et6, Et7, Et8 | 8 |
 | DC-SW4-L3 | Et1, Et2, Et3, Et4, Et5, Et6, Et7, Et8 | 8 |
 | HQ-R1 | Gi0/0, Gi1/0, Gi2/0, Gi3/0 | 4 |
 | HQ-R2 | Gi0/0, Gi1/0, Gi2/0, Gi3/0, Gi4/0 | 5 |
-| HQ-SW-1 | Gi1/0, Gi1/1, Gi1/2, Gi1/3 | 4 |
+| HQ-SW-1 | Gi1/0, Gi1/1, Gi1/2, Gi1/3, Gi3/0, Gi3/1 | 6 |
 | HQ-SW-2 | Gi0/0, Gi0/1, Gi0/2, Gi0/3, Gi1/0, Gi1/1 | 6 |
 | HQ-SW-3 | Gi0/0, Gi0/1, Gi0/2, Gi0/3, Gi1/0, Gi1/1 | 6 |
 | ISP-1-P1 | Gi0/0, Gi1/0, Gi2/0 | 3 |
@@ -168,8 +170,7 @@
 
 ## 3. 미확정 항목
 
-- 사용 포트는 모두 위 표의 사용 가능 포트 안에 있습니다. 가장 많이 쓰는 장비는 라우터 5포트(`PrivI-net`, `HQ-R2`, `BR1-R1`, `BR2-R2`)와 `DC-SW3-L3`, `DC-SW4-L3`의 8포트입니다.
-- DC 서버 스위치(`DC-SW1-L2`, `DC-SW2-L2`)의 업링크 포트(`Et1`, `Et2`)와 BR1·BR2 스위치 간 트렁크 포트(`Gi2/0`, `Gi0/0`, `Gi0/1`)는 설계 문서에 없어 제안한 값입니다.
-- BR1·BR2 스위치↔라우터 L3 링크 4개의 서브넷이 정해지지 않았습니다. HQ 패턴(`10.1.0.0/30`, `.4`, `.8`, `.12`)대로 `10.3.0.0/30` ~ `10.3.0.12/30`, `10.4.0.0/30` ~ `10.4.0.12/30`을 쓸지 정해야 합니다.
-- DC-DNS-1, DC-DNS-2는 Alpine Linux(docker 노드, `eth0`)로 GNS3에 만들어져 있습니다. 사이트별 호스트(H1, H2, HQ 호스트)는 VPCS로 쓸 예정이며 노드가 없어 포트가 `미정`입니다.
-- HQ 호스트가 `HQ-SW-1`의 어느 포트에 연결되는지 설계 문서에 없습니다(HQ-SW-1은 `Gi1/0` ~ `Gi1/3`만 사용 중).
+- BR1·BR2 스위치↔라우터 L3 링크 4개씩의 서브넷이 정해지지 않았습니다. HQ 패턴(`10.1.0.0/30`, `.4`, `.8`, `.12`)대로 `10.3.0.0/30` ~ `10.3.0.12/30`, `10.4.0.0/30` ~ `10.4.0.12/30`을 쓸지 정해야 합니다.
+- HQ 호스트의 VLAN 배정(`HQ-PC1`은 VLAN 10, `HQ-PC2`는 VLAN 20)은 설계 문서의 HQ-USER-A, HQ-USER-B 기준 제안이며 스위치 설정 단계에서 확정합니다.
+- BR2의 L2 스위치는 GNS3에서 아직 `BR2-SW1-L2`라는 이름입니다. 문서 기준 이름 `BR2-SW3-L2`로 바꿔야 합니다.
+- 서버와 호스트의 IP 주소는 컨피그 단계(DHCP 풀 포함)에서 정합니다.
