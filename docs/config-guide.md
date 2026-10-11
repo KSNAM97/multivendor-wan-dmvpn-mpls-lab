@@ -1,6 +1,6 @@
 # 장비 설정 가이드
 
-`configs/<사이트>/<장비명>.<ios|eos>`를 작성할 때의 순서, 공통 규칙, 장비 종류별 설정 틀을 정리한 문서. 값은 각 설계 문서의 표를 그대로 사용하며 아래 예시는 형식 확인용.
+`configs/<사이트>/<계층>/<장비명>.<ios|eos>`를 작성할 때의 순서, 공통 규칙, 장비 종류별 설정 틀을 정리한 문서. 값은 각 설계 문서의 표를 그대로 사용하며 아래 예시는 형식 확인용.
 
 ## 1. 설계 문서 대응
 
@@ -19,6 +19,7 @@
 - 컨피그 파일의 모든 문자는 **소문자**(호스트네임, 설명, 이름, 키 포함).
 - 확장자는 벤더 기준: Cisco `.ios`, Arista `.eos`(Arista 장비는 `DC-SW*`). 파일 이름은 `<장비명>.<확장자>`.
 - 첫 줄은 벤더 표기: Cisco는 `! cisco` + `!`, Arista는 `! arista` + `!`.
+- 폴더는 `configs/<사이트>/<계층>/`로 나눔. 사이트(대분류)는 `hq`, `dc`, `br1`, `br2`, `isp1`, `isp2`, `private-internet`, 계층은 장비 역할 기준 `core`(라우터), `distribution`(L3 스위치, VRRP 게이트웨이), `access`(호스트 연결 스위치).
 - 약어 사용:
 
 | 구분 | 약어 |
@@ -26,6 +27,14 @@
 | 인터페이스 | `et`(Arista Ethernet), `gi`(GigabitEthernet), `te`, `fo`, `fa`, `po`(Port-Channel), `lo`(Loopback), `vlan` |
 | 프로토콜 | `bgp`, `ospf`, `eigrp`, `rt`, `rd`, `acl` |
 | 일반 속성 | `int`(interface), `desc`(description), `addr`(address; Cisco `ip addr`, Arista `ip add`), `no sh`(no shutdown), `mgmt`(management) |
+
+| 사이트 | core | distribution | access |
+|---|---|---|---|
+| hq | HQ-R1, HQ-R2 | HQ-SW-2, HQ-SW-3 | HQ-SW-1 |
+| dc | DC-R1 ~ DC-R4 | DC-SW1-L3 ~ DC-SW4-L3 | DC-SW1-L2, DC-SW2-L2 |
+| br1 | BR1-R1, BR1-R2 | BR1-SW1-L3, BR1-SW2-L3 | BR1-SW3-L3 |
+| br2 | BR2-R1, BR2-R2 | BR2-SW1-L3, BR2-SW2-L3 | BR2-SW3-L2 |
+| isp1, isp2, private-internet | 전체 라우터(PE, P, Private-net) | - | - |
 
 - 이 문서의 예시와 `configs/**/*.ios`, `configs/**/*.eos`는 같은 규칙 적용. 문서 본문(표, 설명)의 장비명은 `HQ-R2`처럼 대소문자 표기 유지.
 
@@ -550,7 +559,7 @@ iface eth0 inet dhcp
 ## 7. 저장과 백업
 
 - 변경 전 장비에서 `copy running-config flash:<장비명>-backup-<날짜>.cfg`로 백업.
-- 변경 후 `copy running-config startup-config`(EOS는 `write`)로 저장하고, 확인한 컨피그를 `configs/<사이트>/<장비명>.<ios|eos>`에 반영.
+- 변경 후 `copy running-config startup-config`(EOS는 `write`)로 저장하고, 확인한 컨피그를 `configs/<사이트>/<계층>/<장비명>.<ios|eos>`에 반영.
 - 실습 환경이므로 접속 비밀번호(`admin1234`)와 DMVPN 키(ISAKMP `dmvpn-hub`, NHRP `nhrpkey1`)를 컨피그와 문서에 그대로 기재.
 
 ## 8. 설정 후 확인
@@ -561,7 +570,7 @@ iface eth0 inet dhcp
 | OSPF | `show ip ospf neighbor`, `show ip route ospf` | `show ip ospf neighbor`, `show ip route ospf` |
 | BGP | `show ip bgp summary` | - |
 | VRRP | `show vrrp brief` | `show vrrp brief` |
-| 채널, 트렁크 | `show etherchannel summary`, `show interfaces trunk` | `show port-channel summary`, `show interfaces trunk` |
+| 채널, 트렁크 | `show etherchannel summary`, `show interfaces trunk` | `show port-channel dense`, `show interfaces trunk` |
 | MSTP | `show spanning-tree mst`, `show spanning-tree mst configuration` | `show spanning-tree mst`, `show spanning-tree mst configuration` |
 | DMVPN | `show dmvpn`, `show ip nhrp`, `show crypto ipsec sa` | - |
 | DHCP | `show ip dhcp binding`, `show ip dhcp pool` | - |

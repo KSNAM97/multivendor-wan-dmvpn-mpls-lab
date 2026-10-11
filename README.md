@@ -44,14 +44,17 @@ DC ←── DMVPN Phase3 (mGRE over IPsec, Private Internet 경유) ──→ H
 
 ```
 network-project/
-├── configs/
+├── configs/                  사이트/계층(core, distribution, access)/장비
 │   ├── hq/
-│   ├── dc/
-│   ├── br1/
-│   ├── br2/
-│   ├── isp1/
-│   ├── isp2/
-│   └── private-internet/
+│   │   ├── core/             HQ-R1.ios, HQ-R2.ios
+│   │   ├── distribution/     HQ-SW-2.ios, HQ-SW-3.ios
+│   │   └── access/           HQ-SW-1.ios
+│   ├── dc/                   core, distribution, access (Arista는 .eos)
+│   ├── br1/                  core, distribution, access
+│   ├── br2/                  core, distribution, access
+│   ├── isp1/core/
+│   ├── isp2/core/
+│   └── private-internet/core/
 ├── docs/
 │   ├── network-project-final.md
 │   ├── port-mapping.md
@@ -82,7 +85,7 @@ network-project/
 
 | 폴더 | 내용 |
 | --- | --- |
-| `configs/` | 사이트별 장비 컨피그 (`configs/<사이트>/<장비명>.<ios|eos>`) |
+| `configs/` | 사이트별 장비 컨피그 (`configs/<사이트>/<계층>/<장비명>.<ios|eos>`) |
 | `docs/` | 전체 설계(아키텍처, AS / VLAN / IP, 인터페이스 매핑, 정책, 빌드 순서), 프로토콜별 상세 설계(OSPF, BGP, VLAN, DMVPN, DHCP·DNS), 장비 설정 가이드, 일정 |
 | `jira/` | Jira 티켓 목록과 마감일 (현재 Jira 이슈 기준 CSV) |
 | `slack/` | 팀 공지 초안 |

@@ -19,7 +19,7 @@ DC 서버 VLAN(50)은 DC-DNS-1(주)과 DC-DNS-2(백업) 두 대로 구성합니�
 - 커밋 메시지: <Jira키>: [역할][VLAN태그] 내용
   예) KAN-14: [Network][vlan-dc-server] DC-DNS-1 ACL 추가
   Jira 프로젝트 키는 KAN이고, 커밋 맨 앞에 키를 적으면 이슈에 자동 연결됩니다.
-- 컨피그 파일: configs/<사이트>/<장비명>.<ios|eos> 로 저장
+- 컨피그 파일: configs/<사이트>/<계층>/<장비명>.<ios|eos> 로 저장
   변경 전에 장비에서 copy running-config flash:<장비명>-backup-<날짜>.cfg 로 백업
 
 ■ 리소스 주의
