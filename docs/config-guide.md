@@ -24,7 +24,7 @@
 |---|---|
 | 인터페이스 | `et`(Arista Ethernet), `gi`(GigabitEthernet), `te`, `fo`, `fa`, `po`(Port-Channel), `lo`(Loopback), `vlan` |
 | 프로토콜 | `bgp`, `ospf`, `eigrp`, `rt`, `rd`, `acl` |
-| 일반 속성 | `desc`(description), `addr`(address; Cisco `ip addr`, Arista `ip add`), `mgmt`(management) |
+| 일반 속성 | `int`(interface), `desc`(description), `addr`(address; Cisco `ip addr`, Arista `ip add`), `no sh`(no shutdown), `mgmt`(management) |
 
 - 이 문서의 예시와 `configs/**/*.cfg`는 같은 규칙 적용. 문서 본문(표, 설명)의 장비명은 `HQ-R2`처럼 대소문자 표기 유지.
 
@@ -63,19 +63,19 @@ line vty 0 4
  password admin1234
  login
 !
-interface lo0
+int lo0
  ip addr 11.11.11.2 255.255.255.255
 !
-interface gi0/0
+int gi0/0
  desc to hq-sw-2 gi1/0
  ip addr 10.1.0.5 255.255.255.252
- no shutdown
+ no sh
 ```
 
 - 콘솔에서 `enable`, `configure terminal`로 설정 모드에 진입한 뒤 위 내용을 붙여 넣음(진입 명령은 파일에 기재하지 않음).
 - 접속 설정(`enable secret`, `line vty`)은 모든 Cisco 장비에 같은 형식으로 적용. Arista는 `username admin secret admin1234`.
 - 실습 환경이므로 접속 비밀번호는 `admin1234`로 통일하고 컨피그와 문서에 그대로 기재(7절).
-- 모든 인터페이스에 `description`(연결 상대와 포트)을 입력하고 `no shutdown`을 명시.
+- 모든 인터페이스에 `desc`(연결 상대와 포트)를 입력하고 `no sh`를 명시.
 
 ### 3.2 OSPF(사이트 프로세스)
 
@@ -84,9 +84,9 @@ router ospf 11
  router-id 11.11.11.2
  passive-interface lo0
 !
-interface lo0
+int lo0
  ip ospf 11 area 1
-interface gi0/0
+int gi0/0
  ip ospf 11 area 1
  ip ospf network point-to-point
 ```
@@ -141,7 +141,7 @@ crypto ipsec profile dmvpn-profile
  set pfs group5
  set security-association lifetime seconds 3600
 !
-interface tunnel0
+int tunnel0
  ip addr 172.16.0.13 255.255.255.0
  ip mtu 1400
  ip tcp adjust-mss 1360
@@ -168,7 +168,7 @@ interface tunnel0
 ```
 router ospf 2
  router-id 11.11.11.2
-interface gi4/0
+int gi4/0
  ip ospf 2 area 100
  ip ospf network point-to-point
 !
@@ -204,7 +204,7 @@ policy-map pm-lan-out
   shape average 10000000
   service-policy pm-lan-out-child
 !
-interface gi0/0
+int gi0/0
  service-policy output pm-lan-out
 ```
 
@@ -229,14 +229,14 @@ vlan 100
 vlan 999
  name native
 !
-interface range gi0/0 - 1
+int range gi0/0 - 1
  channel-group 1 mode active
-interface po1
+int po1
  switchport trunk encapsulation dot1q
  switchport mode trunk
  switchport trunk native vlan 999
  switchport trunk allowed vlan 10,20,100
-interface gi3/0
+int gi3/0
  switchport mode access
  switchport access vlan 10
 ```
@@ -247,14 +247,14 @@ interface gi3/0
 
 ```
 ip routing
-interface vlan10
+int vlan10
  ip addr 10.1.10.2 255.255.255.0
  standby version 2
  standby 10 ip 10.1.10.1
  standby 10 priority 110
  standby 10 preempt
 !
-interface gi1/0
+int gi1/0
  no switchport
  ip addr 10.1.0.2 255.255.255.252
 ```
@@ -279,29 +279,29 @@ vlan 100
 vlan 999
  name native
 !
-interface gi0/0
+int gi0/0
  desc to br2-sw1-l3 gi2/0
  switchport trunk encapsulation dot1q
  switchport mode trunk
  switchport trunk native vlan 999
  switchport trunk allowed vlan 10,100
-interface gi0/1
+int gi0/1
  desc to br2-sw2-l3 gi2/0
  switchport trunk encapsulation dot1q
  switchport mode trunk
  switchport trunk native vlan 999
  switchport trunk allowed vlan 10,100
-interface gi3/0
+int gi3/0
  desc to br2-pc1 eth0
  switchport mode access
  switchport access vlan 10
  spanning-tree portfast
-interface gi3/1
+int gi3/1
  desc to br2-pc2 eth0
  switchport mode access
  switchport access vlan 10
  spanning-tree portfast
-interface vlan100
+int vlan100
  ip addr 10.4.100.23 255.255.255.0
 ```
 
@@ -325,16 +325,16 @@ vlan 100
 vlan 999
    name native
 !
-interface range et 5-6
+int range et 5-6
    channel-group 1 mode active
-interface po1
+int po1
    switchport mode trunk
    switchport trunk native vlan 999
    switchport trunk allowed vlan 50,100
-interface vlan50
+int vlan50
    ip add 10.2.50.2/24
    ip virtual-router address 10.2.50.1
-interface et3
+int et3
    no switchport
    ip add 10.2.0.38/30
    ip ospf network point-to-point
@@ -364,22 +364,22 @@ vlan 100
 vlan 999
    name native
 !
-interface et1
+int et1
    desc to dc-sw3-l3 et7
    switchport mode trunk
    switchport trunk native vlan 999
    switchport trunk allowed vlan 50,100
-interface et2
+int et2
    desc to dc-sw4-l3 et7
    switchport mode trunk
    switchport trunk native vlan 999
    switchport trunk allowed vlan 50,100
-interface et12
+int et12
    desc to dc-dns-1 eth0
    switchport mode access
    switchport access vlan 50
    spanning-tree portfast
-interface vlan100
+int vlan100
    ip add 10.2.100.21/24
 ```
 

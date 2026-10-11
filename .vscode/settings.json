@@ -1,0 +1,21 @@
+{
+    "files.associations": {
+        "*.cfg": "cisco",
+        "**/configs/dc/DC-SW*.cfg": "eos"
+    },
+    "[cisco]": {
+        "editor.quickSuggestions": { "other": true, "comments": false, "strings": true },
+        "editor.wordBasedSuggestions": "currentDocument",
+        "editor.tabSize": 1,
+        "editor.insertSpaces": true,
+        "editor.detectIndentation": false
+    },
+    "[eos]": {
+        "editor.quickSuggestions": { "other": true, "comments": false, "strings": true },
+        "editor.wordBasedSuggestions": "currentDocument",
+        "editor.tabSize": 3,
+        "editor.insertSpaces": true,
+        "editor.detectIndentation": false
+    },
+    "files.eol": "\n"
+}
