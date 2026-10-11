@@ -28,9 +28,20 @@ int gi1/1
  ip addr 10.1.0.6 255.255.255.252
  no sh
 !
+vlan 10
+ name hq-public
+vlan 20
+ name hq-private
+vlan 100
+ name mgmt
+vlan 999
+ name native
+!
 int range gi0/0 - 1
+ desc to hq-sw-1 po1
  channel-group 1 mode active
 int range gi0/2 - 3
+ desc to hq-sw-3 po3
  channel-group 3 mode active
 !
 int po1
@@ -45,3 +56,8 @@ int po3
  switchport mode trunk
  switchport trunk native vlan 999
  switchport trunk allowed vlan 10,20,100
+!
+int vlan 100
+ ip addr 10.1.100.12 255.255.255.0
+ no sh
+!

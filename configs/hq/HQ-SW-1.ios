@@ -23,8 +23,10 @@ vlan 999
  name native
 !
 int range gi1/0 - 1
+ desc to hq-sw-2 po1
  channel-group 1 mode active
 int range gi1/2 - 3
+ desc to hq-sw-3 po2
  channel-group 2 mode active
 !
 int po1

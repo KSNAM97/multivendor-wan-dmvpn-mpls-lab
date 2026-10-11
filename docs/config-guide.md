@@ -76,7 +76,7 @@ int gi0/0
 - 콘솔에서 `enable`, `configure terminal`로 설정 모드에 진입한 뒤 위 내용을 붙여 넣음(진입 명령은 파일에 기재하지 않음).
 - 접속 설정(`enable secret`, `line vty`)은 모든 Cisco 장비에 같은 형식으로 적용. Arista는 `username admin secret admin1234`.
 - 실습 환경이므로 접속 비밀번호는 `admin1234`로 통일하고 컨피그와 문서에 그대로 기재(7절).
-- 모든 인터페이스에 `desc`(연결 상대와 포트)를 입력하고 `no sh`를 명시.
+- 모든 인터페이스에 `desc`(연결 상대와 포트)를 입력하고 `no sh`를 명시. 단, EtherChannel 멤버 포트는 `int range`로 묶어 범위에 `desc to <상대 장비> po<번호>`를 한 번만 입력(포트별 `desc`는 생략).
 
 ### 3.2 OSPF(사이트 프로세스)
 
@@ -236,8 +236,10 @@ vlan 999
  name native
 !
 int range gi0/0 - 1
+ desc to hq-sw-2 po1
  channel-group 1 mode active
 int po1
+ desc to hq-sw-2 po1
  switchport trunk encapsulation dot1q
  switchport mode trunk
  switchport trunk native vlan 999
@@ -313,6 +315,61 @@ int gi3/1
 int vlan100
  ip addr 10.4.100.23 255.255.255.0
 ```
+
+### 4.4 L3 스위치 OSPF(HQ-SW-2)
+
+```
+router ospf 11
+ router-id 11.11.11.12
+ passive-interface lo0
+ passive-interface vlan10
+ passive-interface vlan20
+!
+int lo0
+ ip ospf 11 area 1
+int vlan10
+ ip ospf 11 area 1
+int vlan20
+ ip ospf 11 area 1
+int gi1/0
+ ip ospf 11 area 1
+ ip ospf network point-to-point
+int gi1/1
+ ip ospf 11 area 1
+ ip ospf network point-to-point
+```
+
+- 사용자 VLAN SVI와 `lo0`는 Area에 포함하고 `passive-interface` 처리. 라우티드 포트는 `point-to-point`. MGMT VLAN 100은 OSPF에 포함하지 않음.
+- 프로세스, Area, Router ID는 `docs/ospf-design.md` 2~3절의 표 값을 사용.
+
+### 4.5 MGMT SVI
+
+```
+int vlan 100
+ ip addr 10.1.100.12 255.255.255.0
+ no sh
+```
+
+- 주소는 `10.<사이트>.100.<장비 번호>`(`docs/vlan-design.md` 1절). 예시는 `HQ-SW-2`(`.12`). 게이트웨이와 OSPF 광고는 없음.
+- L2 스위치(`BR2-SW3-L2`)는 4.3절 예시처럼 같은 형식에 장비 번호만 20을 더한 값을 사용.
+
+### 4.6 DHCP 서버(게이트웨이 스위치)
+
+```
+service dhcp
+ip dhcp excluded-address 10.1.10.1 10.1.10.99
+ip dhcp excluded-address 10.1.10.164 10.1.10.254
+!
+ip dhcp pool hq-public
+ network 10.1.10.0 255.255.255.0
+ default-router 10.1.10.1
+ dns-server 10.2.50.10 10.2.50.11
+ domain-name lab.local
+ lease 1
+```
+
+- 예시는 `HQ-SW-2`(Active, 풀 `.100` – `.163`). `HQ-SW-3`(Standby)은 제외 구간만 `10.1.10.1 10.1.10.163`, `10.1.10.228 10.1.10.254`로 입력.
+- VLAN 20과 BR1, BR2도 같은 형식에서 서브넷과 풀 이름만 변경. 값은 `docs/dhcp-dns-design.md` 3절 표.
 
 ## 5. Arista cEOS(DC)
 
@@ -404,10 +461,44 @@ int vlan100
 
 - `DC-SW2-L2`는 호스트네임 `dc-sw2-l2`, 업링크 설명 `desc to dc-sw3-l3 et8`(et1), `desc to dc-sw4-l3 et8`(et2), 서버 포트 설명 `desc to dc-dns-2 eth0`, MGMT 주소 `ip add 10.2.100.22/24`로 변경.
 
+### 5.2 접속 설정
+
+```
+username admin privilege 15 role network-admin secret admin1234
+```
+
+- Cisco의 `enable secret`, `line vty`에 해당. 호스트네임과 접속 계정은 모든 Arista 장비에 같은 형식으로 적용.
+
+### 5.3 서버 VLAN ACL(DC-SW3-L3, DC-SW4-L3)
+
+```
+ip access-list dns-only
+   10 permit udp any host 10.2.50.10 eq 53
+   20 permit tcp any host 10.2.50.10 eq 53
+   30 permit udp any host 10.2.50.11 eq 53
+   40 permit tcp any host 10.2.50.11 eq 53
+   50 deny ip any any log
+!
+int vlan50
+   ip access-group dns-only out
+```
+
+- 서버 VLAN으로는 DNS(UDP/TCP 53)만 허용. 순서와 값은 `docs/dhcp-dns-design.md` 5절 표.
+- cEOS에서 SVI 출력 방향 ACL의 지원 여부는 장비에서 입력해 확인(동작하지 않으면 입력 방향 또는 포트 적용으로 변경).
+
 ## 6. 알파인 노드
 
 - `DC-DNS-1`, `DC-DNS-2`: `docs/dhcp-dns-design.md` 2절의 `interfaces`, `dnsmasq.conf`, `hosts.lab` 사용.
 - 호스트(`HQ-PC*`, `BR*-PC*`): DHCP 클라이언트(`docs/dhcp-dns-design.md` 4절). 별도 컨피그 파일 없음.
+
+- 호스트 `/etc/network/interfaces`(DHCP 클라이언트):
+
+```
+auto eth0
+iface eth0 inet dhcp
+```
+
+- 서버(`DC-DNS-1`, `DC-DNS-2`)의 고정 주소 설정과 `dnsmasq.conf`는 `docs/dhcp-dns-design.md` 2.1절 형식 사용.
 
 ## 7. 저장과 백업
 
@@ -426,4 +517,8 @@ int vlan100
 | 채널, 트렁크 | `show etherchannel summary`, `show interfaces trunk` | `show port-channel summary`, `show interfaces trunk` |
 | MSTP | `show spanning-tree mst` | `show spanning-tree mst` |
 | DMVPN | `show dmvpn`, `show ip nhrp`, `show crypto ipsec sa` | - |
+| DHCP | `show ip dhcp binding`, `show ip dhcp pool` | - |
+| IP SLA, track | `show ip sla statistics`, `show track` | - |
+| ACL | `show ip access-lists` | `show ip access-lists` |
+| QoS | `show policy-map interface gi0/0` | - |
 
