@@ -419,7 +419,7 @@ spanning-tree mst configuration
 
 ## 5. Arista cEOS(DC)
 
-대상: `DC-SW1-L3` ~ `DC-SW4-L3`, `DC-SW1-L2`, `DC-SW2-L2`. 인터페이스 이름은 `et<번호>`(범위는 `int range et 5-6`), 주소는 `ip add`, 접두 3칸 들여쓰기.
+대상: `DC-SW1-L3` ~ `DC-SW4-L3`, `DC-SW1-L2`, `DC-SW2-L2`. 인터페이스 이름은 `et<번호>`(범위는 `int range et 5-6`), 주소는 `ip add`. 하위 명령 들여쓰기는 Cisco와 같은 1칸.
 
 ```
 ! arista
@@ -427,40 +427,40 @@ spanning-tree mst configuration
 hostname dc-sw3-l3
 spanning-tree mode mstp
 spanning-tree mst configuration
-   name dc
-   revision 1
-   instance 1 vlan 50,100
+ name dc
+ revision 1
+ instance 1 vlan 50,100
 !
 spanning-tree mst 1 priority 4096
 ip routing
 !
 vlan 50
-   name server
+ name server
 vlan 100
-   name mgmt
+ name mgmt
 vlan 999
-   name native
+ name native
 !
 int range et 5-6
-   channel-group 1 mode active
+ channel-group 1 mode active
 int po1
-   switchport mode trunk
-   switchport trunk native vlan 999
-   switchport trunk allowed vlan 50,100
+ switchport mode trunk
+ switchport trunk native vlan 999
+ switchport trunk allowed vlan 50,100
 int vlan50
-   ip add 10.2.50.2/24
-   vrrp 50 ipv4 10.2.50.1
-   vrrp 50 priority-level 110
+ ip add 10.2.50.2/24
+ vrrp 50 ipv4 10.2.50.1
+ vrrp 50 priority-level 110
 int et3
-   no switchport
-   ip add 10.2.0.38/30
-   ip ospf network point-to-point
+ no switchport
+ ip add 10.2.0.38/30
+ ip ospf network point-to-point
 !
 router ospf 10
-   router-id 10.10.10.13
-   passive-interface vlan50
-   network 10.2.0.36/30 area 0.0.0.0
-   network 10.2.50.0/24 area 0.0.0.0
+ router-id 10.10.10.13
+ passive-interface vlan50
+ network 10.2.0.36/30 area 0.0.0.0
+ network 10.2.50.0/24 area 0.0.0.0
 ```
 
 - 예시는 `DC-SW3-L3`. `DC-SW4-L3`은 SVI 주소 `.3`, `vrrp 50 priority-level 90`, `spanning-tree mst 1 priority 8192`. `DC-SW1-L3`, `DC-SW2-L3`은 VLAN 설정 없이 라우티드 포트와 OSPF만 사용.
@@ -474,35 +474,35 @@ router ospf 10
 hostname dc-sw1-l2
 spanning-tree mode mstp
 spanning-tree mst configuration
-   name dc
-   revision 1
-   instance 1 vlan 50,100
+ name dc
+ revision 1
+ instance 1 vlan 50,100
 !
 !
 vlan 50
-   name server
+ name server
 vlan 100
-   name mgmt
+ name mgmt
 vlan 999
-   name native
+ name native
 !
 int et1
-   desc to dc-sw3-l3 et7
-   switchport mode trunk
-   switchport trunk native vlan 999
-   switchport trunk allowed vlan 50,100
+ desc to dc-sw3-l3 et7
+ switchport mode trunk
+ switchport trunk native vlan 999
+ switchport trunk allowed vlan 50,100
 int et2
-   desc to dc-sw4-l3 et7
-   switchport mode trunk
-   switchport trunk native vlan 999
-   switchport trunk allowed vlan 50,100
+ desc to dc-sw4-l3 et7
+ switchport mode trunk
+ switchport trunk native vlan 999
+ switchport trunk allowed vlan 50,100
 int et12
-   desc to dc-dns-1 eth0
-   switchport mode access
-   switchport access vlan 50
-   spanning-tree portfast
+ desc to dc-dns-1 eth0
+ switchport mode access
+ switchport access vlan 50
+ spanning-tree portfast
 int vlan100
-   ip add 10.2.100.21/24
+ ip add 10.2.100.21/24
 ```
 
 - `DC-SW2-L2`는 호스트네임 `dc-sw2-l2`, 업링크 설명 `desc to dc-sw3-l3 et8`(et1), `desc to dc-sw4-l3 et8`(et2), 서버 포트 설명 `desc to dc-dns-2 eth0`, MGMT 주소 `ip add 10.2.100.22/24`로 변경.
@@ -519,14 +519,14 @@ username admin privilege 15 role network-admin secret admin1234
 
 ```
 ip access-list dns-only
-   10 permit udp any host 10.2.50.10 eq 53
-   20 permit tcp any host 10.2.50.10 eq 53
-   30 permit udp any host 10.2.50.11 eq 53
-   40 permit tcp any host 10.2.50.11 eq 53
-   50 deny ip any any log
+ 10 permit udp any host 10.2.50.10 eq 53
+ 20 permit tcp any host 10.2.50.10 eq 53
+ 30 permit udp any host 10.2.50.11 eq 53
+ 40 permit tcp any host 10.2.50.11 eq 53
+ 50 deny ip any any log
 !
 int vlan50
-   ip access-group dns-only out
+ ip access-group dns-only out
 ```
 
 - 서버 VLAN으로는 DNS(UDP/TCP 53)만 허용. 순서와 값은 `docs/dhcp-dns-design.md` 5절 표.

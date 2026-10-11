@@ -71,7 +71,7 @@
 | 항목 | Cisco | Arista |
 |---|---|---|
 | 모드 | `spanning-tree mode mst` | `spanning-tree mode mstp` |
-| region 설정 | `spanning-tree mst configuration` 아래 `name`, `revision`, `instance` | 같은 형식(3칸 들여쓰기) |
+| region 설정 | `spanning-tree mst configuration` 아래 `name`, `revision`, `instance` | 같은 형식(1칸 들여쓰기) |
 | 우선순위 | `spanning-tree mst 1 priority 4096` | `spanning-tree mst 1 priority 4096` |
 | 확인 | `show spanning-tree mst` | `show spanning-tree mst` |
 
@@ -108,16 +108,16 @@ int vlan20
 ```
 spanning-tree mode mstp
 spanning-tree mst configuration
-   name dc
-   revision 1
-   instance 1 vlan 50,100
+ name dc
+ revision 1
+ instance 1 vlan 50,100
 !
 spanning-tree mst 1 priority 4096
 !
 int vlan50
-   ip add 10.2.50.2/24
-   vrrp 50 ipv4 10.2.50.1
-   vrrp 50 priority-level 110
+ ip add 10.2.50.2/24
+ vrrp 50 ipv4 10.2.50.1
+ vrrp 50 priority-level 110
 ```
 
 - `DC-SW4-L3`은 SVI 주소 `.3`, `vrrp 50 priority-level 90`, `spanning-tree mst 1 priority 8192`.

@@ -45,16 +45,16 @@
     "arista interface": {
         "scope": "eos",
         "prefix": "aint",
-        "body": ["int et${1:1}", "   desc to ${2:peer} ${3:et1}", "   no switchport", "   ip add ${4:10.2.0.38/30}", "$0"]
+        "body": ["int et${1:1}", " desc to ${2:peer} ${3:et1}", " no switchport", " ip add ${4:10.2.0.38/30}", "$0"]
     },
     "arista range": {
         "scope": "eos",
         "prefix": "arange",
-        "body": ["int range et ${1:5-6}", "   channel-group ${2:1} mode active", "$0"]
+        "body": ["int range et ${1:5-6}", " channel-group ${2:1} mode active", "$0"]
     },
     "arista vlan": {
         "scope": "eos",
         "prefix": "avlan",
-        "body": ["vlan ${1:50}", "   name ${2:server}", "$0"]
+        "body": ["vlan ${1:50}", " name ${2:server}", "$0"]
     }
 }
