@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "docs/port-mapping.md",
+                "file": "docs/ip-mapping.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "port-mapping"
+              "title": "ip-mapping"
             }
           }
         ]
@@ -99,7 +99,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "docs/port-mapping.md",
+                "file": "docs/ip-mapping.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -118,7 +118,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "docs/port-mapping.md",
+                "file": "docs/ip-mapping.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -161,7 +161,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "docs/port-mapping.md",
+                "file": "docs/ip-mapping.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -190,6 +190,18 @@
   },
   "active": "5aff95b4dcd4e49e",
   "lastOpenFiles": [
+    "docs/dmvpn-design.md",
+    "docs/dhcp-dns-design.md",
+    "docs/bgp-design.md",
+    "docs/port-mapping.md",
+    "docs/README.md",
+    "docs/README.md.tmp.16412.3246ff9f4300",
+    "docs/config-guide/README.md",
+    "docs/config-guide/cisco-switch.md",
+    "docs/config-guide/cisco-router.md",
+    "docs/config-guide/arista-switch.md",
+    "docs/config-guide/alpine.md",
+    "docs/config-guide",
     "configs/hq/distribution/HQ-SW-3.ios",
     "configs/hq/distribution/HQ-SW-2.ios",
     "configs/hq/distribution",
@@ -198,20 +210,13 @@
     "configs/hq/core",
     "configs/hq/access/HQ-SW-1.ios",
     "configs/hq/access",
-    "configs/dc/distribution/DC-SW4-L3.eos",
-    "configs/dc/distribution/DC-SW3-L3.eos",
-    "configs/dc/distribution/DC-SW2-L3.eos",
     "docs/vlan-design.md",
     "docs/vrrp-mstp-design.md",
     "docs/ip-mapping.md",
-    "docs/port-mapping.md",
     "docs/schedule.md",
     "docs/config-guide.md",
-    "docs/bgp-design.md",
     "docs/ospf-design.md",
     "CONTRIBUTING.md",
-    "docs/network-project-final.md",
-    "docs/dmvpn-design.md",
-    "docs/dhcp-dns-design.md"
+    "docs/network-project-final.md"
   ]
 }

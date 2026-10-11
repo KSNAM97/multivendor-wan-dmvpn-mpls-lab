@@ -65,7 +65,8 @@ network-project/
 │   ├── vrrp-mstp-design.md
 │   ├── dmvpn-design.md
 │   ├── dhcp-dns-design.md
-│   ├── config-guide.md
+│   ├── README.md              문서 목차(하려는 일별 안내)
+│   ├── config-guide/          설정 가이드(README, cisco-router, cisco-switch, arista-switch, alpine)
 │   ├── schedule.md
 │   └── archive/
 │       ├── schedule-2person.md   (2인 체제 계획, 보관)
@@ -164,6 +165,8 @@ network-project/
 - DHCP: 사용자 VLAN 게이트웨이 스위치 두 대(IOS DHCP 서버)가 풀을 나눠 제공(앞 64개 Active, 뒤 64개 Standby). 풀은 `docs/ip-mapping.md` 5절, 구성은 `docs/dhcp-dns-design.md`.
 - QoS: 사이트 스위치와 연결된 라우터 인터페이스 20포트에 적용하며 스위치(IOU L2 / cEOS) QoS는 적용하지 않음.
 
-상세 설계: [`docs/ospf-design.md`](./docs/ospf-design.md), [`docs/bgp-design.md`](./docs/bgp-design.md), [`docs/vlan-design.md`](./docs/vlan-design.md), [`docs/vrrp-mstp-design.md`](./docs/vrrp-mstp-design.md), [`docs/dmvpn-design.md`](./docs/dmvpn-design.md), [`docs/dhcp-dns-design.md`](./docs/dhcp-dns-design.md), [`docs/config-guide.md`](./docs/config-guide.md)
+문서 목차: [`docs/README.md`](./docs/README.md)
+
+상세 설계: [`docs/ospf-design.md`](./docs/ospf-design.md), [`docs/bgp-design.md`](./docs/bgp-design.md), [`docs/vlan-design.md`](./docs/vlan-design.md), [`docs/vrrp-mstp-design.md`](./docs/vrrp-mstp-design.md), [`docs/dmvpn-design.md`](./docs/dmvpn-design.md), [`docs/dhcp-dns-design.md`](./docs/dhcp-dns-design.md), [`docs/config-guide/README.md`](./docs/config-guide/README.md)
 
 > 브랜치 전략, 커밋 규칙, Jira 연동 → [`CONTRIBUTING.md`](./CONTRIBUTING.md)

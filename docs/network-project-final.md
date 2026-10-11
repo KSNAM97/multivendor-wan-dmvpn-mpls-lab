@@ -213,4 +213,5 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ HQ
 | L2·게이트웨이 | `docs/vlan-design.md`, `docs/vrrp-mstp-design.md` |
 | 터널·암호화 | `docs/dmvpn-design.md` |
 | 서비스 | `docs/dhcp-dns-design.md` |
-| 설정 가이드 | `docs/config-guide.md` |
+| 설정 가이드 | `docs/config-guide/README.md`(공통 규칙), 장비별 `docs/config-guide/*.md` |
+| 문서 목차 | `docs/README.md` |
