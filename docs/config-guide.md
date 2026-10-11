@@ -383,7 +383,7 @@ interface vlan100
    ip add 10.2.100.21/24
 ```
 
-- `DC-SW2-L2`는 호스트네임 `DC-SW2-L2`, 업링크 설명 `to DC-SW3-L3 Et8`(Et1), `to DC-SW4-L3 Et8`(Et2), 서버 포트 설명 `to DC-DNS-2 eth0`, MGMT 주소 `10.2.100.22/24`로 변경.
+- `DC-SW2-L2`는 호스트네임 `dc-sw2-l2`, 업링크 설명 `desc to dc-sw3-l3 et8`(et1), `desc to dc-sw4-l3 et8`(et2), 서버 포트 설명 `desc to dc-dns-2 eth0`, MGMT 주소 `ip add 10.2.100.22/24`로 변경.
 
 ## 6. 알파인 노드
 
