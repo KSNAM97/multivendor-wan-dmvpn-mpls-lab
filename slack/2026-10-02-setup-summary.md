@@ -8,7 +8,7 @@
 - README.md: 구조, 단계, 설계 요약 / docs/: 전체 설계와 일정
 - 컨피그 저장: configs/<사이트>/<장비명>.cfg
 - 브랜치: feature/<역할>-<내용>, PR 후 본인 검토를 거쳐 main에 merge
-- 설계 반영: DC 서버 VLAN(50)은 DNS1(주 용도 DHCP)과 DB1 두 대로 구성 (DB 종류·DHCP 방식·접근 포트는 미확정)
+- 설계 반영: DC 서버 VLAN(50)은 DNS1(주)과 DNS2(백업) 두 대로 구성 (DHCP는 사이트 게이트웨이에서 제공, IP·DNS 소프트웨어는 미확정)
 
 ■ 2. Jira
 - 프로젝트 키: KAN, 이슈 29개 등록 (KAN-4 ~ KAN-32)
