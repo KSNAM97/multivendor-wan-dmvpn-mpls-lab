@@ -108,14 +108,14 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ BR
 | DC-R2 Gi0/0 | DC-SW1-L3 Et2 | 10.2.0.8/30 |
 | DC-R2 Gi1/0 | DC-SW2-L3 Et2 | 10.2.0.12/30 |
 | DC-SW1-L3 Et3 | DC-SW2-L3 Et3 | 10.2.0.16/30 |
-| DC-SW1-L3 Et4 | DC-SW3-L3 Et1 | - |
-| DC-SW1-L3 Et5 | DC-SW4-L3 Et1 | - |
-| DC-SW2-L3 Et4 | DC-SW3-L3 Et2 | - |
-| DC-SW2-L3 Et5 | DC-SW4-L3 Et2 | - |
-| DC-SW3-L3 Et3 | DC-R3 Gi0/0 | - |
-| DC-SW3-L3 Et4 | DC-R4 Gi0/0 | - |
-| DC-SW4-L3 Et3 | DC-R3 Gi1/0 | - |
-| DC-SW4-L3 Et4 | DC-R4 Gi1/0 | - |
+| DC-SW1-L3 Et4 | DC-SW3-L3 Et1 | 10.2.0.20/30 (L3, 서브넷 제안) |
+| DC-SW1-L3 Et5 | DC-SW4-L3 Et1 | 10.2.0.24/30 (L3, 서브넷 제안) |
+| DC-SW2-L3 Et4 | DC-SW3-L3 Et2 | 10.2.0.28/30 (L3, 서브넷 제안) |
+| DC-SW2-L3 Et5 | DC-SW4-L3 Et2 | 10.2.0.32/30 (L3, 서브넷 제안) |
+| DC-SW3-L3 Et3 | DC-R3 Gi0/0 | 10.2.0.36/30 (L3, 서브넷 제안) |
+| DC-SW3-L3 Et4 | DC-R4 Gi0/0 | 10.2.0.40/30 (L3, 서브넷 제안) |
+| DC-SW4-L3 Et3 | DC-R3 Gi1/0 | 10.2.0.44/30 (L3, 서브넷 제안) |
+| DC-SW4-L3 Et4 | DC-R4 Gi1/0 | 10.2.0.48/30 (L3, 서브넷 제안) |
 | DC-R3 Gi2/0 | DC-R4 Gi2/0 | 10.2.0.52/30 |
 | DC-R1 Gi2/0 | PrivI-net Gi0/0 | 203.0.113.0/30 |
 | DC-R2 Gi2/0 | PrivI-net Gi1/0 | 203.0.113.4/30 (Tunnel0 source) |
