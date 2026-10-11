@@ -1,6 +1,6 @@
 # VLAN 설계
 
-VLAN, 게이트웨이 이중화, EtherChannel, 트렁크, STP, DHCP 배치를 정리한 문서. 포트는 `docs/port-mapping.md`, 서브넷과 DHCP 풀은 `docs/ip-mapping.md` 기준.
+VLAN, 게이트웨이 이중화, EtherChannel, 트렁크, STP(MSTP), DHCP 배치를 정리한 문서. 포트는 `docs/port-mapping.md`, 서브넷과 DHCP 풀은 `docs/ip-mapping.md` 기준.
 
 ## 1. VLAN 정의
 
@@ -20,18 +20,18 @@ VLAN, 게이트웨이 이중화, EtherChannel, 트렁크, STP, DHCP 배치를 �
 
 ## 2. 게이트웨이 이중화
 
-- 전 사이트 VRRP(표준, 멀티벤더 호환)로 통일. 그룹 번호는 VLAN 번호와 동일, `preempt`는 기본 사용. 우선순위는 Active 110, Standby 100(문서의 Active/Standby는 VRRP Master/Backup).
+- 전 사이트 VRRP(표준, 멀티벤더 호환)로 통일. 그룹 번호는 VLAN 번호와 동일, `preempt`는 기본 사용. 우선순위는 Active 110, Standby 90(문서의 Active/Standby는 VRRP Master/Backup).
 - DC 서버 VLAN도 VRRP 사용(Arista `vrrp 50 ipv4 10.2.50.1`). VARP와 HSRP는 사용하지 않음.
 
 | 사이트 | VLAN | 방식 | Active / 1번 장비 | Standby / 2번 장비 | VIP | 서브넷 |
 |---|---|---|---|---|---|---|
-| HQ | 10 | VRRP | HQ-SW-2 `10.1.10.2` (110) | HQ-SW-3 `10.1.10.3` (100) | 10.1.10.1 | 10.1.10.0/24 |
-| HQ | 20 | VRRP | HQ-SW-2 `10.1.20.2` (110) | HQ-SW-3 `10.1.20.3` (100) | 10.1.20.1 | 10.1.20.0/24 |
-| DC | 50 | VRRP | DC-SW3-L3 `10.2.50.2` (110) | DC-SW4-L3 `10.2.50.3` (100) | 10.2.50.1 | 10.2.50.0/24 |
-| BR1 | 10 | VRRP | BR1-SW1-L3 `10.3.10.2` (110) | BR1-SW2-L3 `10.3.10.3` (100) | 10.3.10.1 | 10.3.10.0/24 |
-| BR2 | 10 | VRRP | BR2-SW1-L3 `10.4.10.2` (110) | BR2-SW2-L3 `10.4.10.3` (100) | 10.4.10.1 | 10.4.10.0/24 |
+| HQ | 10 | VRRP | HQ-SW-2 `10.1.10.2` (110) | HQ-SW-3 `10.1.10.3` (90) | 10.1.10.1 | 10.1.10.0/24 |
+| HQ | 20 | VRRP | HQ-SW-2 `10.1.20.2` (110) | HQ-SW-3 `10.1.20.3` (90) | 10.1.20.1 | 10.1.20.0/24 |
+| DC | 50 | VRRP | DC-SW3-L3 `10.2.50.2` (110) | DC-SW4-L3 `10.2.50.3` (90) | 10.2.50.1 | 10.2.50.0/24 |
+| BR1 | 10 | VRRP | BR1-SW1-L3 `10.3.10.2` (110) | BR1-SW2-L3 `10.3.10.3` (90) | 10.3.10.1 | 10.3.10.0/24 |
+| BR2 | 10 | VRRP | BR2-SW1-L3 `10.4.10.2` (110) | BR2-SW2-L3 `10.4.10.3` (90) | 10.4.10.1 | 10.4.10.0/24 |
 
-## 3. STP
+## 3. STP(MSTP)
 
 - 전 사이트 MSTP(IEEE 802.1s)로 통일: Cisco `spanning-tree mode mst`, Arista `spanning-tree mode mstp`.
 - 사이트마다 region 하나를 두며 region 이름은 사이트 이름(소문자), revision은 1. 사용자 또는 서버 VLAN과 MGMT VLAN 100은 instance 1에 매핑하고 native VLAN 999는 기본 instance 0에 둠. 사이트 안의 모든 스위치(L2 포함)는 같은 MST 설정 사용.

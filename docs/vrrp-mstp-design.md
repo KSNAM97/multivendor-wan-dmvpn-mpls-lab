@@ -14,10 +14,10 @@
 ### 2.1 그룹
 
 - 그룹 번호는 VLAN 번호와 동일, VIP는 서브넷의 `.1`, 장비 SVI 주소는 `.2`(Active)와 `.3`(Standby).
-- 우선순위는 Active 110, Standby 100. `preempt`는 기본 사용이라 별도 설정 없음.
+- 우선순위는 Active 110, Standby 90. `preempt`는 기본 사용이라 별도 설정 없음.
 - 광고 주기와 타이머는 기본값 사용.
 
-| 사이트 | VLAN | 그룹 | Active (110) | Standby (100) | VIP |
+| 사이트 | VLAN | 그룹 | Active (110) | Standby (90) | VIP |
 |---|---|---|---|---|---|
 | HQ | 10 (HQ-PUBLIC) | 10 | HQ-SW-2 `10.1.10.2` | HQ-SW-3 `10.1.10.3` | 10.1.10.1 |
 | HQ | 20 (HQ-PRIVATE) | 20 | HQ-SW-2 `10.1.20.2` | HQ-SW-3 `10.1.20.3` | 10.1.20.1 |
@@ -100,7 +100,7 @@ int vlan20
  no sh
 ```
 
-- `HQ-SW-3`은 SVI 주소 `.3`, `vrrp ... priority 100`, `spanning-tree mst 1 priority 8192`.
+- `HQ-SW-3`은 SVI 주소 `.3`, `vrrp ... priority 90`, `spanning-tree mst 1 priority 8192`.
 - `HQ-SW-1`은 MST 설정만 같게 입력하고 priority와 VRRP는 없음.
 
 ### 4.2 Arista 루트(DC-SW3-L3)
@@ -120,7 +120,7 @@ int vlan50
    vrrp 50 priority-level 110
 ```
 
-- `DC-SW4-L3`은 SVI 주소 `.3`, `vrrp 50 priority-level 100`, `spanning-tree mst 1 priority 8192`.
+- `DC-SW4-L3`은 SVI 주소 `.3`, `vrrp 50 priority-level 90`, `spanning-tree mst 1 priority 8192`.
 - `DC-SW1-L2`, `DC-SW2-L2`는 MST 설정만 같게 입력.
 
 ## 5. 검증

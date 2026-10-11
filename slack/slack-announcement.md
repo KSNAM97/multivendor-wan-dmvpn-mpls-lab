@@ -6,7 +6,7 @@ ISP-1 · ISP-2는 라우터별 개별 AS의 eBGP 전용 (PE-A/P1/P2/PE-B, 마름
 사이트↔ISP는 정적경로+재분배, DC↔BR1/BR2는 DMVPN Phase3(mGRE over IPsec)으로
 Private Internet(203.0.113.0/24) 경유. Private Internet에는 화이트리스트 ACL 적용.
 DC 내부 스위치 6대(L3 4대 + 서버용 L2 2대)만 Arista cEOS, 나머지는 전부 Cisco.
-DC 서버 VLAN(50)은 DC-DNS-1(주)과 DC-DNS-2(백업) 두 대로 구성합니다 (DHCP는 사이트 게이트웨이에서 제공, IP·DNS 소프트웨어는 미확정).
+DC 서버 VLAN(50)은 DC-DNS-1(주)과 DC-DNS-2(백업) 두 대로 구성합니다 (DHCP는 사이트 게이트웨이에서 제공, DNS는 알파인 `dnsmasq`, 주소 10.2.50.10, 10.2.50.11).
 
 ■ 역할 분담
 - 담당: 남기석 (전 사이트). 작업 영역은 Net-Cloud(DC, HQ, ISP-1, ISP-2, Private Internet, DNS 서버, QoS)와 Policy(BR1, BR2, DMVPN Spoke+IPsec, ACL/컨벤션/문서)로 구분

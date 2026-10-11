@@ -61,3 +61,18 @@ int vlan 100
  ip addr 10.1.100.12 255.255.255.0
  no sh
 !
+ip routing
+int vlan10
+ desc vrrp master for hq-sw-2 vlan10
+ ip addr 10.1.10.2 255.255.255.0
+ vrrp 10 ip 10.1.10.1
+ vrrp 10 priority 110
+ no sh
+!
+int vlan20
+ desc vrrp master for hq-sw-2 vlan20
+ ip addr 10.1.20.2 255.255.255.0
+ vrrp 20 ip 10.1.20.1
+ vrrp 20 priority 110
+ no sh
+!

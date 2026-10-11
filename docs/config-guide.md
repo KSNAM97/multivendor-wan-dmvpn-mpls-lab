@@ -259,13 +259,19 @@ int vlan10
  ip addr 10.1.10.2 255.255.255.0
  vrrp 10 ip 10.1.10.1
  vrrp 10 priority 110
+ no sh
+int vlan20
+ ip addr 10.1.20.2 255.255.255.0
+ vrrp 20 ip 10.1.20.1
+ vrrp 20 priority 110
+ no sh
 !
 int gi1/0
  no switchport
  ip addr 10.1.0.2 255.255.255.252
 ```
 
-- 예시는 `HQ-SW-2`(Active). `HQ-SW-3`은 SVI 주소 `.3`, priority 100. VRRP는 `preempt`가 기본 사용이라 별도 입력 없음. 라우티드 포트의 `ip ospf` 설정은 3.2절과 같은 형식.
+- 예시는 `HQ-SW-2`(Active). `HQ-SW-3`은 SVI 주소 `.3`, priority 90. VRRP는 `preempt`가 기본 사용이라 별도 입력 없음. 라우티드 포트의 `ip ospf` 설정은 3.2절과 같은 형식.
 - 사용자 VLAN의 SVI는 `passive-interface`로 설정하고 사이트 OSPF Area에 포함. DHCP 풀은 `docs/dhcp-dns-design.md` 3절.
 - 이미지(`vios_l2`)에서 `no switchport`와 `ip routing` 동작은 첫 장비에 적용해 확인 후 나머지 장비에 반복.
 
@@ -417,7 +423,7 @@ router ospf 10
    network 10.2.50.0/24 area 0.0.0.0
 ```
 
-- 예시는 `DC-SW3-L3`. `DC-SW4-L3`은 SVI 주소 `.3`, `vrrp 50 priority-level 100`, `spanning-tree mst 1 priority 8192`. `DC-SW1-L3`, `DC-SW2-L3`은 VLAN 설정 없이 라우티드 포트와 OSPF만 사용.
+- 예시는 `DC-SW3-L3`. `DC-SW4-L3`은 SVI 주소 `.3`, `vrrp 50 priority-level 90`, `spanning-tree mst 1 priority 8192`. `DC-SW1-L3`, `DC-SW2-L3`은 VLAN 설정 없이 라우티드 포트와 OSPF만 사용.
 ### 5.1 DC L2 스위치(DC-SW1-L2, DC-SW2-L2)
 
 - `ip routing`, OSPF 없이 트렁크(Et1, Et2)와 서버 액세스(Et12, VLAN 50)만 설정. EOS의 포트는 기본이 스위치포트이므로 `no switchport` 불필요.

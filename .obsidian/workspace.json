@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "docs/config-guide.md",
+                "file": "docs/vlan-design.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "config-guide"
+              "title": "vlan-design"
             }
           }
         ]
@@ -99,7 +99,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "docs/config-guide.md",
+                "file": "docs/vlan-design.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -118,7 +118,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "docs/config-guide.md",
+                "file": "docs/vlan-design.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -161,7 +161,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "docs/config-guide.md",
+                "file": "docs/vlan-design.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -190,6 +190,7 @@
   },
   "active": "5aff95b4dcd4e49e",
   "lastOpenFiles": [
+    "docs/config-guide.md",
     "docs/bgp-design.md",
     "docs/ip-mapping.md",
     "docs/ospf-design.md",
@@ -210,7 +211,6 @@
     "configs/isp1/ISP-1-P1.ios",
     "configs/hq/HQ-SW-3.ios",
     "docs/dmvpn-design.md",
-    "docs/dhcp-dns-design.md",
-    "docs/config-guide.md"
+    "docs/dhcp-dns-design.md"
   ]
 }
