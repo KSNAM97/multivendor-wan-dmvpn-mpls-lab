@@ -10,7 +10,7 @@
 | 인터페이스 IP | `docs/ip-mapping.md` |
 | OSPF | `docs/ospf-design.md` |
 | BGP(ISP) | `docs/bgp-design.md` |
-| VLAN, HSRP/VARP, STP, EtherChannel | `docs/vlan-design.md` |
+| VLAN, VRRP, MSTP, EtherChannel | `docs/vlan-design.md` |
 | DMVPN, IPsec | `docs/dmvpn-design.md` |
 | DHCP, DNS | `docs/dhcp-dns-design.md` |
 
@@ -33,7 +33,7 @@
 | 단계 | 일정 | 대상 | 작업 | 기준 문서 |
 |---|---|---|---|---|
 | 1 | 1주 월~화 | 전 장비 | 호스트네임, lo0, 인터페이스 설명·IP, 콘솔 설정 | port-mapping, ip-mapping, ospf-design |
-| 2 | 1주 수~목 | 스위치 | VLAN, 트렁크, EtherChannel, STP, SVI, HSRP/VARP | vlan-design |
+| 2 | 1주 수~목 | 스위치 | VLAN, 트렁크, EtherChannel, MSTP, SVI, VRRP | vlan-design |
 | 3 | 1주 금 | 사이트 장비 | 사이트 내부 OSPF, 사용자 VLAN DHCP | ospf-design, dhcp-dns-design |
 | 4 | 2주 월~화 | ISP 장비, 사이트 ISP 연결 라우터 | eBGP, PE 정적 경로·광고, 정적 기본 경로, IP SLA/track | bgp-design, ospf-design 6절 |
 | 5 | 2주 수 | Private-net, PI 연결 라우터 | 언더레이 OSPF(프로세스 2), PI ACL | ospf-design 5절, dmvpn-design 5절 |
@@ -218,12 +218,17 @@ int gi0/0
 ### 4.1 L2 기능
 
 ```
-spanning-tree mode rapid-pvst
-spanning-tree vlan 10,20 priority 4096
+spanning-tree mode mst
+spanning-tree mst configuration
+ name hq
+ revision 1
+ instance 1 vlan 10,20,100
+!
+spanning-tree mst 1 priority 4096
 vlan 10
- name hq-user-a
+ name hq-public
 vlan 20
- name hq-user-b
+ name hq-private
 vlan 100
  name mgmt
 vlan 999
@@ -241,25 +246,23 @@ int gi3/0
  switchport access vlan 10
 ```
 
-- 채널 번호, 허용 VLAN, 포트는 `docs/vlan-design.md` 4~6절 표 값을 사용. 루트 장비에만 STP priority 4096, Standby 장비는 8192.
+- 채널 번호, 허용 VLAN, 포트는 `docs/vlan-design.md` 4~6절 표 값을 사용. `spanning-tree mst 1 priority`는 루트 장비 4096, Standby 장비 8192, L2 스위치는 기본값. MST 설정(region 이름, revision, instance)은 사이트 안의 모든 스위치에 동일하게 입력.
 
-### 4.2 L3 기능(SVI, HSRP, 라우티드 포트)
+### 4.2 L3 기능(SVI, VRRP, 라우티드 포트)
 
 ```
 ip routing
 int vlan10
  ip addr 10.1.10.2 255.255.255.0
- standby version 2
- standby 10 ip 10.1.10.1
- standby 10 priority 110
- standby 10 preempt
+ vrrp 10 ip 10.1.10.1
+ vrrp 10 priority 110
 !
 int gi1/0
  no switchport
  ip addr 10.1.0.2 255.255.255.252
 ```
 
-- 예시는 `HQ-SW-2`(Active). `HQ-SW-3`은 SVI 주소 `.3`, priority 100. 라우티드 포트의 `ip ospf` 설정은 3.2절과 같은 형식.
+- 예시는 `HQ-SW-2`(Active). `HQ-SW-3`은 SVI 주소 `.3`, priority 100. VRRP는 `preempt`가 기본 사용이라 별도 입력 없음. 라우티드 포트의 `ip ospf` 설정은 3.2절과 같은 형식.
 - 사용자 VLAN의 SVI는 `passive-interface`로 설정하고 사이트 OSPF Area에 포함. DHCP 풀은 `docs/dhcp-dns-design.md` 3절.
 - 이미지(`vios_l2`)에서 `no switchport`와 `ip routing` 동작은 첫 장비에 적용해 확인 후 나머지 장비에 반복.
 
@@ -271,7 +274,12 @@ int gi1/0
 ! cisco
 !
 hostname br2-sw3-l2
-spanning-tree mode rapid-pvst
+spanning-tree mode mst
+spanning-tree mst configuration
+ name br2
+ revision 1
+ instance 1 vlan 10,100
+!
 vlan 10
  name br2-user
 vlan 100
@@ -313,10 +321,14 @@ int vlan100
 ! arista
 !
 hostname dc-sw3-l3
-spanning-tree mode rstp
-spanning-tree priority 4096
+spanning-tree mode mstp
+spanning-tree mst configuration
+   name dc
+   revision 1
+   instance 1 vlan 50,100
+!
+spanning-tree mst 1 priority 4096
 ip routing
-ip virtual-router mac-address 00:1c:73:00:00:99
 !
 vlan 50
    name server
@@ -333,7 +345,8 @@ int po1
    switchport trunk allowed vlan 50,100
 int vlan50
    ip add 10.2.50.2/24
-   ip virtual-router address 10.2.50.1
+   vrrp 50 ipv4 10.2.50.1
+   vrrp 50 priority-level 110
 int et3
    no switchport
    ip add 10.2.0.38/30
@@ -346,7 +359,7 @@ router ospf 10
    network 10.2.50.0/24 area 0.0.0.0
 ```
 
-- 예시는 `DC-SW3-L3`. `DC-SW4-L3`은 SVI 주소 `.3`, STP priority 8192. `DC-SW1-L3`, `DC-SW2-L3`은 VLAN 설정 없이 라우티드 포트와 OSPF만 사용.
+- 예시는 `DC-SW3-L3`. `DC-SW4-L3`은 SVI 주소 `.3`, `vrrp 50 priority-level 100`, `spanning-tree mst 1 priority 8192`. `DC-SW1-L3`, `DC-SW2-L3`은 VLAN 설정 없이 라우티드 포트와 OSPF만 사용.
 ### 5.1 DC L2 스위치(DC-SW1-L2, DC-SW2-L2)
 
 - `ip routing`, OSPF 없이 트렁크(Et1, Et2)와 서버 액세스(Et12, VLAN 50)만 설정. EOS의 포트는 기본이 스위치포트이므로 `no switchport` 불필요.
@@ -355,7 +368,12 @@ router ospf 10
 ! arista
 !
 hostname dc-sw1-l2
-spanning-tree mode rstp
+spanning-tree mode mstp
+spanning-tree mst configuration
+   name dc
+   revision 1
+   instance 1 vlan 50,100
+!
 !
 vlan 50
    name server
@@ -403,8 +421,8 @@ int vlan100
 | 인터페이스 | `show ip interface brief` | `show ip interface brief` |
 | OSPF | `show ip ospf neighbor`, `show ip route ospf` | `show ip ospf neighbor`, `show ip route ospf` |
 | BGP | `show ip bgp summary` | - |
-| HSRP/VARP | `show standby brief` | `show ip virtual-router` |
+| VRRP | `show vrrp brief` | `show vrrp brief` |
 | 채널, 트렁크 | `show etherchannel summary`, `show interfaces trunk` | `show port-channel summary`, `show interfaces trunk` |
-| STP | `show spanning-tree` | `show spanning-tree` |
+| MSTP | `show spanning-tree mst` | `show spanning-tree mst` |
 | DMVPN | `show dmvpn`, `show ip nhrp`, `show crypto ipsec sa` | - |
 

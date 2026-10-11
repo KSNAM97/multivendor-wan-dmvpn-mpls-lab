@@ -36,8 +36,8 @@
 | 12 | HQ-SW-1 | Gi1/3 | HQ-SW-3 | Gi0/1 | - | Po2 |
 | 13 | HQ-SW-2 | Gi0/2 | HQ-SW-3 | Gi0/2 | - | Po3 |
 | 14 | HQ-SW-2 | Gi0/3 | HQ-SW-3 | Gi0/3 | - | Po3 |
-| 15 | HQ-PC1 | eth0 | HQ-SW-1 | Gi3/0 | - | VLAN 10 access (Alpine Linux, 연결 확인됨) |
-| 16 | HQ-PC2 | eth0 | HQ-SW-1 | Gi3/1 | - | VLAN 20 access (Alpine Linux, 연결 확인됨) |
+| 15 | HQ-PC1 | eth0 | HQ-SW-1 | Gi3/0 | - | VLAN 10 access, HQ-PUBLIC (Alpine Linux, 연결 확인됨) |
+| 16 | HQ-PC2 | eth0 | HQ-SW-1 | Gi3/1 | - | VLAN 20 access, HQ-PRIVATE (Alpine Linux, 연결 확인됨) |
 
 ### DC
 
@@ -170,5 +170,5 @@
 ## 3. 비고
 
 - BR1·BR2 스위치↔라우터 L3 링크 4개씩의 서브넷: `10.3.0.0/30` – `10.3.0.12/30`, `10.4.0.0/30` – `10.4.0.12/30`(HQ 패턴).
-- HQ 호스트의 VLAN: `HQ-PC1` VLAN 10, `HQ-PC2` VLAN 20(HQ-USER-A, HQ-USER-B).
+- HQ 호스트의 VLAN: `HQ-PC1` VLAN 10(HQ-PUBLIC), `HQ-PC2` VLAN 20(HQ-PRIVATE). 두 호스트 모두 DHCP로 주소를 받음.
 - 서버 IP는 고정(`docs/ip-mapping.md`), 호스트 IP는 DHCP(`docs/dhcp-dns-design.md`).

@@ -12,8 +12,8 @@
 
 | VLAN | 태그 |
 |---|---|
-| 10 | `vlan-hq-user-a` |
-| 20 | `vlan-hq-user-b` |
+| 10 | `vlan-hq-public` |
+| 20 | `vlan-hq-private` |
 | 50 | `vlan-dc-server` |
 | BR1 10 | `vlan-br1-user` |
 | BR2 10 | `vlan-br2-user` |
@@ -26,8 +26,8 @@
 |---|---|---|
 | 1주 (10/12~10/16) | 월 | AS/IP/VLAN 표 리뷰, GNS3/Jira/Slack/Git 세팅 |
 |  | 화 | 7200/cEOS/IOU RAM 실측, 노드 배치, 기본 링크 up/up / BR1+BR2 노드 배치, 기본 링크 up/up |
-|  | 수 | DC VLAN/트렁크(Arista), DC VARP / BR1 VLAN/트렁크, HSRP |
-|  | 목 | HQ VLAN/트렁크, HSRP, Po1-3 / BR2 VLAN/트렁크, HSRP |
+|  | 수 | DC VLAN/트렁크(Arista), DC VRRP / BR1 VLAN/트렁크, VRRP |
+|  | 목 | HQ VLAN/트렁크, VRRP, Po1-3 / BR2 VLAN/트렁크, VRRP |
 |  | 금 | 사이트 내부 OSPF, DC/HQ 내부통신 검증 / 사이트 내부 OSPF, BR1/BR2 내부통신 검증 |
 | 2주 (10/19~10/23) | 월 | ISP-1, ISP-2 내부 eBGP 8세션 / BR1/BR2↔ISP 정적경로+track |
 |  | 화 | PE 고객 대역 광고, DC/HQ↔ISP 정적 기본 경로+OSPF 기본 경로 광고 |
@@ -36,7 +36,7 @@
 |  | 금 | DC-DNS-1·DC-DNS-2(Alpine) 배치+검증, 사이트 DHCP / Phase3 shortcut 검증 |
 | 3주 (10/26~10/30) | 월 | QoS 20포트 중 DC/HQ 12대 / QoS 20포트 중 BR 8대 |
 |  | 화 | 접근통제 ACL, 통합 테스트 |
-|  | 수 | HSRP/VARP, EtherChannel 실측 |
+|  | 수 | VRRP, EtherChannel 실측 |
 |  | 목 | ISP 장애→DMVPN 전환, DMVPN Hub 장애 실측 |
 |  | 금 | 트러블슈팅 로그 정리 |
 | 3.5주 (11/2~11/4) | 월 | PPT(DC/HQ/ISP/이중화) / PPT(BR/DMVPN) |

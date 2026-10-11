@@ -4,7 +4,7 @@
 [![Arista](https://img.shields.io/badge/Arista-cEOS-orange)](https://github.com/KSNAM97)
 [![GNS3](https://img.shields.io/badge/GNS3-Topology-green)](https://github.com/KSNAM97)
 
-**ISP 이중화 eBGP · DMVPN Phase3 (mGRE over IPsec) · OSPF · HSRP/VARP · QoS · 화이트리스트 ACL — Cisco + Arista 멀티벤더 4개 사이트 WAN 종합 구축**
+**ISP 이중화 eBGP · DMVPN Phase3 (mGRE over IPsec) · OSPF · VRRP · MSTP · QoS · 화이트리스트 ACL — Cisco + Arista 멀티벤더 4개 사이트 WAN 종합 구축**
 
 ---
 
@@ -14,7 +14,7 @@
 | --- | --- |
 | 주제 | HQ / DC / BR1 / BR2 4개 사이트를 ISP 이중화와 DMVPN으로 연결하는 멀티벤더 하이브리드 네트워크 |
 | 장비 구성 | HQ (HQ-R1·HQ-R2, HQ-SW-1 – HQ-SW-3), DC (DC-R1 – DC-R4, DC-SW1 – DC-SW4-L3, DC-SW1·2-L2, DC-DNS-1·DC-DNS-2), BR1 (BR1-R1·R2, BR1-SW1 ~ SW3-L3), BR2 (BR2-R1·R2, BR2-SW1·SW2-L3, BR2-SW3-L2), 호스트 H1·H2, ISP-1·ISP-2 (ISP-n-PE-A·P1·P2·PE-B 각 4대), Private Internet (Private-net) |
-| 핵심 기술 | 사이트 OSPF, ISP eBGP(라우터별 개별 AS), 정적 기본 경로 + OSPF 기본 경로 광고(IP SLA/track), DMVPN Phase3, IPsec, HSRP / VARP, EtherChannel, QoS, ACL 화이트리스트 |
+| 핵심 기술 | 사이트 OSPF, ISP eBGP(라우터별 개별 AS), 정적 기본 경로 + OSPF 기본 경로 광고(IP SLA/track), DMVPN Phase3, IPsec, VRRP, MSTP, EtherChannel, QoS, ACL 화이트리스트 |
 | 시뮬레이터 | GNS3 (Cisco 7200 / IOU, Arista cEOS) |
 | 일정 | 3.5주(2026-10-12 ~ 11-04), 1인 체제 (남기석) |
 | 검증 | 이중화 장애 실측 (FHRP, EtherChannel, ISP 장애, DMVPN Hub 장애), 트러블슈팅 로그 |
@@ -59,6 +59,7 @@ network-project/
 │   ├── ospf-design.md
 │   ├── bgp-design.md
 │   ├── vlan-design.md
+│   ├── vrrp-mstp-design.md
 │   ├── dmvpn-design.md
 │   ├── dhcp-dns-design.md
 │   ├── config-guide.md
@@ -93,7 +94,7 @@ network-project/
 
 | 주차 | 단계 | 핵심 내용 |
 | --- | --- | --- |
-| **1주** | 설계 확정, 환경 세팅, 사이트 내부 | AS / IP / VLAN 확정, GNS3 환경, RAM 실측, 노드 배치, VLAN / 트렁크 / EtherChannel / HSRP / VARP, 사이트 내부 OSPF |
+| **1주** | 설계 확정, 환경 세팅, 사이트 내부 | AS / IP / VLAN 확정, GNS3 환경, RAM 실측, 노드 배치, VLAN / 트렁크 / EtherChannel / VRRP / MSTP, 사이트 내부 OSPF |
 | **2주** | 사이트 ↔ ISP, DMVPN | 정적 기본 경로 + OSPF 기본 경로 광고(track), ISP 내부 eBGP, Private Internet ACL, DMVPN(mGRE over IPsec), DNS |
 | **3주** | 정책, 이중화 실측 | QoS 정책, 접근통제 ACL, 통합 테스트, FHRP / EtherChannel / ISP 장애 / DMVPN Hub 장애 실측, 트러블슈팅 로그 |
 | **3.5주** | 정리 | PPT 제작, 리허설 |
@@ -139,9 +140,9 @@ network-project/
 
 | 사이트 | VLAN | 이름 | 서브넷 | 게이트웨이 이중화 |
 | --- | --- | --- | --- | --- |
-| HQ | 10 / 20 | HQ-USER-A / B | 10.1.10.0/24, 10.1.20.0/24 | HSRP |
-| DC | 50 | SERVER (DC-DNS-1, DC-DNS-2) | 10.2.50.0/24 | VARP / VRRP |
-| BR1 / BR2 | 10 | BR-USER | 10.3.10.0/24, 10.4.10.0/24 | HSRP |
+| HQ | 10 / 20 | HQ-PUBLIC / HQ-PRIVATE | 10.1.10.0/24, 10.1.20.0/24 | VRRP |
+| DC | 50 | SERVER (DC-DNS-1, DC-DNS-2) | 10.2.50.0/24 | VRRP |
+| BR1 / BR2 | 10 | BR-USER | 10.3.10.0/24, 10.4.10.0/24 | VRRP |
 | 전 사이트 | 100 / 999 | MGMT / NATIVE | 10.X.100.0/24 / IP 없음 | - |
 
 ### QoS와 접근 통제
@@ -160,6 +161,6 @@ network-project/
 - DHCP: 사용자 VLAN 게이트웨이 스위치 두 대(IOS DHCP 서버)가 풀을 나눠 제공(앞 64개 Active, 뒤 64개 Standby). 풀은 `docs/ip-mapping.md` 5절, 구성은 `docs/dhcp-dns-design.md`.
 - QoS: 사이트 스위치와 연결된 라우터 인터페이스 20포트에 적용하며 스위치(IOU L2 / cEOS) QoS는 적용하지 않음.
 
-상세 설계: [`docs/ospf-design.md`](./docs/ospf-design.md), [`docs/bgp-design.md`](./docs/bgp-design.md), [`docs/vlan-design.md`](./docs/vlan-design.md), [`docs/dmvpn-design.md`](./docs/dmvpn-design.md), [`docs/dhcp-dns-design.md`](./docs/dhcp-dns-design.md), [`docs/config-guide.md`](./docs/config-guide.md)
+상세 설계: [`docs/ospf-design.md`](./docs/ospf-design.md), [`docs/bgp-design.md`](./docs/bgp-design.md), [`docs/vlan-design.md`](./docs/vlan-design.md), [`docs/vrrp-mstp-design.md`](./docs/vrrp-mstp-design.md), [`docs/dmvpn-design.md`](./docs/dmvpn-design.md), [`docs/dhcp-dns-design.md`](./docs/dhcp-dns-design.md), [`docs/config-guide.md`](./docs/config-guide.md)
 
 > 브랜치 전략, 커밋 규칙, Jira 연동 → [`CONTRIBUTING.md`](./CONTRIBUTING.md)

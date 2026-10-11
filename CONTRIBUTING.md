@@ -29,7 +29,7 @@ Settings → Branches → Add rule → main
 예시:
 ```
 KAN-14: [Network][vlan-dc-server] DC-DNS-1 ACL 추가
-KAN-21: [Cloud][vlan-hq-user-a] HQ HSRP 설정
+KAN-21: [Cloud][vlan-hq-public] HQ VRRP 설정
 KAN-33: [Policy][vlan-br1-user] DMVPN Spoke 구성
 ```
 
@@ -37,8 +37,8 @@ KAN-33: [Policy][vlan-br1-user] DMVPN Spoke 구성
 
 | VLAN | 태그 |
 |---|---|
-| 10 (HQ-USER-A) | `vlan-hq-user-a` |
-| 20 (HQ-USER-B) | `vlan-hq-user-b` |
+| 10 (HQ-PUBLIC) | `vlan-hq-public` |
+| 20 (HQ-PRIVATE) | `vlan-hq-private` |
 | 50 (DC-SERVER) | `vlan-dc-server` |
 | BR1 10 | `vlan-br1-user` |
 | BR2 10 | `vlan-br2-user` |

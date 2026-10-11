@@ -6,11 +6,11 @@ VLAN, 게이트웨이 이중화, EtherChannel, 트렁크, STP, DHCP 배치를 �
 
 | 사이트 | VLAN | 이름 | 서브넷 | 태그 | 게이트웨이 이중화 |
 |---|---|---|---|---|---|
-| HQ | 10 | HQ-USER-A | 10.1.10.0/24 | `vlan-hq-user-a` | HSRP |
-| HQ | 20 | HQ-USER-B | 10.1.20.0/24 | `vlan-hq-user-b` | HSRP |
-| DC | 50 | SERVER | 10.2.50.0/24 | `vlan-dc-server` | VARP |
-| BR1 | 10 | BR1-USER | 10.3.10.0/24 | `vlan-br1-user` | HSRP |
-| BR2 | 10 | BR2-USER | 10.4.10.0/24 | `vlan-br2-user` | HSRP |
+| HQ | 10 | HQ-PUBLIC | 10.1.10.0/24 | `vlan-hq-public` | VRRP |
+| HQ | 20 | HQ-PRIVATE | 10.1.20.0/24 | `vlan-hq-private` | VRRP |
+| DC | 50 | SERVER | 10.2.50.0/24 | `vlan-dc-server` | VRRP |
+| BR1 | 10 | BR1-USER | 10.3.10.0/24 | `vlan-br1-user` | VRRP |
+| BR2 | 10 | BR2-USER | 10.4.10.0/24 | `vlan-br2-user` | VRRP |
 | 전 사이트 | 100 | MGMT | 10.<사이트>.100.0/24 | `vlan-mgmt` | - |
 | 전 사이트 | 999 | NATIVE | 없음 | `vlan-native` | - |
 
@@ -20,21 +20,22 @@ VLAN, 게이트웨이 이중화, EtherChannel, 트렁크, STP, DHCP 배치를 �
 
 ## 2. 게이트웨이 이중화
 
-- HSRP는 version 2, 그룹 번호는 VLAN 번호와 동일, `preempt` 사용. 우선순위는 Active 110, Standby 100.
-- DC 서버 VLAN은 Arista VARP로 두 스위치가 같은 가상 MAC과 VIP를 공유(우선순위 개념 없음).
+- 전 사이트 VRRP(표준, 멀티벤더 호환)로 통일. 그룹 번호는 VLAN 번호와 동일, `preempt`는 기본 사용. 우선순위는 Active 110, Standby 100(문서의 Active/Standby는 VRRP Master/Backup).
+- DC 서버 VLAN도 VRRP 사용(Arista `vrrp 50 ipv4 10.2.50.1`). VARP와 HSRP는 사용하지 않음.
 
 | 사이트 | VLAN | 방식 | Active / 1번 장비 | Standby / 2번 장비 | VIP | 서브넷 |
 |---|---|---|---|---|---|---|
-| HQ | 10 | HSRP | HQ-SW-2 `10.1.10.2` (110) | HQ-SW-3 `10.1.10.3` (100) | 10.1.10.1 | 10.1.10.0/24 |
-| HQ | 20 | HSRP | HQ-SW-2 `10.1.20.2` (110) | HQ-SW-3 `10.1.20.3` (100) | 10.1.20.1 | 10.1.20.0/24 |
-| DC | 50 | VARP | DC-SW3-L3 `10.2.50.2` | DC-SW4-L3 `10.2.50.3` | 10.2.50.1 | 10.2.50.0/24 |
-| BR1 | 10 | HSRP | BR1-SW1-L3 `10.3.10.2` (110) | BR1-SW2-L3 `10.3.10.3` (100) | 10.3.10.1 | 10.3.10.0/24 |
-| BR2 | 10 | HSRP | BR2-SW1-L3 `10.4.10.2` (110) | BR2-SW2-L3 `10.4.10.3` (100) | 10.4.10.1 | 10.4.10.0/24 |
+| HQ | 10 | VRRP | HQ-SW-2 `10.1.10.2` (110) | HQ-SW-3 `10.1.10.3` (100) | 10.1.10.1 | 10.1.10.0/24 |
+| HQ | 20 | VRRP | HQ-SW-2 `10.1.20.2` (110) | HQ-SW-3 `10.1.20.3` (100) | 10.1.20.1 | 10.1.20.0/24 |
+| DC | 50 | VRRP | DC-SW3-L3 `10.2.50.2` (110) | DC-SW4-L3 `10.2.50.3` (100) | 10.2.50.1 | 10.2.50.0/24 |
+| BR1 | 10 | VRRP | BR1-SW1-L3 `10.3.10.2` (110) | BR1-SW2-L3 `10.3.10.3` (100) | 10.3.10.1 | 10.3.10.0/24 |
+| BR2 | 10 | VRRP | BR2-SW1-L3 `10.4.10.2` (110) | BR2-SW2-L3 `10.4.10.3` (100) | 10.4.10.1 | 10.4.10.0/24 |
 
 ## 3. STP
 
-- Cisco 스위치(HQ, BR1, BR2): `spanning-tree mode rapid-pvst`. Arista 스위치(DC): `spanning-tree mode rstp`.
-- 루트 브리지는 게이트웨이 Active 장비로 고정(해당 VLAN priority 4096, Standby는 8192).
+- 전 사이트 MSTP(IEEE 802.1s)로 통일: Cisco `spanning-tree mode mst`, Arista `spanning-tree mode mstp`.
+- 사이트마다 region 하나를 두며 region 이름은 사이트 이름(소문자), revision은 1. 사용자 또는 서버 VLAN과 MGMT VLAN 100은 instance 1에 매핑하고 native VLAN 999는 기본 instance 0에 둠. 사이트 안의 모든 스위치(L2 포함)는 같은 MST 설정 사용.
+- 루트 브리지는 게이트웨이 Active 장비로 고정(`spanning-tree mst 1 priority 4096`, Standby는 8192).
 
 | 사이트 | 루트 | 보조 루트 |
 |---|---|---|
@@ -42,6 +43,13 @@ VLAN, 게이트웨이 이중화, EtherChannel, 트렁크, STP, DHCP 배치를 �
 | DC | DC-SW3-L3 | DC-SW4-L3 |
 | BR1 | BR1-SW1-L3 | BR1-SW2-L3 |
 | BR2 | BR2-SW1-L3 | BR2-SW2-L3 |
+
+| 사이트 | region 이름 | instance 1 VLAN |
+|---|---|---|
+| HQ | `hq` | 10,20,100 |
+| DC | `dc` | 50,100 |
+| BR1 | `br1` | 10,100 |
+| BR2 | `br2` | 10,100 |
 
 ## 4. EtherChannel
 

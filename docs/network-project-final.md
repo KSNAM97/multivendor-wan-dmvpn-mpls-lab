@@ -40,11 +40,11 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ HQ
 
 | 사이트 | VLAN | 이름 | 서브넷 | 게이트웨이 이중화 |
 |---|---|---|---|---|
-| HQ | 10 | HQ-USER-A | 10.1.10.0/24 | HSRP (HQ-SW-2 .2 / HQ-SW-3 .3, VIP .1) |
-| HQ | 20 | HQ-USER-B | 10.1.20.0/24 | HSRP |
-| DC | 50 | SERVER (DC-DNS-1, DC-DNS-2) | 10.2.50.0/24 | VARP/VRRP (DC-SW3-L3 .2 / DC-SW4-L3 .3, VIP .1) |
-| BR1 | 10 | BR1-USER | 10.3.10.0/24 | HSRP |
-| BR2 | 10 | BR2-USER | 10.4.10.0/24 | HSRP |
+| HQ | 10 | HQ-PUBLIC | 10.1.10.0/24 | VRRP (HQ-SW-2 .2 / HQ-SW-3 .3, VIP .1) |
+| HQ | 20 | HQ-PRIVATE | 10.1.20.0/24 | VRRP |
+| DC | 50 | SERVER (DC-DNS-1, DC-DNS-2) | 10.2.50.0/24 | VRRP (DC-SW3-L3 .2 / DC-SW4-L3 .3, VIP .1) |
+| BR1 | 10 | BR1-USER | 10.3.10.0/24 | VRRP |
+| BR2 | 10 | BR2-USER | 10.4.10.0/24 | VRRP |
 | 전 사이트 | 100 | MGMT | 10.X.100.0/24 | - |
 | 전 사이트 | 999 | NATIVE | IP 없음 | 모든 트렁크 native |
 
@@ -57,12 +57,12 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ HQ
 | Private Internet | Private-net | PI | DMVPN 언더레이 | |
 | HQ | HQ-R1 / HQ-R2 | R11 / R12 | 라우터(R12가 DMVPN Spoke) | |
 | HQ | HQ-SW-1 | SW110 | L3 스위치 | |
-| HQ | HQ-SW-2 / HQ-SW-3 | SW101 / SW102 | L3 스위치(HSRP) | |
+| HQ | HQ-SW-2 / HQ-SW-3 | SW101 / SW102 | L3 스위치(VRRP) | |
 | HQ | HQ-PC1 / HQ-PC2 | - | 호스트(Alpine Linux, docker) | |
 | DC | DC-R1 / DC-R2 | R23 / R24 | 라우터(PI 연결) | R24가 DMVPN Hub |
 | DC | DC-R3 / DC-R4 | R21 / R22 | 라우터(ISP 연결) | |
 | DC | DC-SW1-L3 / DC-SW2-L3 | SW211 / SW212 | L3 스위치(Arista cEOS) | |
-| DC | DC-SW3-L3 / DC-SW4-L3 | SW201 / SW202 | L3 스위치(Arista cEOS, VARP) | |
+| DC | DC-SW3-L3 / DC-SW4-L3 | SW201 / SW202 | L3 스위치(Arista cEOS, VRRP) | |
 | DC | DC-SW1-L2 / DC-SW2-L2 | SW-SVR1 / SW-SVR2 | 서버용 L2 스위치(Arista cEOS) | |
 | DC | DC-DNS-1 / DC-DNS-2 | DNS1(주) / DNS2(백업) | 서버(VLAN50, Alpine Linux, docker) | |
 | ISP-1 | ISP-1-PE-A / ISP-1-P1 / ISP-1-P2 / ISP-1-PE-B | PE-A / P1 / P2 / PE-B | eBGP | |
@@ -195,7 +195,7 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ HQ
 
 | 주차 | 내용 |
 |---|---|
-| 1주 | AS/IP/VLAN 확정, GNS3 환경 세팅, 이미지별 RAM 실측(cEOS 포함), 노드 배치, 사이트 내부 L2/L3(VLAN, 트렁크, EtherChannel, HSRP/VARP, 사이트 내부 OSPF) |
+| 1주 | AS/IP/VLAN 확정, GNS3 환경 세팅, 이미지별 RAM 실측(cEOS 포함), 노드 배치, 사이트 내부 L2/L3(VLAN, 트렁크, EtherChannel, VRRP, MSTP, 사이트 내부 OSPF) |
 | 2주 | 사이트↔ISP 정적 기본 경로+OSPF 기본 경로 광고, ISP 내부 eBGP 풀메시, PI ACL, DMVPN(mGRE over IPsec), DNS 서버 |
 | 3주 | QoS 정책, 접근통제 ACL, 통합 테스트, 이중화 장애 실측(FHRP, EtherChannel, ISP 장애, DMVPN Hub 장애), 트러블슈팅 로그 |
 | 3.5주 | PPT 제작, 리허설 |
@@ -210,7 +210,7 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ HQ
 |---|---|
 | 포트·IP | `docs/port-mapping.md`, `docs/ip-mapping.md` |
 | 라우팅 | `docs/ospf-design.md`, `docs/bgp-design.md` |
-| L2·게이트웨이 | `docs/vlan-design.md` |
+| L2·게이트웨이 | `docs/vlan-design.md`, `docs/vrrp-mstp-design.md` |
 | 터널·암호화 | `docs/dmvpn-design.md` |
 | 서비스 | `docs/dhcp-dns-design.md` |
 | 설정 가이드 | `docs/config-guide.md` |
