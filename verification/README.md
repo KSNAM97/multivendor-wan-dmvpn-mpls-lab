@@ -59,28 +59,28 @@ verification/
 
 | Jira | 일정 | 내용 | 검증 파일 | 상태 |
 |---|---|---|---|---|
-| KAN-8 | 1주 목 | HQ VLAN/트렁크 | `hq/*/vlan-trunk.md`, `hq/*/po-channel.md`, `hq/access/l3-interface.md`, `hq/distribution/l3-interface.md` | 기록됨 |
-| KAN-9 | 1주 목 | HQ VRRP + Po1-3 | `hq/distribution/vrrp.md`, `hq/*/stp.md` | 기록됨 |
-| KAN-7 | 1주 화 | 인터페이스 매핑(HQ 라우터 포함) | `hq/core/l3-interface.md` | 기록됨 |
-| KAN-10 | 1주 수 | DC VLAN/트렁크 | `dc/*/vlan-trunk.md`, `dc/distribution/po-channel.md` | 기록됨(통과) |
-| KAN-11 | 1주 수 | DC VRRP + MSTP 루트 | `dc/distribution/vrrp.md`, `dc/*/stp.md` | 기록됨 |
+| KAN-7 | 1주 화 | 인터페이스 매핑(HQ 라우터 포함) | `hq/core/l3-interface.md` | 검증 완료 |
+| KAN-8 | 1주 목 | HQ VLAN/트렁크 | `hq/*/vlan-trunk.md`, `hq/*/po-channel.md`, `hq/access/l3-interface.md`, `hq/distribution/l3-interface.md` | 검증 완료 |
+| KAN-9 | 1주 목 | HQ VRRP + Po1-3 | `hq/distribution/vrrp.md`, `hq/*/stp.md` | 검증 완료 |
+| KAN-10 | 1주 수 | DC VLAN/트렁크 | `dc/*/vlan-trunk.md`, `dc/distribution/po-channel.md` | 검증 완료 |
+| KAN-11 | 1주 수 | DC VRRP + MSTP 루트 | `dc/distribution/vrrp.md`, `dc/*/stp.md` | 검증 완료 |
 | KAN-12 | 1주 수 | BR1 VLAN/트렁크/VRRP | `br1/*/` | 서식 준비 |
 | KAN-13 | 1주 목 | BR2 VLAN/트렁크/VRRP | `br2/*/` | 서식 준비 |
-| KAN-14 | 1주 금 | 사이트 내부 OSPF | `*/core/ospf.md`, `*/distribution/ospf.md` | 서식 준비 |
-| KAN-15, 16 | 2주 월 | ISP 내부 eBGP | `isp1/core/bgp.md`, `isp2/core/bgp.md` | 서식 준비 |
-| KAN-17 | 2주 화 | PE 사이트 대역 network | `isp*/core/bgp.md` | 서식 준비 |
-| KAN-18 | 2주 월~화 | 정적 경로 + IP SLA/track | `*/core/isp-link.md` | 서식 준비 |
-| KAN-19 | 2주 수 | Private Internet ACL | `private-internet/core/acl.md` | 서식 준비 |
-| KAN-20 | 2주 수 | Private Internet OSPF | `private-internet/core/ospf.md` | 서식 준비 |
-| KAN-21 | 2주 목 | DMVPN Hub | `dc/core/dmvpn.md` | 서식 준비 |
-| KAN-22, 23, 33 | 2주 목 | DMVPN Spoke(BR1, BR2, HQ) | `br1/core/dmvpn.md`, `br2/core/dmvpn.md`, `hq/core/dmvpn.md` | 서식 준비 |
-| KAN-24 | 2주 금 | DNS 서버, DHCP 할당 | `dc/host/dns.md`, `*/distribution/dhcp.md` | 서식 준비 |
-| KAN-25 | 3주 월 | QoS | `*/core/qos.md` | 서식 준비 |
-| KAN-26 | 3주 화 | DNS 서버 VLAN ACL | `dc/distribution/acl.md` | 서식 준비 |
-| KAN-27 | 3주 수 | VRRP 장애 전환 | `scenarios/vrrp-failover.md` | 서식 준비 |
-| KAN-28 | 3주 수 | EtherChannel 멤버 다운 | `scenarios/etherchannel-link-down.md` | 서식 준비 |
+| KAN-14 | 1주 금 | 사이트 내부 OSPF + 사이트 DHCP | `*/core/ospf.md`, `*/distribution/ospf.md`, `*/distribution/dhcp.md` | 서식 준비 |
+| KAN-18 | 2주 월 | 정적 경로 + IP SLA/track | `*/core/isp-link.md` | 서식 준비 |
+| KAN-20 | 2주 월 | Private Internet OSPF | `private-internet/core/ospf.md` | 서식 준비 |
+| KAN-19 | 2주 화 | Private Internet ACL | `private-internet/core/acl.md` | 서식 준비 |
+| KAN-21 | 2주 화 | DMVPN Hub | `dc/core/dmvpn.md` | 서식 준비 |
+| KAN-22, 23, 33 | 2주 수 | DMVPN Spoke(BR1, BR2, HQ) | `br1/core/dmvpn.md`, `br2/core/dmvpn.md`, `hq/core/dmvpn.md` | 서식 준비 |
+| KAN-24 | 2주 목 | DNS 서버, 호스트 DHCP 할당 | `dc/host/dns.md` | 서식 준비 |
+| KAN-26 | 2주 금 | DNS 서버 VLAN ACL | `dc/distribution/acl.md` | 서식 준비 |
+| KAN-27 | 3주 월 | VRRP 장애 전환 | `scenarios/vrrp-failover.md` | 서식 준비(HQ, DC 전환 동작은 확인) |
+| KAN-28 | 3주 월 | EtherChannel 멤버 다운 | `scenarios/etherchannel-link-down.md` | 서식 준비 |
+| KAN-30 | 3주 화 | DMVPN Hub 장애 | `scenarios/dmvpn-hub-failure.md` | 서식 준비 |
+| KAN-15, 16 | 3주 수 | ISP 내부 eBGP | `isp1/core/bgp.md`, `isp2/core/bgp.md` | 서식 준비 |
+| KAN-17 | 3주 목 | PE 사이트 대역 network | `isp*/core/bgp.md` | 서식 준비 |
 | KAN-29 | 3주 목 | ISP-1 장애 시 전환 | `scenarios/isp1-failure.md` | 서식 준비 |
-| KAN-30 | 3주 목 | DMVPN Hub 장애 | `scenarios/dmvpn-hub-failure.md` | 서식 준비 |
+| KAN-25 | 3주 금 | QoS | `*/core/qos.md` | 서식 준비 |
 | KAN-31 | 3주 금 | 트러블슈팅 로그 | 검증 중 나온 불일치와 조치를 정리 | - |
 
 ## 4. 관련 문서

@@ -1,6 +1,6 @@
 # DHCP 검증 (HQ / distribution)
 
-- Jira: KAN-24
+- Jira: KAN-14
 - 대상 장비: HQ-SW-2(Active), HQ-SW-3(Standby)
 - 기준 문서: [dhcp-dns-design.md](../../../docs/dhcp-dns-design.md) 3절
 - 검증일: -

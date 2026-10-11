@@ -195,9 +195,9 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ HQ
 
 | 주차 | 내용 |
 |---|---|
-| 1주 | AS/IP/VLAN 확정, GNS3 환경 세팅, 이미지별 RAM 실측(cEOS 포함), 노드 배치, 사이트 내부 L2/L3(VLAN, 트렁크, EtherChannel, VRRP, MSTP, 사이트 내부 OSPF) |
-| 2주 | 사이트↔ISP 정적 기본 경로+OSPF 기본 경로 광고, ISP 내부 eBGP 풀메시, PI ACL, DMVPN(mGRE over IPsec), DNS 서버 |
-| 3주 | QoS 정책, 접근통제 ACL, 통합 테스트, 이중화 장애 실측(FHRP, EtherChannel, ISP 장애, DMVPN Hub 장애), 트러블슈팅 로그 |
+| 1주 | AS/IP/VLAN 확정, GNS3 환경 세팅, 이미지별 RAM 실측(cEOS 포함), 노드 배치, 사이트 내부 L2/L3(VLAN, 트렁크, EtherChannel, VRRP, MSTP, 사이트 내부 OSPF, 사이트 DHCP) |
+| 2주 | 사이트↔ISP 정적 기본 경로+OSPF 기본 경로 광고, PI ACL, DMVPN(mGRE over IPsec), DNS 서버, 서버 VLAN ACL |
+| 3주 | 이중화 장애 실측(VRRP, EtherChannel, DMVPN Hub 장애), ISP 내부 eBGP 풀메시, ISP 장애 실측, QoS 정책, 트러블슈팅 로그 |
 | 3.5주 | PPT 제작, 리허설 |
 
 ## 7. 비고

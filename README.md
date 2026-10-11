@@ -99,9 +99,9 @@ network-project/
 
 | 주차 | 단계 | 핵심 내용 |
 | --- | --- | --- |
-| **1주** | 설계 확정, 환경 세팅, 사이트 내부 | AS / IP / VLAN 확정, GNS3 환경, RAM 실측, 노드 배치, VLAN / 트렁크 / EtherChannel / VRRP / MSTP, 사이트 내부 OSPF |
-| **2주** | 사이트 ↔ ISP, DMVPN | 정적 기본 경로 + OSPF 기본 경로 광고(track), ISP 내부 eBGP, Private Internet ACL, DMVPN(mGRE over IPsec), DNS |
-| **3주** | 정책, 이중화 실측 | QoS 정책, 접근통제 ACL, 통합 테스트, FHRP / EtherChannel / ISP 장애 / DMVPN Hub 장애 실측, 트러블슈팅 로그 |
+| **1주** | 설계 확정, 환경 세팅, 사이트 내부 | AS / IP / VLAN 확정, GNS3 환경, RAM 실측, 노드 배치, VLAN / 트렁크 / EtherChannel / VRRP / MSTP, 사이트 내부 OSPF, 사이트 DHCP |
+| **2주** | 사이트 ↔ ISP, DMVPN | 정적 기본 경로 + OSPF 기본 경로 광고(track), Private Internet ACL, DMVPN(mGRE over IPsec), DNS, 서버 VLAN ACL |
+| **3주** | 이중화 실측, ISP BGP, QoS | VRRP / EtherChannel / DMVPN Hub 장애 실측, ISP 내부 eBGP, ISP-1 장애 전환 실측, QoS 정책, 트러블슈팅 로그 |
 | **3.5주** | 정리 | PPT 제작, 리허설 |
 
 > 역할 분담과 일별 목표 → [`docs/schedule.md`](./docs/schedule.md)  

@@ -1,6 +1,6 @@
 # DHCP 검증 (BR1 / distribution)
 
-- Jira: KAN-24
+- Jira: KAN-14
 - 대상 장비: BR1-SW1-L3, BR1-SW2-L3
 - 기준 문서: [dhcp-dns-design.md](../../../docs/dhcp-dns-design.md) 3절
 - 검증일: -

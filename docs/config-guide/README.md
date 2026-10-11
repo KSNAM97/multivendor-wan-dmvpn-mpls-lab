@@ -54,11 +54,13 @@
 | 1 | 1주 월~화 | 전 장비 | 호스트네임, lo0, 인터페이스 설명·IP, 콘솔 설정 | port-mapping, ip-mapping, ospf-design |
 | 2 | 1주 수~목 | 스위치 | VLAN, 트렁크, EtherChannel, MSTP, SVI, VRRP | vlan-design |
 | 3 | 1주 금 | 사이트 장비 | 사이트 내부 OSPF, 사용자 VLAN DHCP | ospf-design, dhcp-dns-design |
-| 4 | 2주 월~화 | ISP 장비, 사이트 ISP 연결 라우터 | eBGP, PE 정적 경로·광고, 정적 기본 경로, IP SLA/track | bgp-design, ospf-design 6절 |
-| 5 | 2주 수 | Private-net, PI 연결 라우터 | 언더레이 OSPF(프로세스 2), PI ACL | ospf-design 5절, dmvpn-design 5절 |
-| 6 | 2주 목 | DC-R2, HQ-R2, BR1-R1, BR2-R2 | IPsec, Tunnel0, NHRP, 터널 OSPF | dmvpn-design |
-| 7 | 2주 금 | DC-DNS-1, DC-DNS-2 | dnsmasq, 레코드 | dhcp-dns-design |
-| 8 | 3주 월~화 | 라우터, DC 게이트웨이 | QoS, 서버 VLAN ACL | [cisco-router.md](./cisco-router.md) 3.7절, dhcp-dns-design 5절 |
+| 4 | 2주 월 | 사이트 ISP 연결 라우터 | 정적 기본 경로, IP SLA/track, OSPF 기본 경로 광고 | ospf-design 6절 |
+| 5 | 2주 월~화 | Private-net, PI 연결 라우터 | 언더레이 OSPF(프로세스 2), PI ACL | ospf-design 5절, dmvpn-design 5절 |
+| 6 | 2주 화~수 | DC-R2, HQ-R2, BR1-R1, BR2-R2 | IPsec, Tunnel0, NHRP, 터널 OSPF | dmvpn-design |
+| 7 | 2주 목 | DC-DNS-1, DC-DNS-2 | dnsmasq, 레코드 | dhcp-dns-design |
+| 8 | 2주 금 | DC 게이트웨이 | 서버 VLAN ACL | dhcp-dns-design 5절 |
+| 9 | 3주 수~목 | ISP 장비 | eBGP, PE 정적 경로·광고 | bgp-design |
+| 10 | 3주 금 | 라우터 | QoS | [cisco-router.md](./cisco-router.md) 3.7절 |
 
 ## 7. 저장과 백업
 
