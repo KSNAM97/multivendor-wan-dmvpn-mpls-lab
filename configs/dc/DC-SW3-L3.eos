@@ -39,39 +39,33 @@ int et1
  desc to dc-sw1-l3 et4
  no switchport
  ip add 10.2.0.22 255.255.255.252
- no sh
 !
 int et2
  desc to dc-sw2-l3 et4
  no switchport
  ip add 10.2.0.30 255.255.255.252
- no sh
 !
 int et3
  desc to dc-r3 gi0/0
  no switchport
  ip add 10.2.0.38 255.255.255.252
- no sh
 !
 int et4
  desc to dc-r4 gi0/0
  no switchport
  ip add 10.2.0.41 255.255.255.252
- no sh
 !
 ip routing
 !
 int vlan100
  desc mgmt vlan for dc-sw3-l3
  ip add 10.2.100.13 255.255.255.0
- no sh
 !
 int vlan50
  desc vrrp master for dc-sw4-l3 vlan50
  ip add 10.2.50.2 255.255.255.0
  vrrp 50 ipv4 10.2.50.1
  vrrp 50 priority-level 110
- no sh
 ! stp mst
 spanning-tree mode mstp
 spanning-tree mst configuration

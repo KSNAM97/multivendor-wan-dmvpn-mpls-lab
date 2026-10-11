@@ -1,0 +1,38 @@
+! arista
+!
+zerotouch cancel
+!
+hostname dc-sw1-l3
+username admin privilege 15 role network-admin secret admin1234
+!
+ip routing
+!
+int lo0
+ ip add 10.10.10.11 255.255.255.255
+!
+int et1
+ desc to dc-r1 gi0/0
+ no switchport
+ ip add 10.2.0.2 255.255.255.252
+!
+int et2
+ desc to dc-r2 gi0/0
+ no switchport
+ ip add 10.2.0.9 255.255.255.252
+!
+int et3
+ desc to dc-sw2-l3 et3
+ no switchport
+ ip add 10.2.0.17 255.255.255.252
+!
+int et4
+ desc to dc-sw3-l3 et1
+ no switchport
+ ip add 10.2.0.21 255.255.255.252
+!
+int et5
+ desc to dc-sw4-l3 et1
+ no switchport
+ ip add 10.2.0.25 255.255.255.252
+!
+

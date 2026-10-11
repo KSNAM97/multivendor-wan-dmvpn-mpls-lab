@@ -76,7 +76,7 @@ int gi0/0
 - 콘솔에서 `enable`, `configure terminal`로 설정 모드에 진입한 뒤 위 내용을 붙여 넣음(진입 명령은 파일에 기재하지 않음).
 - 접속 설정(`enable secret`, `line vty`)은 모든 Cisco 장비에 같은 형식으로 적용. Arista는 `username admin secret admin1234`.
 - 실습 환경이므로 접속 비밀번호는 `admin1234`로 통일하고 컨피그와 문서에 그대로 기재(7절).
-- 물리 포트와 `po`(연결 상대와 포트)에는 `desc`를 입력하고 `no sh`를 명시. 가상 인터페이스(`lo0`)와 MGMT SVI(`vlan 100`, VLAN `name`으로 구분)는 `desc` 생략. 단, EtherChannel 멤버 포트는 `int range`로 묶어 범위에 `desc to <상대 장비> po<번호>`를 한 번만 입력(포트별 `desc`는 생략).
+- 물리 포트와 `po`(연결 상대와 포트)에는 `desc`를 입력하고 Cisco는 `no sh`를 명시. Arista는 포트가 기본 활성이므로 `no sh`를 입력하지 않음(EOS에서 `no sh`는 모호한 명령으로 거절됨). 가상 인터페이스(`lo0`)와 MGMT SVI(`vlan 100`, VLAN `name`으로 구분)는 `desc` 생략. 단, EtherChannel 멤버 포트는 `int range`로 묶어 범위에 `desc to <상대 장비> po<번호>`를 한 번만 입력(포트별 `desc`는 생략).
 
 ### 3.2 OSPF(사이트 프로세스)
 
@@ -358,6 +358,7 @@ int vlan 100
 
 - 주소는 `10.<사이트>.100.<장비 번호>`(`docs/vlan-design.md` 1절). 예시는 `HQ-SW-2`(`.12`). 게이트웨이와 OSPF 광고는 없음.
 - L2 스위치(`BR2-SW3-L2`)는 4.3절 예시처럼 같은 형식에 장비 번호만 20을 더한 값을 사용.
+- Arista L3 전용 스위치(`DC-SW1-L3`, `DC-SW2-L3`)는 VLAN 100에 속한 포트가 없어 SVI가 `down`이 되므로 MGMT SVI를 두지 않음(콘솔로 관리).
 
 ### 4.6 DHCP 서버(게이트웨이 스위치)
 
