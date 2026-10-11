@@ -144,7 +144,7 @@ network-project/
 | 클래스 | CONTROL (CS6, 10%) / BUSINESS (DNS 53 → AF31, 30%) / class-default (fair-queue) |
 | 제외 | 라우터 간 링크, ISP 방향, Private Internet 방향, Tunnel0 |
 | Private Internet ACL | OSPF, GRE / ESP / UDP 500 (203.0.113.0/24 간), ICMP(임시)만 허용 후 `deny ip any any log` |
-| DC VLAN 50 | DC-DNS-1·DNS2는 각 사이트에서 UDP / TCP 53만 허용 (DHCP는 사이트 게이트웨이에서 제공하므로 서버 VLAN으로 허용하지 않음) |
+| DC VLAN 50 | DC-DNS-1·DC-DNS-2는 각 사이트에서 UDP / TCP 53만 허용 (DHCP는 사이트 게이트웨이에서 제공하므로 서버 VLAN으로 허용하지 않음) |
 
 ### 미확정 항목
 
