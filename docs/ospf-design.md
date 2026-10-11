@@ -10,7 +10,7 @@
 | HQ | 11 | 1 | 터널(Area 0) 연결 라우터 `HQ-R2`가 ABR |
 | BR1 | 12 | 2 | 터널(Area 0) 연결 라우터 `BR1-R1`이 ABR |
 | BR2 | 13 | 3 | 터널(Area 0) 연결 라우터 `BR2-R2`가 ABR |
-| Private Internet(DMVPN 언더레이) | 2 | 100 | `PrivI-net`과 사이트의 PI 연결 라우터 |
+| Private Internet(DMVPN 언더레이) | 2 | 100 | `Private-net`과 사이트의 PI 연결 라우터 |
 
 - 프로세스 번호는 장비 로컬 값이며 IOS와 EOS 모두 1 ~ 65535만 허용. 사이트 번호(DC 0, HQ 1, BR1 2, BR2 3)에 10을 더해 사용하고, 언더레이 프로세스 2와 겹치지 않도록 구성.
 - Area 0은 DC와 DMVPN 터널. HQ(Area 1), BR1(Area 2), BR2(Area 3)는 터널을 통해 Area 0에 연결.
@@ -21,7 +21,7 @@
 - 형식: `<프로세스>.<프로세스>.<프로세스>.<장비 번호>/32`. DC `10.10.10.x`, HQ `11.11.11.x`, BR1 `12.12.12.x`, BR2 `13.13.13.x`. 끝자리는 라우터가 이름의 번호(`R1` → `.1`), L3 스위치가 이름의 번호에 10을 더한 값(`SW1` → `.11`).
 - 같은 OSPF 도메인 안에서 Router ID는 장비마다 고유해야 하므로 사이트 내 장비는 끝자리로 구분.
 - Loopback0은 해당 사이트 Area에 포함하고 `passive-interface` 처리. 이 값을 `router-id`로 사용.
-- `PrivI-net`의 Router ID는 `203.0.113.254`(Loopback0, `/32`).
+- `Private-net`의 Router ID는 `203.0.113.254`(Loopback0, `/32`).
 
 | 장비 | Loopback0 | 프로세스 | Area |
 |---|---|---|---|
@@ -45,7 +45,7 @@
 | BR2-R2 | 13.13.13.2/32 | 13 | 3 |
 | BR2-SW1-L3 | 13.13.13.11/32 | 13 | 3 |
 | BR2-SW2-L3 | 13.13.13.12/32 | 13 | 3 |
-| PrivI-net | 2.2.2.2/32 | 2 | 100 |
+| Private-net | 2.2.2.2/32 | 2 | 100 |
 
 ## 3. 인터페이스별 OSPF 소속
 
@@ -122,11 +122,11 @@
 | BR2-SW1-L3 | Gi0/1 | 10.4.0.5/30 | 13 | 3 | point-to-point | 58 |
 | BR2-SW2-L3 | Gi0/0 | 10.4.0.10/30 | 13 | 3 | point-to-point | 59 |
 | BR2-SW2-L3 | Gi0/1 | 10.4.0.14/30 | 13 | 3 | point-to-point | 60 |
-| PrivI-net | Gi0/0 | 203.0.113.2/30 | 2 | 100 | point-to-point | 31 |
-| PrivI-net | Gi1/0 | 203.0.113.6/30 | 2 | 100 | point-to-point | 32 |
-| PrivI-net | Gi2/0 | 203.0.113.10/30 | 2 | 100 | point-to-point | 8 |
-| PrivI-net | Gi3/0 | 203.0.113.14/30 | 2 | 100 | point-to-point | 50 |
-| PrivI-net | Gi4/0 | 203.0.113.18/30 | 2 | 100 | point-to-point | 64 |
+| Private-net | Gi0/0 | 203.0.113.2/30 | 2 | 100 | point-to-point | 31 |
+| Private-net | Gi1/0 | 203.0.113.6/30 | 2 | 100 | point-to-point | 32 |
+| Private-net | Gi2/0 | 203.0.113.10/30 | 2 | 100 | point-to-point | 8 |
+| Private-net | Gi3/0 | 203.0.113.14/30 | 2 | 100 | point-to-point | 50 |
+| Private-net | Gi4/0 | 203.0.113.18/30 | 2 | 100 | point-to-point | 64 |
 
 ## 4. DMVPN 터널(Tunnel0)
 
@@ -137,7 +137,7 @@
 
 ## 5. Private Internet 언더레이(프로세스 2, Area 100)
 
-- 대상: `PrivI-net`(5포트)과 PI 연결 사이트 라우터(`DC-R1`, `DC-R2`, `HQ-R2`, `BR1-R1`, `BR2-R2`)의 PI 연결 인터페이스.
+- 대상: `Private-net`(5포트)과 PI 연결 사이트 라우터(`DC-R1`, `DC-R2`, `HQ-R2`, `BR1-R1`, `BR2-R2`)의 PI 연결 인터페이스.
 - 사이트 내부 OSPF와 별도 프로세스이며 Area 100만 사용. ACL 화이트리스트가 OSPF(224.0.0.5/6)를 허용.
 
 ## 6. 정적 기본 경로와 OSPF 기본 경로 광고

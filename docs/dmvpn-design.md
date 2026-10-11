@@ -50,7 +50,7 @@ DMVPN Phase 3(mGRE over IPsec) 구성을 정리한 문서. 값은 참고 저장�
 - NBMA 주소는 Private Internet 링크의 사이트 측 IP. 언더레이는 OSPF 프로세스 2 Area 100으로 상호 도달.
 - Private Internet ACL은 OSPF(224.0.0.5/6), GRE, ESP, UDP 500(203.0.113.0/24 간)과 ICMP(임시)만 허용.
 
-| 링크 # | 사이트 장비 | 포트 | IP | PrivI-net 포트 | IP |
+| 링크 # | 사이트 장비 | 포트 | IP | Private-net 포트 | IP |
 |---|---|---|---|---|---|
 | 8 | HQ-R2 | Gi4/0 | 203.0.113.9/30 | Gi2/0 | 203.0.113.10/30 |
 | 31 | DC-R1 | Gi2/0 | 203.0.113.1/30 | Gi0/0 | 203.0.113.2/30 |

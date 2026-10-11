@@ -22,14 +22,14 @@
 | 2 | 1주 수~목 | 스위치 | VLAN, 트렁크, EtherChannel, STP, SVI, HSRP/VARP | vlan-design |
 | 3 | 1주 금 | 사이트 장비 | 사이트 내부 OSPF, 사용자 VLAN DHCP | ospf-design, dhcp-dns-design |
 | 4 | 2주 월~화 | ISP 장비, 사이트 ISP 연결 라우터 | eBGP, PE 정적 경로·광고, 정적 기본 경로, IP SLA/track | bgp-design, ospf-design 6절 |
-| 5 | 2주 수 | PrivI-net, PI 연결 라우터 | 언더레이 OSPF(프로세스 2), PI ACL | ospf-design 5절, dmvpn-design 5절 |
+| 5 | 2주 수 | Private-net, PI 연결 라우터 | 언더레이 OSPF(프로세스 2), PI ACL | ospf-design 5절, dmvpn-design 5절 |
 | 6 | 2주 목 | DC-R2, HQ-R2, BR1-R1, BR2-R2 | IPsec, Tunnel0, NHRP, 터널 OSPF | dmvpn-design |
 | 7 | 2주 금 | DC-DNS-1, DC-DNS-2 | dnsmasq, 레코드 | dhcp-dns-design |
 | 8 | 3주 월~화 | 라우터, DC 게이트웨이 | QoS, 서버 VLAN ACL | 아래 3.7절, dhcp-dns-design 5절 |
 
 ## 3. Cisco 7200 라우터
 
-대상: `HQ-R*`, `DC-R*`, `BR*-R*`, `ISP-*`, `PrivI-net`. 인터페이스 이름은 `GigabitEthernet<슬롯>/0`.
+대상: `HQ-R*`, `DC-R*`, `BR*-R*`, `ISP-*`, `Private-net`. 인터페이스 이름은 `GigabitEthernet<슬롯>/0`.
 
 ### 3.1 기본
 
@@ -165,8 +165,8 @@ ip access-list extended PI-WHITELIST
  deny ip any any log
 ```
 
-- ACL은 `PrivI-net`의 5개 링크 인터페이스에 적용(`ip access-group PI-WHITELIST in`). `ICMP` 허용 줄은 임시이며 검증 후 제거.
-- 사이트 라우터는 사이트 프로세스와 같은 Router ID를 프로세스 2에도 사용. `PrivI-net`의 Router ID는 `2.2.2.2`.
+- ACL은 `Private-net`의 5개 링크 인터페이스에 적용(`ip access-group PI-WHITELIST in`). `ICMP` 허용 줄은 임시이며 검증 후 제거.
+- 사이트 라우터는 사이트 프로세스와 같은 Router ID를 프로세스 2에도 사용. `Private-net`의 Router ID는 `2.2.2.2`.
 
 ### 3.7 QoS
 

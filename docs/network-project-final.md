@@ -54,7 +54,7 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ HQ
 
 | 사이트 | GNS3 장비명 (기준) | 초기 설계명 | 역할 | 비고 |
 |---|---|---|---|---|
-| Private Internet | PrivI-net | PI | DMVPN 언더레이 | |
+| Private Internet | Private-net | PI | DMVPN 언더레이 | |
 | HQ | HQ-R1 / HQ-R2 | R11 / R12 | 라우터(R12가 DMVPN Spoke) | |
 | HQ | HQ-SW-1 | SW110 | L3 스위치 | |
 | HQ | HQ-SW-2 / HQ-SW-3 | SW101 / SW102 | L3 스위치(HSRP) | |
@@ -89,7 +89,7 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ HQ
 | HQ-R1 Gi2/0 | HQ-R2 Gi2/0 | 10.1.0.16/30 |
 | HQ-R1 Gi3/0 | ISP-1-PE-A Gi2/0 | 100.1.11.0/30 |
 | HQ-R2 Gi3/0 | ISP-2-PE-A Gi2/0 | 100.2.12.0/30 |
-| HQ-R2 Gi4/0 | PrivI-net Gi2/0 | 203.0.113.8/30 (Tunnel0 source, DMVPN Spoke) |
+| HQ-R2 Gi4/0 | Private-net Gi2/0 | 203.0.113.8/30 (Tunnel0 source, DMVPN Spoke) |
 | HQ-SW-1 Gi1/0 | HQ-SW-2 Gi0/0 | Po1 (VLAN10/20/100) |
 | HQ-SW-1 Gi1/1 | HQ-SW-2 Gi0/1 | Po1 |
 | HQ-SW-1 Gi1/2 | HQ-SW-3 Gi0/0 | Po2 |
@@ -117,8 +117,8 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ HQ
 | DC-SW4-L3 Et3 | DC-R3 Gi1/0 | 10.2.0.44/30 (L3) |
 | DC-SW4-L3 Et4 | DC-R4 Gi1/0 | 10.2.0.48/30 (L3) |
 | DC-R3 Gi2/0 | DC-R4 Gi2/0 | 10.2.0.52/30 |
-| DC-R1 Gi2/0 | PrivI-net Gi0/0 | 203.0.113.0/30 |
-| DC-R2 Gi2/0 | PrivI-net Gi1/0 | 203.0.113.4/30 (Tunnel0 source) |
+| DC-R1 Gi2/0 | Private-net Gi0/0 | 203.0.113.0/30 |
+| DC-R2 Gi2/0 | Private-net Gi1/0 | 203.0.113.4/30 (Tunnel0 source) |
 | DC-R3 Gi3/0 | ISP-1-PE-A Gi3/0 | 100.1.21.0/30 |
 | DC-R4 Gi3/0 | ISP-2-PE-A Gi3/0 | 100.2.22.0/30 |
 | DC-SW3-L3 Et5 | DC-SW4-L3 Et5 | Po1 (VLAN50/100) |
@@ -141,7 +141,7 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ HQ
 | BR1-R1 Gi2/0 | BR1-R2 Gi2/0 | 10.3.0.16/30 |
 | BR1-R1 Gi3/0 | ISP-1-PE-B Gi2/0 | 100.1.31.0/30 |
 | BR1-R2 Gi3/0 | ISP-2-PE-B Gi2/0 | 100.2.32.0/30 |
-| BR1-R1 Gi4/0 | PrivI-net Gi3/0 | 203.0.113.12/30 (Tunnel0 source, DMVPN Spoke) |
+| BR1-R1 Gi4/0 | Private-net Gi3/0 | 203.0.113.12/30 (Tunnel0 source, DMVPN Spoke) |
 | BR1-SW1-L3 Gi1/0 | BR1-SW2-L3 Gi1/0 | Po1 (VLAN10/100) |
 | BR1-SW1-L3 Gi1/1 | BR1-SW2-L3 Gi1/1 | Po1 |
 | BR1-SW1-L3 Gi2/0 | BR1-SW3-L3 Gi0/0 | 트렁크 (연결 확인됨) |
@@ -155,7 +155,7 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ HQ
 |---|---|
 | BR2-R1 Gi3/0 ↔ ISP-1-PE-B Gi3/0 | 100.1.41.0/30 |
 | BR2-R2 Gi3/0 ↔ ISP-2-PE-B Gi3/0 | 100.2.42.0/30 |
-| BR2-R2 Gi4/0 ↔ PrivI-net Gi4/0 | 203.0.113.16/30 (Tunnel0 source, DMVPN Spoke) |
+| BR2-R2 Gi4/0 ↔ Private-net Gi4/0 | 203.0.113.16/30 (Tunnel0 source, DMVPN Spoke) |
 
 ### ISP-1 (ISP-2는 같은 구조이며 장비명 ISP-2-*, 100.1→100.2, AS +10)
 | A | B | 서브넷 |

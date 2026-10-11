@@ -9,7 +9,7 @@ Summary,Issue Type,Label,Priority,Description,Due Date
 [1주] DC VARP + STP 루트 고정,Task,net-cloud;vlan-dc-server,High,"DC-SW3-L3 루트, cEOS 교차연결 루프 방지 / 일정: 1주 수(10/14)",2026-10-14
 [1주] BR1 VLAN/트렁크/HSRP(vlan-br1-user),Task,policy;vlan-br1-user,High,BR1-SW1~3-L3 + BR1-R1/R2 / 일정: 1주 수(10/14),2026-10-14
 [1주] BR2 VLAN/트렁크/HSRP(vlan-br2-user),Task,policy;vlan-br2-user,High,BR2-SW1-L3/SW2-L3/SW3-L2 + BR2-R1/R2 / 일정: 1주 목(10/15),2026-10-15
-"[1주] 사이트 내부 OSPF(DC Area0, HQ Area1, BR1 Area2, BR2 Area3) 확정",Task,net-cloud;policy,Medium,"프로세스 DC 10, HQ 11, BR1 12, BR2 13 / ABR: BR1-R1, BR2-R2 / 상세: docs/ospf-design.md / 일정: 1주 금(10/16), DC/HQ와 BR1/BR2 내부통신 검증 포함",2026-10-16
+"[1주] 사이트 내부 OSPF(DC Area0, HQ Area1, BR1 Area2, BR2 Area3) 확정",Task,net-cloud;policy,Medium,"프로세스 DC 10, HQ 11, BR1 12, BR2 13 / ABR: HQ-R2, BR1-R1, BR2-R2 / 상세: docs/ospf-design.md / 일정: 1주 금(10/16), DC/HQ와 BR1/BR2 내부통신 검증 포함",2026-10-16
 [2주] ISP-1 내부 eBGP 4세션,Task,net-cloud,High,"PE-A/P1/P2/PE-B, AS65111-65114 / 일정: 2주 월(10/19)",2026-10-19
 [2주] ISP-2 내부 eBGP 4세션,Task,net-cloud,High,"PE-A/P1/P2/PE-B, AS65121-65124 / 일정: 2주 월(10/19)",2026-10-19
 [2주] PE 고객 대역 network 광고,Task,net-cloud,High,사이트별 /16 announce / 일정: 2주 화(10/20),2026-10-20
@@ -28,3 +28,4 @@ Summary,Issue Type,Label,Priority,Description,Due Date
 [3주] DMVPN Hub 장애 실측,Task,net-cloud,High,Private Internet 단일 노드 리스크 / 일정: 3주 목(10/29),2026-10-29
 [3주] 트러블슈팅 로그 정리,Task,policy,Medium,docs/troubleshooting-log.md / 일정: 3주 금(10/30),2026-10-30
 [3.5주] PPT 슬라이드 작성 및 리허설,Task,net-cloud;policy,High,"일정: 3.5주 월~수(11/2~11/4, 수요일은 반일)",2026-11-04
+[2주] DMVPN Spoke 구성(HQ-R2),Task,policy,High,"Phase3 shortcut / 일정: 2주 목(10/22), Phase3 shortcut 검증은 2주 금(10/23)",2026-10-22

@@ -7,7 +7,7 @@
 
 | 장비 종류 | GNS3 인터페이스 | 사용 가능 포트 |
 |---|---|---|
-| Cisco 7200 라우터 (`HQ-R*`, `DC-R*`, `BR*-R*`, `ISP-*`, `PrivI-net`) | `GigabitEthernet0/0` – `6/0` (`GiX/0`) | 7포트 |
+| Cisco 7200 라우터 (`HQ-R*`, `DC-R*`, `BR*-R*`, `ISP-*`, `Private-net`) | `GigabitEthernet0/0` – `6/0` (`GiX/0`) | 7포트 |
 | Cisco IOU 스위치 L3·L2 (`HQ-SW-*`, `BR*-SW*-L3`, `BR2-SW3-L2`) | `Gi0/0` – `Gi3/3` | 16포트 |
 | Arista cEOS 스위치 L3·L2 (`DC-SW*-L3`, `DC-SW*-L2`) | `Management1`, `Ethernet1` – `Ethernet12` (`Et1` – `Et12`) | 12포트 + 관리 |
 
@@ -29,7 +29,7 @@
 | 5 | HQ-R1 | Gi2/0 | HQ-R2 | Gi2/0 | 10.1.0.16/30 | - |
 | 6 | HQ-R1 | Gi3/0 | ISP-1-PE-A | Gi2/0 | 100.1.11.0/30 | ISP-1 연결 |
 | 7 | HQ-R2 | Gi3/0 | ISP-2-PE-A | Gi2/0 | 100.2.12.0/30 | ISP-2 연결 |
-| 8 | HQ-R2 | Gi4/0 | PrivI-net | Gi2/0 | 203.0.113.8/30 | PI 연결, DMVPN Spoke Tunnel0 source |
+| 8 | HQ-R2 | Gi4/0 | Private-net | Gi2/0 | 203.0.113.8/30 | PI 연결, DMVPN Spoke Tunnel0 source |
 | 9 | HQ-SW-1 | Gi1/0 | HQ-SW-2 | Gi0/0 | - | Po1 (VLAN 10/20/100) |
 | 10 | HQ-SW-1 | Gi1/1 | HQ-SW-2 | Gi0/1 | - | Po1 |
 | 11 | HQ-SW-1 | Gi1/2 | HQ-SW-3 | Gi0/0 | - | Po2 |
@@ -57,8 +57,8 @@
 | 28 | DC-SW4-L3 | Et3 | DC-R3 | Gi1/0 | 10.2.0.44/30 | L3 링크 |
 | 29 | DC-SW4-L3 | Et4 | DC-R4 | Gi1/0 | 10.2.0.48/30 | L3 링크 |
 | 30 | DC-R3 | Gi2/0 | DC-R4 | Gi2/0 | 10.2.0.52/30 | - |
-| 31 | DC-R1 | Gi2/0 | PrivI-net | Gi0/0 | 203.0.113.0/30 | PI 연결 |
-| 32 | DC-R2 | Gi2/0 | PrivI-net | Gi1/0 | 203.0.113.4/30 | PI 연결, DMVPN Hub Tunnel0 source |
+| 31 | DC-R1 | Gi2/0 | Private-net | Gi0/0 | 203.0.113.0/30 | PI 연결 |
+| 32 | DC-R2 | Gi2/0 | Private-net | Gi1/0 | 203.0.113.4/30 | PI 연결, DMVPN Hub Tunnel0 source |
 | 33 | DC-R3 | Gi3/0 | ISP-1-PE-A | Gi3/0 | 100.1.21.0/30 | ISP-1 연결 |
 | 34 | DC-R4 | Gi3/0 | ISP-2-PE-A | Gi3/0 | 100.2.22.0/30 | ISP-2 연결 |
 | 35 | DC-SW3-L3 | Et5 | DC-SW4-L3 | Et5 | - | Po1 (VLAN 50/100) |
@@ -81,7 +81,7 @@
 | 47 | BR1-R1 | Gi2/0 | BR1-R2 | Gi2/0 | 10.3.0.16/30 | - |
 | 48 | BR1-R1 | Gi3/0 | ISP-1-PE-B | Gi2/0 | 100.1.31.0/30 | ISP-1 연결 |
 | 49 | BR1-R2 | Gi3/0 | ISP-2-PE-B | Gi2/0 | 100.2.32.0/30 | ISP-2 연결 |
-| 50 | BR1-R1 | Gi4/0 | PrivI-net | Gi3/0 | 203.0.113.12/30 | PI 연결, DMVPN Spoke Tunnel0 source |
+| 50 | BR1-R1 | Gi4/0 | Private-net | Gi3/0 | 203.0.113.12/30 | PI 연결, DMVPN Spoke Tunnel0 source |
 | 51 | BR1-SW1-L3 | Gi1/0 | BR1-SW2-L3 | Gi1/0 | - | Po1 (VLAN 10/100) |
 | 52 | BR1-SW1-L3 | Gi1/1 | BR1-SW2-L3 | Gi1/1 | - | Po1 |
 | 53 | BR1-SW1-L3 | Gi2/0 | BR1-SW3-L3 | Gi0/0 | - | 트렁크 (연결 확인됨) |
@@ -100,7 +100,7 @@
 | 61 | BR2-R1 | Gi2/0 | BR2-R2 | Gi2/0 | 10.4.0.16/30 | - |
 | 62 | BR2-R1 | Gi3/0 | ISP-1-PE-B | Gi3/0 | 100.1.41.0/30 | ISP-1 연결 |
 | 63 | BR2-R2 | Gi3/0 | ISP-2-PE-B | Gi3/0 | 100.2.42.0/30 | ISP-2 연결 |
-| 64 | BR2-R2 | Gi4/0 | PrivI-net | Gi4/0 | 203.0.113.16/30 | PI 연결, DMVPN Spoke Tunnel0 source |
+| 64 | BR2-R2 | Gi4/0 | Private-net | Gi4/0 | 203.0.113.16/30 | PI 연결, DMVPN Spoke Tunnel0 source |
 | 65 | BR2-SW1-L3 | Gi1/0 | BR2-SW2-L3 | Gi1/0 | - | Po1 (VLAN 10/100) |
 | 66 | BR2-SW1-L3 | Gi1/1 | BR2-SW2-L3 | Gi1/1 | - | Po1 |
 | 67 | BR2-SW1-L3 | Gi2/0 | BR2-SW3-L2 | Gi0/0 | - | 트렁크 (연결 확인됨) |
@@ -132,7 +132,7 @@
 
 | 장비 | 사용 포트 | 개수 |
 |---|---|---|
-| PrivI-net | Gi0/0, Gi1/0, Gi2/0, Gi3/0, Gi4/0 | 5 |
+| Private-net | Gi0/0, Gi1/0, Gi2/0, Gi3/0, Gi4/0 | 5 |
 | BR1-R1 | Gi0/0, Gi1/0, Gi2/0, Gi3/0, Gi4/0 | 5 |
 | BR1-R2 | Gi0/0, Gi1/0, Gi2/0, Gi3/0 | 4 |
 | BR1-SW1-L3 | Gi0/0, Gi0/1, Gi1/0, Gi1/1, Gi2/0 | 5 |

@@ -51,7 +51,7 @@ log-queries
 
 ### 2.2 DNS 레코드
 
-- 총 31개. Router ID는 `docs/ospf-design.md` 2절(사이트 장비, `PrivI-net`)과 `docs/bgp-design.md` 2절(ISP 장비) 기준.
+- 총 31개. Router ID는 `docs/ospf-design.md` 2절(사이트 장비, `Private-net`)과 `docs/bgp-design.md` 2절(ISP 장비) 기준.
 
 | 이름 | IP |
 |---|---|
@@ -75,7 +75,7 @@ log-queries
 | br2-r2.lab.local | 13.13.13.2 |
 | br2-sw1-l3.lab.local | 13.13.13.11 |
 | br2-sw2-l3.lab.local | 13.13.13.12 |
-| privi-net.lab.local | 2.2.2.2 |
+| private-net.lab.local | 2.2.2.2 |
 | isp-1-pe-a.lab.local | 111.111.111.111 |
 | isp-1-p1.lab.local | 112.112.112.112 |
 | isp-1-p2.lab.local | 113.113.113.113 |
