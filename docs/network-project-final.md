@@ -89,9 +89,12 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ BR
 | HQ-R1 Gi3/0 | ISP-1-PE-A Gi2/0 | 100.1.11.0/30 |
 | HQ-R2 Gi3/0 | ISP-2-PE-A Gi2/0 | 100.2.12.0/30 |
 | HQ-R2 Gi4/0 | PrivI-net Gi2/0 | 203.0.113.8/30 |
-| HQ-SW-1 Gi1/0-1 | HQ-SW-2 Gi0/0-1 (Po1, VLAN10/20/100) |
-| HQ-SW-1 Gi1/2-3 | HQ-SW-3 Gi0/0-1 (Po2) |
-| HQ-SW-2 Gi0/2-3 | HQ-SW-3 Gi0/2-3 (Po3) |
+| HQ-SW-1 Gi1/0 | HQ-SW-2 Gi0/0 | Po1 (VLAN10/20/100) |
+| HQ-SW-1 Gi1/1 | HQ-SW-2 Gi0/1 | Po1 |
+| HQ-SW-1 Gi1/2 | HQ-SW-3 Gi0/0 | Po2 |
+| HQ-SW-1 Gi1/3 | HQ-SW-3 Gi0/1 | Po2 |
+| HQ-SW-2 Gi0/2 | HQ-SW-3 Gi0/2 | Po3 |
+| HQ-SW-2 Gi0/3 | HQ-SW-3 Gi0/3 | Po3 |
 | **QoS 대상** | HQ-R1 Gi0/0, Gi1/0 / HQ-R2 Gi0/0, Gi1/0 |
 
 ### DC
@@ -102,17 +105,25 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ BR
 | DC-R2 Gi0/0 | DC-SW1-L3 Et2 | 10.2.0.8/30 |
 | DC-R2 Gi1/0 | DC-SW2-L3 Et2 | 10.2.0.12/30 |
 | DC-SW1-L3 Et3 | DC-SW2-L3 Et3 | 10.2.0.16/30 |
-| DC-SW1-L3 Et4-5 | DC-SW3-L3 Et1 / DC-SW4-L3 Et1 |
-| DC-SW2-L3 Et4-5 | DC-SW3-L3 Et2 / DC-SW4-L3 Et2 |
-| DC-SW3-L3 Et3-4 | DC-R3 Gi0/0 / DC-R4 Gi0/0 |
-| DC-SW4-L3 Et3-4 | DC-R3 Gi1/0 / DC-R4 Gi1/0 |
+| DC-SW1-L3 Et4 | DC-SW3-L3 Et1 | - |
+| DC-SW1-L3 Et5 | DC-SW4-L3 Et1 | - |
+| DC-SW2-L3 Et4 | DC-SW3-L3 Et2 | - |
+| DC-SW2-L3 Et5 | DC-SW4-L3 Et2 | - |
+| DC-SW3-L3 Et3 | DC-R3 Gi0/0 | - |
+| DC-SW3-L3 Et4 | DC-R4 Gi0/0 | - |
+| DC-SW4-L3 Et3 | DC-R3 Gi1/0 | - |
+| DC-SW4-L3 Et4 | DC-R4 Gi1/0 | - |
 | DC-R3 Gi2/0 | DC-R4 Gi2/0 | 10.2.0.52/30 |
 | DC-R1 Gi2/0 | PrivI-net Gi0/0 | 203.0.113.0/30 |
 | DC-R2 Gi2/0 | PrivI-net Gi1/0 | 203.0.113.4/30 (Tunnel0 source) |
 | DC-R3 Gi3/0 | ISP-1-PE-A Gi3/0 | 100.1.21.0/30 |
 | DC-R4 Gi3/0 | ISP-2-PE-A Gi3/0 | 100.2.22.0/30 |
-| DC-SW3-L3 Et5-6 | DC-SW4-L3 Et5-6 (Po1, VLAN50/100) |
-| DC-SW3-L3/DC-SW4-L3 Et7-8 | DC-SW1-L2 / DC-SW2-L2 (트렁크) |
+| DC-SW3-L3 Et5 | DC-SW4-L3 Et5 | Po1 (VLAN50/100) |
+| DC-SW3-L3 Et6 | DC-SW4-L3 Et6 | Po1 |
+| DC-SW3-L3 Et7 | DC-SW1-L2 Et1 | 트렁크 (L2 쪽 포트는 제안값) |
+| DC-SW3-L3 Et8 | DC-SW2-L2 Et1 | 트렁크 (L2 쪽 포트는 제안값) |
+| DC-SW4-L3 Et7 | DC-SW1-L2 Et2 | 트렁크 (L2 쪽 포트는 제안값) |
+| DC-SW4-L3 Et8 | DC-SW2-L2 Et2 | 트렁크 (L2 쪽 포트는 제안값) |
 | DC-SW1-L2 Et3 | DNS1 (VLAN50 access) |
 | DC-SW2-L2 Et3 | DB1 (VLAN50 access) |
 | **QoS 대상** | DC-R3 Gi0/0,Gi1/0 / DC-R4 Gi0/0,Gi1/0 / DC-R1 Gi0/0,Gi1/0 / DC-R2 Gi0/0,Gi1/0 |
@@ -120,14 +131,18 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ BR
 ### BR1 (BR2는 10.3→10.4, 장비명 BR2-*, ISP 링크 하단 표 참고)
 | A | B | 서브넷/용도 |
 |---|---|---|
-| BR1-SW1-L3 Gi0/0-1 | BR1-R1 Gi0/0 / BR1-R2 Gi0/0 |
-| BR1-SW2-L3 Gi0/0-1 | BR1-R1 Gi1/0 / BR1-R2 Gi1/0 |
+| BR1-SW1-L3 Gi0/0 | BR1-R1 Gi0/0 | 서브넷 미정 |
+| BR1-SW1-L3 Gi0/1 | BR1-R2 Gi0/0 | 서브넷 미정 |
+| BR1-SW2-L3 Gi0/0 | BR1-R1 Gi1/0 | 서브넷 미정 |
+| BR1-SW2-L3 Gi0/1 | BR1-R2 Gi1/0 | 서브넷 미정 |
 | BR1-R1 Gi2/0 | BR1-R2 Gi2/0 | 10.3.0.16/30 |
 | BR1-R1 Gi3/0 | ISP-1-PE-B Gi2/0 | 100.1.31.0/30 |
 | BR1-R2 Gi3/0 | ISP-2-PE-B Gi2/0 | 100.2.32.0/30 |
 | BR1-R1 Gi4/0 | PrivI-net Gi3/0 | 203.0.113.12/30 (Tunnel0 source, DMVPN Spoke) |
-| BR1-SW1-L3 Gi1/0-1 | BR1-SW2-L3 Gi1/0-1 (Po1, VLAN10/100) |
-| BR1-SW1-L3/BR1-SW2-L3 → BR1-SW3-L3 | 트렁크 |
+| BR1-SW1-L3 Gi1/0 | BR1-SW2-L3 Gi1/0 | Po1 (VLAN10/100) |
+| BR1-SW1-L3 Gi1/1 | BR1-SW2-L3 Gi1/1 | Po1 |
+| BR1-SW1-L3 Gi2/0 | BR1-SW3-L3 Gi0/0 | 트렁크 (포트는 제안값) |
+| BR1-SW2-L3 Gi2/0 | BR1-SW3-L3 Gi0/1 | 트렁크 (포트는 제안값) |
 | H1/H2 | BR1-SW3-L3 (VLAN10 access) |
 | **QoS 대상** | BR1-R1 Gi0/0,Gi1/0 / BR1-R2 Gi0/0,Gi1/0 |
 
