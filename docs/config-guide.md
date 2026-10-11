@@ -14,11 +14,25 @@
 | DMVPN, IPsec | `docs/dmvpn-design.md` |
 | DHCP, DNS | `docs/dhcp-dns-design.md` |
 
+## 1-1. 컨피그 표기 규칙
+
+- 컨피그 파일의 모든 문자는 **소문자**(호스트네임, 설명, 이름, 키 포함).
+- 첫 줄은 벤더 표기: Cisco는 `! cisco` + `!`, Arista는 `! arista` + `!`.
+- 약어 사용:
+
+| 구분 | 약어 |
+|---|---|
+| 인터페이스 | `et`(Arista Ethernet), `gi`(GigabitEthernet), `te`, `fo`, `fa`, `po`(Port-Channel), `lo`(Loopback), `vlan` |
+| 프로토콜 | `bgp`, `ospf`, `eigrp`, `rt`, `rd`, `acl` |
+| 일반 속성 | `desc`(description), `addr`(address; Cisco `ip addr`, Arista `ip add`), `mgmt`(management) |
+
+- 이 문서의 예시와 `configs/**/*.cfg`는 같은 규칙 적용. 문서 본문(표, 설명)의 장비명은 `HQ-R2`처럼 대소문자 표기 유지.
+
 ## 2. 작성 순서
 
 | 단계 | 일정 | 대상 | 작업 | 기준 문서 |
 |---|---|---|---|---|
-| 1 | 1주 월~화 | 전 장비 | 호스트네임, Loopback0, 인터페이스 설명·IP, 콘솔 설정 | port-mapping, ip-mapping, ospf-design |
+| 1 | 1주 월~화 | 전 장비 | 호스트네임, lo0, 인터페이스 설명·IP, 콘솔 설정 | port-mapping, ip-mapping, ospf-design |
 | 2 | 1주 수~목 | 스위치 | VLAN, 트렁크, EtherChannel, STP, SVI, HSRP/VARP | vlan-design |
 | 3 | 1주 금 | 사이트 장비 | 사이트 내부 OSPF, 사용자 VLAN DHCP | ospf-design, dhcp-dns-design |
 | 4 | 2주 월~화 | ISP 장비, 사이트 ISP 연결 라우터 | eBGP, PE 정적 경로·광고, 정적 기본 경로, IP SLA/track | bgp-design, ospf-design 6절 |
@@ -29,12 +43,14 @@
 
 ## 3. Cisco 7200 라우터
 
-대상: `HQ-R*`, `DC-R*`, `BR*-R*`, `ISP-*`, `Private-net`. 인터페이스 이름은 `GigabitEthernet<슬롯>/0`.
+대상: `HQ-R*`, `DC-R*`, `BR*-R*`, `ISP-*`, `Private-net`. 인터페이스 이름은 `gi<슬롯>/0`.
 
 ### 3.1 기본
 
 ```
-hostname HQ-R2
+! cisco
+!
+hostname hq-r2
 enable secret admin1234
 no ip domain-lookup
 service timestamps debug datetime msec
@@ -47,12 +63,12 @@ line vty 0 4
  password admin1234
  login
 !
-interface Loopback0
- ip address 11.11.11.2 255.255.255.255
+interface lo0
+ ip addr 11.11.11.2 255.255.255.255
 !
-interface GigabitEthernet0/0
- description to HQ-SW-2 Gi1/0
- ip address 10.1.0.5 255.255.255.252
+interface gi0/0
+ desc to hq-sw-2 gi1/0
+ ip addr 10.1.0.5 255.255.255.252
  no shutdown
 ```
 
@@ -66,11 +82,11 @@ interface GigabitEthernet0/0
 ```
 router ospf 11
  router-id 11.11.11.2
- passive-interface Loopback0
+ passive-interface lo0
 !
-interface Loopback0
+interface lo0
  ip ospf 11 area 1
-interface GigabitEthernet0/0
+interface gi0/0
  ip ospf 11 area 1
  ip ospf network point-to-point
 ```
@@ -81,7 +97,7 @@ interface GigabitEthernet0/0
 
 ```
 ip sla 1
- icmp-echo 100.2.12.2 source-interface GigabitEthernet3/0
+ icmp-echo 100.2.12.2 source-interface gi3/0
  frequency 5
 ip sla schedule 1 life forever start-time now
 track 1 ip sla 1 reachability
@@ -116,25 +132,25 @@ crypto isakmp policy 10
  authentication pre-share
  group 5
  lifetime 86400
-crypto isakmp key DMVPN-HUB address 0.0.0.0 0.0.0.0
+crypto isakmp key dmvpn-hub address 0.0.0.0 0.0.0.0
 crypto isakmp keepalive 10 3
-crypto ipsec transform-set TS-AES256 esp-aes 256 esp-sha-hmac
+crypto ipsec transform-set ts-aes256 esp-aes 256 esp-sha-hmac
  mode tunnel
-crypto ipsec profile DMVPN-PROFILE
- set transform-set TS-AES256
+crypto ipsec profile dmvpn-profile
+ set transform-set ts-aes256
  set pfs group5
  set security-association lifetime seconds 3600
 !
-interface Tunnel0
- ip address 172.16.0.13 255.255.255.0
+interface tunnel0
+ ip addr 172.16.0.13 255.255.255.0
  ip mtu 1400
  ip tcp adjust-mss 1360
- tunnel source GigabitEthernet4/0
+ tunnel source gi4/0
  tunnel mode gre multipoint
  tunnel key 100
  ip nhrp network-id 100
  ip nhrp holdtime 600
- ip nhrp authentication NHRPKEY1
+ ip nhrp authentication nhrpkey1
  ip nhrp nhs 172.16.0.1
  ip nhrp map 172.16.0.1 203.0.113.5
  ip nhrp map multicast 203.0.113.5
@@ -142,7 +158,7 @@ interface Tunnel0
  ip ospf 11 area 0
  ip ospf network broadcast
  ip ospf priority 0
- tunnel protection ipsec profile DMVPN-PROFILE shared
+ tunnel protection ipsec profile dmvpn-profile shared
 ```
 
 - 예시는 Spoke `HQ-R2`. Hub(`DC-R2`)는 `ip nhrp map multicast dynamic`, `ip nhrp redirect`, `ip ospf priority 255`를 사용하고 NHS·map·shortcut 줄 제외.
@@ -152,11 +168,11 @@ interface Tunnel0
 ```
 router ospf 2
  router-id 11.11.11.2
-interface GigabitEthernet4/0
+interface gi4/0
  ip ospf 2 area 100
  ip ospf network point-to-point
 !
-ip access-list extended PI-WHITELIST
+ip access-list extended pi-whitelist
  permit ospf any any
  permit gre 203.0.113.0 0.0.0.255 203.0.113.0 0.0.0.255
  permit esp 203.0.113.0 0.0.0.255 203.0.113.0 0.0.0.255
@@ -171,25 +187,25 @@ ip access-list extended PI-WHITELIST
 ### 3.7 QoS
 
 ```
-class-map match-any CM-CONTROL
+class-map match-any cm-control
  match dscp cs6
-class-map match-any CM-BUSINESS
+class-map match-any cm-business
  match dscp af31
 !
-policy-map PM-LAN-OUT-CHILD
- class CM-CONTROL
+policy-map pm-lan-out-child
+ class cm-control
   bandwidth percent 10
- class CM-BUSINESS
+ class cm-business
   bandwidth percent 30
  class class-default
   fair-queue
-policy-map PM-LAN-OUT
+policy-map pm-lan-out
  class class-default
   shape average 10000000
-  service-policy PM-LAN-OUT-CHILD
+  service-policy pm-lan-out-child
 !
-interface GigabitEthernet0/0
- service-policy output PM-LAN-OUT
+interface gi0/0
+ service-policy output pm-lan-out
 ```
 
 - 적용 대상은 사이트 스위치와 연결된 라우터 인터페이스(`Gi0/0`, `Gi1/0`) 20포트(`docs/network-project-final.md` 5절). 제외: 라우터 간 링크, ISP 방향, PI 방향, Tunnel0.
@@ -197,7 +213,7 @@ interface GigabitEthernet0/0
 
 ## 4. Cisco 스위치(vIOS L3·L2)
 
-대상: `HQ-SW-*`, `BR1-SW*-L3`, `BR2-SW1-L3`, `BR2-SW2-L3`(L3), `BR2-SW3-L2`(L2). 인터페이스 이름은 `GigabitEthernet<슬롯>/<번호>`.
+대상: `HQ-SW-*`, `BR1-SW*-L3`, `BR2-SW1-L3`, `BR2-SW2-L3`(L3), `BR2-SW3-L2`(L2). 인터페이스 이름은 `gi<슬롯>/<번호>`.
 
 ### 4.1 L2 기능
 
@@ -205,22 +221,22 @@ interface GigabitEthernet0/0
 spanning-tree mode rapid-pvst
 spanning-tree vlan 10,20 priority 4096
 vlan 10
- name HQ-USER-A
+ name hq-user-a
 vlan 20
- name HQ-USER-B
+ name hq-user-b
 vlan 100
- name MGMT
+ name mgmt
 vlan 999
- name NATIVE
+ name native
 !
-interface range GigabitEthernet0/0 - 1
+interface range gi0/0 - 1
  channel-group 1 mode active
-interface Port-channel1
+interface po1
  switchport trunk encapsulation dot1q
  switchport mode trunk
  switchport trunk native vlan 999
  switchport trunk allowed vlan 10,20,100
-interface GigabitEthernet3/0
+interface gi3/0
  switchport mode access
  switchport access vlan 10
 ```
@@ -231,16 +247,16 @@ interface GigabitEthernet3/0
 
 ```
 ip routing
-interface Vlan10
- ip address 10.1.10.2 255.255.255.0
+interface vlan10
+ ip addr 10.1.10.2 255.255.255.0
  standby version 2
  standby 10 ip 10.1.10.1
  standby 10 priority 110
  standby 10 preempt
 !
-interface GigabitEthernet1/0
+interface gi1/0
  no switchport
- ip address 10.1.0.2 255.255.255.252
+ ip addr 10.1.0.2 255.255.255.252
 ```
 
 - 예시는 `HQ-SW-2`(Active). `HQ-SW-3`은 SVI 주소 `.3`, priority 100. 라우티드 포트의 `ip ospf` 설정은 3.2절과 같은 형식.
@@ -252,76 +268,80 @@ interface GigabitEthernet1/0
 - L3 기능 없이 트렁크 2포트(L3 스위치 방향)와 호스트 액세스 2포트만 설정.
 
 ```
-hostname BR2-SW3-L2
+! cisco
+!
+hostname br2-sw3-l2
 spanning-tree mode rapid-pvst
 vlan 10
- name BR2-USER
+ name br2-user
 vlan 100
- name MGMT
+ name mgmt
 vlan 999
- name NATIVE
+ name native
 !
-interface GigabitEthernet0/0
- description to BR2-SW1-L3 Gi2/0
+interface gi0/0
+ desc to br2-sw1-l3 gi2/0
  switchport trunk encapsulation dot1q
  switchport mode trunk
  switchport trunk native vlan 999
  switchport trunk allowed vlan 10,100
-interface GigabitEthernet0/1
- description to BR2-SW2-L3 Gi2/0
+interface gi0/1
+ desc to br2-sw2-l3 gi2/0
  switchport trunk encapsulation dot1q
  switchport mode trunk
  switchport trunk native vlan 999
  switchport trunk allowed vlan 10,100
-interface GigabitEthernet3/0
- description to BR2-PC1 eth0
+interface gi3/0
+ desc to br2-pc1 eth0
  switchport mode access
  switchport access vlan 10
  spanning-tree portfast
-interface GigabitEthernet3/1
- description to BR2-PC2 eth0
+interface gi3/1
+ desc to br2-pc2 eth0
  switchport mode access
  switchport access vlan 10
  spanning-tree portfast
-interface Vlan100
- ip address 10.4.100.23 255.255.255.0
+interface vlan100
+ ip addr 10.4.100.23 255.255.255.0
 ```
 
 ## 5. Arista cEOS(DC)
 
-대상: `DC-SW1-L3` ~ `DC-SW4-L3`, `DC-SW1-L2`, `DC-SW2-L2`. 인터페이스 이름은 `Ethernet<번호>`, 접두 3칸 들여쓰기.
+대상: `DC-SW1-L3` ~ `DC-SW4-L3`, `DC-SW1-L2`, `DC-SW2-L2`. 인터페이스 이름은 `et<번호>`(범위는 `interface range et 5-6`), 주소는 `ip add`, 접두 3칸 들여쓰기.
 
 ```
-hostname DC-SW3-L3
+! arista
+!
+hostname dc-sw3-l3
 spanning-tree mode rstp
 spanning-tree priority 4096
 ip routing
 ip virtual-router mac-address 00:1c:73:00:00:99
 !
 vlan 50
-   name SERVER
+   name server
 vlan 100
-   name MGMT
+   name mgmt
 vlan 999
-   name NATIVE
+   name native
 !
-interface Ethernet5-6
+interface range et 5-6
    channel-group 1 mode active
-interface Port-Channel1
+interface po1
    switchport mode trunk
    switchport trunk native vlan 999
    switchport trunk allowed vlan 50,100
-interface Vlan50
-   ip address 10.2.50.2/24
+interface vlan50
+   ip add 10.2.50.2/24
    ip virtual-router address 10.2.50.1
-interface Ethernet3
+interface et3
    no switchport
-   ip address 10.2.0.38/30
+   ip add 10.2.0.38/30
    ip ospf network point-to-point
 !
 router ospf 10
    router-id 10.10.10.13
-   passive-interface Vlan50
+   passive-interface vlan50
    network 10.2.0.36/30 area 0.0.0.0
    network 10.2.50.0/24 area 0.0.0.0
 ```
@@ -332,33 +352,35 @@ router ospf 10
 - `ip routing`, OSPF 없이 트렁크(Et1, Et2)와 서버 액세스(Et12, VLAN 50)만 설정. EOS의 포트는 기본이 스위치포트이므로 `no switchport` 불필요.
 
 ```
-hostname DC-SW1-L2
+! arista
+!
+hostname dc-sw1-l2
 spanning-tree mode rstp
 !
 vlan 50
-   name SERVER
+   name server
 vlan 100
-   name MGMT
+   name mgmt
 vlan 999
-   name NATIVE
+   name native
 !
-interface Ethernet1
-   description to DC-SW3-L3 Et7
+interface et1
+   desc to dc-sw3-l3 et7
    switchport mode trunk
    switchport trunk native vlan 999
    switchport trunk allowed vlan 50,100
-interface Ethernet2
-   description to DC-SW4-L3 Et7
+interface et2
+   desc to dc-sw4-l3 et7
    switchport mode trunk
    switchport trunk native vlan 999
    switchport trunk allowed vlan 50,100
-interface Ethernet12
-   description to DC-DNS-1 eth0
+interface et12
+   desc to dc-dns-1 eth0
    switchport mode access
    switchport access vlan 50
    spanning-tree portfast
-interface Vlan100
-   ip address 10.2.100.21/24
+interface vlan100
+   ip add 10.2.100.21/24
 ```
 
 - `DC-SW2-L2`는 호스트네임 `DC-SW2-L2`, 업링크 설명 `to DC-SW3-L3 Et8`(Et1), `to DC-SW4-L3 Et8`(Et2), 서버 포트 설명 `to DC-DNS-2 eth0`, MGMT 주소 `10.2.100.22/24`로 변경.
@@ -372,7 +394,7 @@ interface Vlan100
 
 - 변경 전 장비에서 `copy running-config flash:<장비명>-backup-<날짜>.cfg`로 백업.
 - 변경 후 `copy running-config startup-config`(EOS는 `write`)로 저장하고, 확인한 컨피그를 `configs/<사이트>/<장비명>.cfg`에 반영.
-- 실습 환경이므로 접속 비밀번호(`admin1234`)와 DMVPN 키(ISAKMP `DMVPN-HUB`, NHRP `NHRPKEY1`)를 컨피그와 문서에 그대로 기재.
+- 실습 환경이므로 접속 비밀번호(`admin1234`)와 DMVPN 키(ISAKMP `dmvpn-hub`, NHRP `nhrpkey1`)를 컨피그와 문서에 그대로 기재.
 
 ## 8. 설정 후 확인
 
