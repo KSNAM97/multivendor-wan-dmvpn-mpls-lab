@@ -55,6 +55,7 @@ network-project/
 │   ├── isp1/core/
 │   ├── isp2/core/
 │   └── private-internet/core/
+├── verification/             장비 검증 기록(사이트/계층/프로토콜, Jira 연결)
 ├── docs/
 │   ├── network-project-final.md
 │   ├── port-mapping.md

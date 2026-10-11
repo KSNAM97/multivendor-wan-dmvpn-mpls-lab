@@ -12,6 +12,7 @@
 | 장비 IP, DHCP 풀 확인 | [ip-mapping.md](./ip-mapping.md) | - |
 | 컨피그 작성 방법 | [config-guide/README.md](./config-guide/README.md) | 아래 3절의 장비별 가이드 |
 | 파일 위치, 이름, 약어 규칙 | [config-guide/README.md](./config-guide/README.md) 1-1절 | - |
+| 장비 확인 결과 기록 | [../verification/README.md](../verification/README.md) | Jira(KAN) |
 
 ## 2. 프로토콜 설계 (값의 기준)
 

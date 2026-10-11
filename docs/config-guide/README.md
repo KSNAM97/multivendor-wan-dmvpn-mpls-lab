@@ -81,3 +81,17 @@
 | IP SLA, track | `show ip sla statistics`, `show track` | - |
 | ACL | `show ip access-lists` | `show ip access-lists` |
 | QoS | `show policy-map interface gi0/0` | - |
+
+### 8-1. Arista 설정 필터 (running-config)
+
+- `section`은 파이프 없이, `include`, `grep`은 파이프(`|`) 뒤에 입력(vEOS 4.29에서 `| grep` 동작 확인).
+- `| grep -E "a|b"`처럼 큰따옴표 안에 `|`가 들어가는 정규식도 사용 가능하며 따옴표를 반드시 닫음.
+
+| 확인할 것 | 명령 |
+|---|---|
+| VLAN 정의 | `show running-config section ^vlan` |
+| 트렁크 native, 허용 VLAN | `show running-config \| grep -E "native vlan\|allowed vlan"` |
+| access 포트 | `show running-config \| grep "access vlan"` |
+| 라우티드 포트 | `show running-config \| grep "no switchport"` |
+| 인터페이스 블록 | `show running-config section ^interface` |
+| 특정 포트, SVI | `show running-config interfaces ethernet7`, `show running-config interfaces vlan 50` |
