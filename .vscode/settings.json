@@ -1,8 +1,4 @@
 {
-    "files.associations": {
-        "*.cfg": "cisco",
-        "**/configs/dc/DC-SW*.cfg": "eos"
-    },
     "[cisco]": {
         "editor.quickSuggestions": { "other": true, "comments": false, "strings": true },
         "editor.wordBasedSuggestions": "currentDocument",

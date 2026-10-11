@@ -191,11 +191,25 @@
   "active": "5aff95b4dcd4e49e",
   "lastOpenFiles": [
     "docs/vrrp-mstp-design.md",
-    "docs/vrrp-mstp-design.md.tmp.16412.b72026e1f9d6",
-    "docs/schedule.md",
+    "configs/private-internet/Private-net.ios",
+    "configs/isp2/ISP-2-PE-B.ios",
+    "configs/isp2/ISP-2-PE-A.ios",
+    "configs/isp2/ISP-2-P2.ios",
+    "configs/isp2/ISP-2-P1.ios",
+    "configs/isp1/ISP-1-PE-B.ios",
+    "configs/isp1/ISP-1-PE-A.ios",
+    "configs/isp1/ISP-1-P2.ios",
+    "configs/isp1/ISP-1-P1.ios",
+    "configs/hq/HQ-SW-3.ios",
     "docs/port-mapping.md",
+    "docs/ospf-design.md",
     "docs/network-project-final.md",
+    "docs/ip-mapping.md",
+    "docs/dmvpn-design.md",
+    "docs/dhcp-dns-design.md",
     "docs/config-guide.md",
-    "docs/ip-mapping.md"
+    "docs/bgp-design.md",
+    "docs/vlan-design.md",
+    "docs/schedule.md"
   ]
 }

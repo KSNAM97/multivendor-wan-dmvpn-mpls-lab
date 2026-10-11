@@ -82,7 +82,7 @@ network-project/
 
 | 폴더 | 내용 |
 | --- | --- |
-| `configs/` | 사이트별 장비 컨피그 (`configs/<사이트>/<장비명>.cfg`) |
+| `configs/` | 사이트별 장비 컨피그 (`configs/<사이트>/<장비명>.<ios|eos>`) |
 | `docs/` | 전체 설계(아키텍처, AS / VLAN / IP, 인터페이스 매핑, 정책, 빌드 순서), 프로토콜별 상세 설계(OSPF, BGP, VLAN, DMVPN, DHCP·DNS), 장비 설정 가이드, 일정 |
 | `jira/` | Jira 티켓 목록과 마감일 (현재 Jira 이슈 기준 CSV) |
 | `slack/` | 팀 공지 초안 |

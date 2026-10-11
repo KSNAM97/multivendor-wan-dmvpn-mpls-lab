@@ -61,4 +61,4 @@ KAN-33: [Policy][vlan-br1-user] DMVPN Spoke 구성
 - 변경 전 장비에서 `copy running-config flash:<장비명>-backup-<날짜>.cfg`로 백업 후 진행.
 - 위험도 "상" 작업(Trunk/Native VLAN 변경, 라우팅 프로세스 제거, 터널 재구성 등)은
   PR 설명에 영향 범위와 롤백 명령을 함께 기재.
-- 컨피그 파일은 `configs/<사이트>/<장비명>.cfg` 형식으로 저장.
+- 컨피그 파일은 `configs/<사이트>/<장비명>.<ios|eos>` 형식으로 저장.

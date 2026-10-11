@@ -1,6 +1,6 @@
 # 장비 설정 가이드
 
-`configs/<사이트>/<장비명>.cfg`를 작성할 때의 순서, 공통 규칙, 장비 종류별 설정 틀을 정리한 문서. 값은 각 설계 문서의 표를 그대로 사용하며 아래 예시는 형식 확인용.
+`configs/<사이트>/<장비명>.<ios|eos>`를 작성할 때의 순서, 공통 규칙, 장비 종류별 설정 틀을 정리한 문서. 값은 각 설계 문서의 표를 그대로 사용하며 아래 예시는 형식 확인용.
 
 ## 1. 설계 문서 대응
 
@@ -17,6 +17,7 @@
 ## 1-1. 컨피그 표기 규칙
 
 - 컨피그 파일의 모든 문자는 **소문자**(호스트네임, 설명, 이름, 키 포함).
+- 확장자는 벤더 기준: Cisco `.ios`, Arista `.eos`(Arista 장비는 `DC-SW*`). 파일 이름은 `<장비명>.<확장자>`.
 - 첫 줄은 벤더 표기: Cisco는 `! cisco` + `!`, Arista는 `! arista` + `!`.
 - 약어 사용:
 
@@ -26,7 +27,7 @@
 | 프로토콜 | `bgp`, `ospf`, `eigrp`, `rt`, `rd`, `acl` |
 | 일반 속성 | `int`(interface), `desc`(description), `addr`(address; Cisco `ip addr`, Arista `ip add`), `no sh`(no shutdown), `mgmt`(management) |
 
-- 이 문서의 예시와 `configs/**/*.cfg`는 같은 규칙 적용. 문서 본문(표, 설명)의 장비명은 `HQ-R2`처럼 대소문자 표기 유지.
+- 이 문서의 예시와 `configs/**/*.ios`, `configs/**/*.eos`는 같은 규칙 적용. 문서 본문(표, 설명)의 장비명은 `HQ-R2`처럼 대소문자 표기 유지.
 
 ## 2. 작성 순서
 
@@ -181,7 +182,7 @@ ip access-list extended pi-whitelist
  deny ip any any log
 ```
 
-- ACL은 `Private-net`의 5개 링크 인터페이스에 적용(`ip access-group PI-WHITELIST in`). `ICMP` 허용 줄은 임시이며 검증 후 제거.
+- ACL은 `Private-net`의 5개 링크 인터페이스에 적용(`ip access-group pi-whitelist in`). `ICMP` 허용 줄은 임시이며 검증 후 제거.
 - 사이트 라우터는 사이트 프로세스와 같은 Router ID를 프로세스 2에도 사용. `Private-net`의 Router ID는 `2.2.2.2`.
 
 ### 3.7 QoS
@@ -209,7 +210,7 @@ int gi0/0
 ```
 
 - 적용 대상은 사이트 스위치와 연결된 라우터 인터페이스(`Gi0/0`, `Gi1/0`) 20포트(`docs/network-project-final.md` 5절). 제외: 라우터 간 링크, ISP 방향, PI 방향, Tunnel0.
-- `shape average` 값은 병목 검증용이며 DNS(53) 트래픽은 `match access-group`으로 `CM-BUSINESS`에 분류하고 `set dscp af31`로 표시. 스위치 QoS는 적용하지 않음.
+- `shape average` 값은 병목 검증용이며 DNS(53) 트래픽은 `match access-group`으로 `cm-business`에 분류하고 `set dscp af31`로 표시. 스위치 QoS는 적용하지 않음.
 
 ## 4. Cisco 스위치(vIOS L3·L2)
 
@@ -315,7 +316,7 @@ int vlan100
 
 ## 5. Arista cEOS(DC)
 
-대상: `DC-SW1-L3` ~ `DC-SW4-L3`, `DC-SW1-L2`, `DC-SW2-L2`. 인터페이스 이름은 `et<번호>`(범위는 `interface range et 5-6`), 주소는 `ip add`, 접두 3칸 들여쓰기.
+대상: `DC-SW1-L3` ~ `DC-SW4-L3`, `DC-SW1-L2`, `DC-SW2-L2`. 인터페이스 이름은 `et<번호>`(범위는 `int range et 5-6`), 주소는 `ip add`, 접두 3칸 들여쓰기.
 
 ```
 ! arista
@@ -406,12 +407,12 @@ int vlan100
 ## 6. 알파인 노드
 
 - `DC-DNS-1`, `DC-DNS-2`: `docs/dhcp-dns-design.md` 2절의 `interfaces`, `dnsmasq.conf`, `hosts.lab` 사용.
-- 호스트(`HQ-PC*`, `BR*-PC*`): DHCP 클라이언트(`docs/dhcp-dns-design.md` 4절). 별도 `.cfg` 파일 없음.
+- 호스트(`HQ-PC*`, `BR*-PC*`): DHCP 클라이언트(`docs/dhcp-dns-design.md` 4절). 별도 컨피그 파일 없음.
 
 ## 7. 저장과 백업
 
 - 변경 전 장비에서 `copy running-config flash:<장비명>-backup-<날짜>.cfg`로 백업.
-- 변경 후 `copy running-config startup-config`(EOS는 `write`)로 저장하고, 확인한 컨피그를 `configs/<사이트>/<장비명>.cfg`에 반영.
+- 변경 후 `copy running-config startup-config`(EOS는 `write`)로 저장하고, 확인한 컨피그를 `configs/<사이트>/<장비명>.<ios|eos>`에 반영.
 - 실습 환경이므로 접속 비밀번호(`admin1234`)와 DMVPN 키(ISAKMP `dmvpn-hub`, NHRP `nhrpkey1`)를 컨피그와 문서에 그대로 기재.
 
 ## 8. 설정 후 확인
