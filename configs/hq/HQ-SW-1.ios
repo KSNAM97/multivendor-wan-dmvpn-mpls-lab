@@ -58,4 +58,10 @@ int gi3/1
 int vlan 100
  ip addr 10.1.100.11 255.255.255.0
  no sh
+! stp mst
+spanning-tree mode mst
+spanning-tree mst configuration
+ name hq
+ revision 1
+ instance 1 vlan 10,20,100
 !

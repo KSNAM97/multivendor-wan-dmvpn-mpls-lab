@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "docs/vlan-design.md",
+                "file": "docs/vrrp-mstp-design.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "vlan-design"
+              "title": "vrrp-mstp-design"
             }
           }
         ]
@@ -99,7 +99,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "docs/vlan-design.md",
+                "file": "docs/vrrp-mstp-design.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -118,7 +118,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "docs/vlan-design.md",
+                "file": "docs/vrrp-mstp-design.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -161,7 +161,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "docs/vlan-design.md",
+                "file": "docs/vrrp-mstp-design.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -191,13 +191,13 @@
   "active": "5aff95b4dcd4e49e",
   "lastOpenFiles": [
     "docs/config-guide.md",
+    "docs/vrrp-mstp-design.md",
+    "docs/vlan-design.md",
     "docs/bgp-design.md",
     "docs/ip-mapping.md",
     "docs/ospf-design.md",
     "docs/port-mapping.md",
     "docs/schedule.md",
-    "docs/vlan-design.md",
-    "docs/vrrp-mstp-design.md",
     "CONTRIBUTING.md",
     "docs/network-project-final.md",
     "configs/private-internet/Private-net.ios",

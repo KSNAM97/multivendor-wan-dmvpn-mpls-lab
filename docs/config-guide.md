@@ -76,7 +76,7 @@ int gi0/0
 - 콘솔에서 `enable`, `configure terminal`로 설정 모드에 진입한 뒤 위 내용을 붙여 넣음(진입 명령은 파일에 기재하지 않음).
 - 접속 설정(`enable secret`, `line vty`)은 모든 Cisco 장비에 같은 형식으로 적용. Arista는 `username admin secret admin1234`.
 - 실습 환경이므로 접속 비밀번호는 `admin1234`로 통일하고 컨피그와 문서에 그대로 기재(7절).
-- 모든 인터페이스에 `desc`(연결 상대와 포트)를 입력하고 `no sh`를 명시. 단, EtherChannel 멤버 포트는 `int range`로 묶어 범위에 `desc to <상대 장비> po<번호>`를 한 번만 입력(포트별 `desc`는 생략).
+- 물리 포트와 `po`(연결 상대와 포트)에는 `desc`를 입력하고 `no sh`를 명시. 가상 인터페이스(`lo0`)와 MGMT SVI(`vlan 100`, VLAN `name`으로 구분)는 `desc` 생략. 단, EtherChannel 멤버 포트는 `int range`로 묶어 범위에 `desc to <상대 장비> po<번호>`를 한 번만 입력(포트별 `desc`는 생략).
 
 ### 3.2 OSPF(사이트 프로세스)
 
@@ -377,6 +377,46 @@ ip dhcp pool hq-public
 - 예시는 `HQ-SW-2`(Active, 풀 `.100` – `.163`). `HQ-SW-3`(Standby)은 제외 구간만 `10.1.10.1 10.1.10.163`, `10.1.10.228 10.1.10.254`로 입력.
 - VLAN 20과 BR1, BR2도 같은 형식에서 서브넷과 풀 이름만 변경. 값은 `docs/dhcp-dns-design.md` 3절 표.
 
+### 4.7 STP(MSTP)
+
+- MST 설정(region 이름, revision, instance 매핑)은 사이트 안의 모든 Cisco 스위치(L2 포함)에 동일하게 입력. 하나라도 다르면 별도 region으로 인식.
+- `spanning-tree mst 1 priority`는 루트 4096, 보조 루트 8192, 그 외 스위치는 입력하지 않고 기본값(32768) 유지. 루트는 해당 사이트 VRRP Active 장비.
+
+루트(HQ-SW-2):
+
+```
+spanning-tree mode mst
+spanning-tree mst configuration
+ name hq
+ revision 1
+ instance 1 vlan 10,20,100
+!
+spanning-tree mst 1 priority 4096
+```
+
+보조 루트(HQ-SW-3): 위와 같고 마지막 줄만 `spanning-tree mst 1 priority 8192`.
+
+일반 스위치(HQ-SW-1): 우선순위 줄 없이 MST 설정만 입력.
+
+```
+spanning-tree mode mst
+spanning-tree mst configuration
+ name hq
+ revision 1
+ instance 1 vlan 10,20,100
+!
+```
+
+| 사이트 | region 이름 | instance 1 VLAN | 루트 (4096) | 보조 루트 (8192) | 기본값 장비 |
+|---|---|---|---|---|---|
+| HQ | `hq` | 10,20,100 | HQ-SW-2 | HQ-SW-3 | HQ-SW-1 |
+| BR1 | `br1` | 10,100 | BR1-SW1-L3 | BR1-SW2-L3 | BR1-SW3-L3 |
+| BR2 | `br2` | 10,100 | BR2-SW1-L3 | BR2-SW2-L3 | BR2-SW3-L2 |
+
+- `native` VLAN 999는 instance 0에 남기므로 instance 1에 넣지 않음.
+- 모드를 바꾸면 STP가 재수렴하므로 사이트의 모든 스위치에 연달아 입력한 뒤 확인.
+- 확인: `show spanning-tree mst configuration`(region 이름, revision, instance 일치), `show spanning-tree mst 1`(루트 브리지와 포트 역할), `show spanning-tree summary`(모드 mst).
+
 ## 5. Arista cEOS(DC)
 
 대상: `DC-SW1-L3` ~ `DC-SW4-L3`, `DC-SW1-L2`, `DC-SW2-L2`. 인터페이스 이름은 `et<번호>`(범위는 `int range et 5-6`), 주소는 `ip add`, 접두 3칸 들여쓰기.
@@ -521,7 +561,7 @@ iface eth0 inet dhcp
 | BGP | `show ip bgp summary` | - |
 | VRRP | `show vrrp brief` | `show vrrp brief` |
 | 채널, 트렁크 | `show etherchannel summary`, `show interfaces trunk` | `show port-channel summary`, `show interfaces trunk` |
-| MSTP | `show spanning-tree mst` | `show spanning-tree mst` |
+| MSTP | `show spanning-tree mst`, `show spanning-tree mst configuration` | `show spanning-tree mst`, `show spanning-tree mst configuration` |
 | DMVPN | `show dmvpn`, `show ip nhrp`, `show crypto ipsec sa` | - |
 | DHCP | `show ip dhcp binding`, `show ip dhcp pool` | - |
 | IP SLA, track | `show ip sla statistics`, `show track` | - |

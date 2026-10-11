@@ -17,7 +17,7 @@ int lo0
  ip addr 11.11.11.2 255.255.255.255
 !
 int gi0/0
- desc to hq-sw-2 gi1/0
+ desc to hq-sw-2 gi1/1
  ip addr 10.1.0.5 255.255.255.252
  no sh
 !
