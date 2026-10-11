@@ -15,7 +15,7 @@ BR2        ─┬─ ISP-1 ─┘
 DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ BR1, BR2
 ```
 
-- 사이트(HQ/DC/BR1/BR2) 내부: OSPF 전용, BGP 없음
+- 사이트(HQ/DC/BR1/BR2) 내부: OSPF 전용, BGP 없음(프로세스와 Area는 `docs/ospf-design.md`)
 - ISP-1/ISP-2: 라우터별 개별 AS의 eBGP 전용, OSPF 없음
 - 사이트 ↔ ISP: 라우팅 프로토콜 없음, 정적 경로 + OSPF 재분배(track)
 - Private Internet(DMVPN 언더레이): 별도 OSPF 프로세스(2), ACL 화이트리스트
@@ -25,14 +25,14 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ BR
 
 | 사이트 | AS | 대역 | 비고 |
 |---|---|---|---|
-| HQ | 65001 | 10.1.0.0/16 | OSPF 프로세스1 Area0 |
-| DC | 65002 | 10.2.0.0/16 | OSPF 프로세스1 Area10, DMVPN Hub(DC-R2) |
-| BR1 | 65003 | 10.3.0.0/16 | OSPF 프로세스1 Area20, DMVPN Spoke(BR1-R1) |
-| BR2 | 65004 | 10.4.0.0/16 | OSPF 프로세스1 Area30, DMVPN Spoke(BR2-R2) |
+| HQ | 65001 | 10.1.0.0/16 | OSPF 프로세스11 Area1 |
+| DC | 65002 | 10.2.0.0/16 | OSPF 프로세스10 Area0, DMVPN Hub(DC-R2) |
+| BR1 | 65003 | 10.3.0.0/16 | OSPF 프로세스12 Area2, DMVPN Spoke(BR1-R1) |
+| BR2 | 65004 | 10.4.0.0/16 | OSPF 프로세스13 Area3, DMVPN Spoke(BR2-R2) |
 | ISP-1 | PE-A 65111 / P1 65112 / P2 65113 / PE-B 65114 | 100.1.0.0/16 | eBGP 전용 |
 | ISP-2 | PE-A 65121 / P1 65122 / P2 65123 / PE-B 65124 | 100.2.0.0/16 | eBGP 전용 |
 | Private Internet | 없음(BGP 미사용) | 203.0.113.0/24 | OSPF 프로세스2 Area100, DMVPN 언더레이 전용 |
-| DMVPN 터널 | - | 172.16.0.0/24 | OSPF 프로세스1 Area0 |
+| DMVPN 터널 | - | 172.16.0.0/24 | Area0(DC 프로세스10, BR1 프로세스12, BR2 프로세스13) |
 
 폐기된 AS: 65000, 65006, 65007, 65010, 65020 (설계 변경 과정에서 대체됨)
 
@@ -50,7 +50,7 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ BR
 
 ## 3-1. GNS3 장비명 대응표
 
-이 문서와 컨피그 파일(`configs/<사이트>/<장비명>.cfg`), 장비 hostname은 GNS3 장비명을 기준으로 합니다. 아래 표는 초기 설계에서 쓰던 이름(설계 장비명)과의 대응이며, 예전 자료를 볼 때 참고합니다. `확인 필요` 표시는 도면 배치로 맞춘 값이라 케이블링과 대조해 확정합니다.
+이 문서, 컨피그 파일(`configs/<사이트>/<장비명>.cfg`), 장비 hostname은 GNS3 장비명을 기준으로 사용. 아래 표는 초기 설계에서 쓰던 이름(설계 장비명)과의 대응이며 예전 자료 참조용. `확인 필요` 표시는 도면 배치로 맞춘 값으로 케이블링과 대조하여 확정.
 
 | 사이트 | GNS3 장비명 (기준) | 초기 설계명 | 역할 | 비고 |
 |---|---|---|---|---|
@@ -77,7 +77,7 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ BR
 
 ## 4. 인터페이스 · 포트 매핑 (GNS3 연결 대조 완료 — 2026-10-11)
 
-링크 단위로 풀어 쓴 전체 표는 [`docs/port-mapping.md`](./port-mapping.md)를 참고하세요.
+링크 단위 전체 표: [`docs/port-mapping.md`](./port-mapping.md)
 
 ### HQ
 | A | B | 서브넷/용도 |
@@ -108,14 +108,14 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ BR
 | DC-R2 Gi0/0 | DC-SW1-L3 Et2 | 10.2.0.8/30 |
 | DC-R2 Gi1/0 | DC-SW2-L3 Et2 | 10.2.0.12/30 |
 | DC-SW1-L3 Et3 | DC-SW2-L3 Et3 | 10.2.0.16/30 |
-| DC-SW1-L3 Et4 | DC-SW3-L3 Et1 | 10.2.0.20/30 (L3, 서브넷 제안) |
-| DC-SW1-L3 Et5 | DC-SW4-L3 Et1 | 10.2.0.24/30 (L3, 서브넷 제안) |
-| DC-SW2-L3 Et4 | DC-SW3-L3 Et2 | 10.2.0.28/30 (L3, 서브넷 제안) |
-| DC-SW2-L3 Et5 | DC-SW4-L3 Et2 | 10.2.0.32/30 (L3, 서브넷 제안) |
-| DC-SW3-L3 Et3 | DC-R3 Gi0/0 | 10.2.0.36/30 (L3, 서브넷 제안) |
-| DC-SW3-L3 Et4 | DC-R4 Gi0/0 | 10.2.0.40/30 (L3, 서브넷 제안) |
-| DC-SW4-L3 Et3 | DC-R3 Gi1/0 | 10.2.0.44/30 (L3, 서브넷 제안) |
-| DC-SW4-L3 Et4 | DC-R4 Gi1/0 | 10.2.0.48/30 (L3, 서브넷 제안) |
+| DC-SW1-L3 Et4 | DC-SW3-L3 Et1 | 10.2.0.20/30 (L3) |
+| DC-SW1-L3 Et5 | DC-SW4-L3 Et1 | 10.2.0.24/30 (L3) |
+| DC-SW2-L3 Et4 | DC-SW3-L3 Et2 | 10.2.0.28/30 (L3) |
+| DC-SW2-L3 Et5 | DC-SW4-L3 Et2 | 10.2.0.32/30 (L3) |
+| DC-SW3-L3 Et3 | DC-R3 Gi0/0 | 10.2.0.36/30 (L3) |
+| DC-SW3-L3 Et4 | DC-R4 Gi0/0 | 10.2.0.40/30 (L3) |
+| DC-SW4-L3 Et3 | DC-R3 Gi1/0 | 10.2.0.44/30 (L3) |
+| DC-SW4-L3 Et4 | DC-R4 Gi1/0 | 10.2.0.48/30 (L3) |
 | DC-R3 Gi2/0 | DC-R4 Gi2/0 | 10.2.0.52/30 |
 | DC-R1 Gi2/0 | PrivI-net Gi0/0 | 203.0.113.0/30 |
 | DC-R2 Gi2/0 | PrivI-net Gi1/0 | 203.0.113.4/30 (Tunnel0 source) |
@@ -186,7 +186,7 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ BR
 - 부모 정책: shape average (병목 검증용 예시값, 실측 시 조정)
 
 ### 접근 통제
-- DC VLAN50(DC-DNS-1, DC-DNS-2): 각 사이트 → UDP/TCP 53만 허용, 그 외 차단. DHCP는 각 사이트 게이트웨이에서 제공하는 것으로 제안하므로 서버 VLAN으로 DHCP(UDP 67/68)를 허용하지 않습니다.
+- DC VLAN50(DC-DNS-1, DC-DNS-2): 각 사이트 → UDP/TCP 53만 허용, 그 외 차단. DHCP는 각 사이트 게이트웨이에서 제공하므로 서버 VLAN으로 DHCP(UDP 67/68) 허용 없음.
 
 ## 6. 빌드 순서 (3.5주, 1인 체제)
 
@@ -200,6 +200,6 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ BR
 | 3.5주 | PPT 제작, 리허설 |
 
 ## 7. 미확정 항목
-- HQ의 DMVPN 스포크 편입 여부 (편입 시 Area 번호 재조정 필요)
-- DC 서버 VLAN50: DC-DNS-1(주)과 DC-DNS-2(백업) 두 대, Alpine Linux 가상 이미지. IP와 DNS 소프트웨어는 미확정. DHCP는 각 사이트 게이트웨이 장비(IOS DHCP 서버)에서 제공하는 것으로 제안하며 풀 범위와 담당 장비는 미확정
+- HQ의 DMVPN 스포크 편입 여부(편입 시 HQ 터널 라우터가 Area 0과 Area 1의 ABR)
+- DC 서버 VLAN50: DC-DNS-1(주), DC-DNS-2(백업) 두 대, Alpine Linux 가상 이미지. IP와 DNS 소프트웨어는 미확정. DHCP는 각 사이트 게이트웨이 장비(IOS DHCP 서버)에서 제공하며 풀 구성은 `docs/ip-mapping.md` 5절 기준. 담당 장비는 미확정.
 - 스위치(IOU L2/cEOS) QoS 지원 여부 실측

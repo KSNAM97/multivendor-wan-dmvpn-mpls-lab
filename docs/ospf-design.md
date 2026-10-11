@@ -1,0 +1,161 @@
+# OSPF 설계
+
+사이트별 OSPF 프로세스와 Area, Router ID, 인터페이스 소속을 정리한 문서. 인터페이스와 IP는 `docs/ip-mapping.md`, 포트는 `docs/port-mapping.md` 기준.
+
+## 1. 프로세스와 Area
+
+| 사이트 | 프로세스 | Area | 비고 |
+|---|---|---|---|
+| DC | 10 | 0 | DC 전체(라우터 4대, L3 스위치 4대)와 DMVPN 터널(Hub `DC-R2`)이 Area 0 |
+| HQ | 11 | 1 | 단독 프로세스. DMVPN 미편입 |
+| BR1 | 12 | 2 | 터널(Area 0) 연결 라우터 `BR1-R1`이 ABR |
+| BR2 | 13 | 3 | 터널(Area 0) 연결 라우터 `BR2-R2`가 ABR |
+| Private Internet(DMVPN 언더레이) | 2 | 100 | `PrivI-net`과 사이트의 PI 연결 라우터 |
+
+- 프로세스 번호는 장비 로컬 값이며 IOS와 EOS 모두 1 ~ 65535만 허용. 사이트 번호(DC 0, HQ 1, BR1 2, BR2 3)에 10을 더해 사용하고, 언더레이 프로세스 2와 겹치지 않도록 구성.
+- Area 0은 DC와 DMVPN 터널. BR1(Area 2), BR2(Area 3)는 터널을 통해 Area 0에 연결되며, HQ(Area 1)는 별도 OSPF 도메인.
+- ISP-1, ISP-2는 OSPF 미사용(eBGP 전용). 사이트↔ISP 구간은 정적 경로와 재분배.
+
+## 2. Router ID (Loopback0)
+
+- 형식: `10.<사이트>.255.<번호>/32`. 사이트 번호는 HQ 1, DC 2, BR1 3, BR2 4. 라우터는 이름의 번호(`R1` → `.1`), L3 스위치는 이름의 번호에 10을 더한 값(`SW1` → `.11`).
+- Loopback0은 해당 사이트 Area에 포함하고 `passive-interface` 처리. 이 값을 `router-id`로 사용.
+- `PrivI-net`의 Router ID는 `203.0.113.254`(Loopback0, `/32`).
+
+| 장비 | Loopback0 | 프로세스 | Area |
+|---|---|---|---|
+| HQ-R1 | 10.1.255.1/32 | 11 | 1 |
+| HQ-R2 | 10.1.255.2/32 | 11 | 1 |
+| HQ-SW-2 | 10.1.255.12/32 | 11 | 1 |
+| HQ-SW-3 | 10.1.255.13/32 | 11 | 1 |
+| DC-R1 | 10.2.255.1/32 | 10 | 0 |
+| DC-R2 | 10.2.255.2/32 | 10 | 0 |
+| DC-R3 | 10.2.255.3/32 | 10 | 0 |
+| DC-R4 | 10.2.255.4/32 | 10 | 0 |
+| DC-SW1-L3 | 10.2.255.11/32 | 10 | 0 |
+| DC-SW2-L3 | 10.2.255.12/32 | 10 | 0 |
+| DC-SW3-L3 | 10.2.255.13/32 | 10 | 0 |
+| DC-SW4-L3 | 10.2.255.14/32 | 10 | 0 |
+| BR1-R1 | 10.3.255.1/32 | 12 | 2 |
+| BR1-R2 | 10.3.255.2/32 | 12 | 2 |
+| BR1-SW1-L3 | 10.3.255.11/32 | 12 | 2 |
+| BR1-SW2-L3 | 10.3.255.12/32 | 12 | 2 |
+| BR2-R1 | 10.4.255.1/32 | 13 | 3 |
+| BR2-R2 | 10.4.255.2/32 | 13 | 3 |
+| BR2-SW1-L3 | 10.4.255.11/32 | 13 | 3 |
+| BR2-SW2-L3 | 10.4.255.12/32 | 13 | 3 |
+| PrivI-net | 203.0.113.254/32 | 2 | 100 |
+
+## 3. 인터페이스별 OSPF 소속
+
+- 모든 /30 링크는 `ip ospf network point-to-point`로 DR 선출 없이 구성.
+- 사용자 VLAN과 서버 VLAN(`10.2.50.0/24`)의 SVI는 해당 사이트 Area에 포함하고 `passive-interface` 처리.
+- 타이머는 기본값, 인증은 미적용(실습 환경).
+
+| 장비 | 인터페이스 | IP | 프로세스 | Area | 네트워크 타입 | 링크 # |
+|---|---|---|---|---|---|---|
+| HQ-R1 | Gi0/0 | 10.1.0.1/30 | 11 | 1 | point-to-point | 1 |
+| HQ-R1 | Gi1/0 | 10.1.0.9/30 | 11 | 1 | point-to-point | 3 |
+| HQ-R1 | Gi2/0 | 10.1.0.17/30 | 11 | 1 | point-to-point | 5 |
+| HQ-R2 | Gi0/0 | 10.1.0.5/30 | 11 | 1 | point-to-point | 2 |
+| HQ-R2 | Gi1/0 | 10.1.0.13/30 | 11 | 1 | point-to-point | 4 |
+| HQ-R2 | Gi2/0 | 10.1.0.18/30 | 11 | 1 | point-to-point | 5 |
+| HQ-R2 | Gi4/0 | 203.0.113.9/30 | 2 | 100 | point-to-point | 8 |
+| HQ-SW-2 | Gi1/0 | 10.1.0.2/30 | 11 | 1 | point-to-point | 1 |
+| HQ-SW-2 | Gi1/1 | 10.1.0.6/30 | 11 | 1 | point-to-point | 2 |
+| HQ-SW-3 | Gi1/0 | 10.1.0.10/30 | 11 | 1 | point-to-point | 3 |
+| HQ-SW-3 | Gi1/1 | 10.1.0.14/30 | 11 | 1 | point-to-point | 4 |
+| DC-R1 | Gi0/0 | 10.2.0.1/30 | 10 | 0 | point-to-point | 17 |
+| DC-R1 | Gi1/0 | 10.2.0.5/30 | 10 | 0 | point-to-point | 18 |
+| DC-R1 | Gi2/0 | 203.0.113.1/30 | 2 | 100 | point-to-point | 31 |
+| DC-R2 | Gi0/0 | 10.2.0.10/30 | 10 | 0 | point-to-point | 19 |
+| DC-R2 | Gi1/0 | 10.2.0.13/30 | 10 | 0 | point-to-point | 20 |
+| DC-R2 | Gi2/0 | 203.0.113.5/30 | 2 | 100 | point-to-point | 32 |
+| DC-R2 | Tunnel0 | 172.16.0.1/24 | 10 | 0 | broadcast, priority 255 (DR) | - |
+| DC-R3 | Gi0/0 | 10.2.0.37/30 | 10 | 0 | point-to-point | 26 |
+| DC-R3 | Gi1/0 | 10.2.0.45/30 | 10 | 0 | point-to-point | 28 |
+| DC-R3 | Gi2/0 | 10.2.0.53/30 | 10 | 0 | point-to-point | 30 |
+| DC-R4 | Gi0/0 | 10.2.0.42/30 | 10 | 0 | point-to-point | 27 |
+| DC-R4 | Gi1/0 | 10.2.0.49/30 | 10 | 0 | point-to-point | 29 |
+| DC-R4 | Gi2/0 | 10.2.0.54/30 | 10 | 0 | point-to-point | 30 |
+| DC-SW1-L3 | Et1 | 10.2.0.2/30 | 10 | 0 | point-to-point | 17 |
+| DC-SW1-L3 | Et2 | 10.2.0.9/30 | 10 | 0 | point-to-point | 19 |
+| DC-SW1-L3 | Et3 | 10.2.0.17/30 | 10 | 0 | point-to-point | 21 |
+| DC-SW1-L3 | Et4 | 10.2.0.21/30 | 10 | 0 | point-to-point | 22 |
+| DC-SW1-L3 | Et5 | 10.2.0.25/30 | 10 | 0 | point-to-point | 23 |
+| DC-SW2-L3 | Et1 | 10.2.0.6/30 | 10 | 0 | point-to-point | 18 |
+| DC-SW2-L3 | Et2 | 10.2.0.14/30 | 10 | 0 | point-to-point | 20 |
+| DC-SW2-L3 | Et3 | 10.2.0.18/30 | 10 | 0 | point-to-point | 21 |
+| DC-SW2-L3 | Et4 | 10.2.0.29/30 | 10 | 0 | point-to-point | 24 |
+| DC-SW2-L3 | Et5 | 10.2.0.33/30 | 10 | 0 | point-to-point | 25 |
+| DC-SW3-L3 | Et1 | 10.2.0.22/30 | 10 | 0 | point-to-point | 22 |
+| DC-SW3-L3 | Et2 | 10.2.0.30/30 | 10 | 0 | point-to-point | 24 |
+| DC-SW3-L3 | Et3 | 10.2.0.38/30 | 10 | 0 | point-to-point | 26 |
+| DC-SW3-L3 | Et4 | 10.2.0.41/30 | 10 | 0 | point-to-point | 27 |
+| DC-SW4-L3 | Et1 | 10.2.0.26/30 | 10 | 0 | point-to-point | 23 |
+| DC-SW4-L3 | Et2 | 10.2.0.34/30 | 10 | 0 | point-to-point | 25 |
+| DC-SW4-L3 | Et3 | 10.2.0.46/30 | 10 | 0 | point-to-point | 28 |
+| DC-SW4-L3 | Et4 | 10.2.0.50/30 | 10 | 0 | point-to-point | 29 |
+| BR1-R1 | Gi0/0 | 10.3.0.1/30 | 12 | 2 | point-to-point | 43 |
+| BR1-R1 | Gi1/0 | 10.3.0.9/30 | 12 | 2 | point-to-point | 45 |
+| BR1-R1 | Gi2/0 | 10.3.0.17/30 | 12 | 2 | point-to-point | 47 |
+| BR1-R1 | Gi4/0 | 203.0.113.13/30 | 2 | 100 | point-to-point | 50 |
+| BR1-R1 | Tunnel0 | 172.16.0.11/24 | 12 | 0 | broadcast, priority 0 | - |
+| BR1-R2 | Gi0/0 | 10.3.0.6/30 | 12 | 2 | point-to-point | 44 |
+| BR1-R2 | Gi1/0 | 10.3.0.13/30 | 12 | 2 | point-to-point | 46 |
+| BR1-R2 | Gi2/0 | 10.3.0.18/30 | 12 | 2 | point-to-point | 47 |
+| BR1-SW1-L3 | Gi0/0 | 10.3.0.2/30 | 12 | 2 | point-to-point | 43 |
+| BR1-SW1-L3 | Gi0/1 | 10.3.0.5/30 | 12 | 2 | point-to-point | 44 |
+| BR1-SW2-L3 | Gi0/0 | 10.3.0.10/30 | 12 | 2 | point-to-point | 45 |
+| BR1-SW2-L3 | Gi0/1 | 10.3.0.14/30 | 12 | 2 | point-to-point | 46 |
+| BR2-R1 | Gi0/0 | 10.4.0.1/30 | 13 | 3 | point-to-point | 57 |
+| BR2-R1 | Gi1/0 | 10.4.0.9/30 | 13 | 3 | point-to-point | 59 |
+| BR2-R1 | Gi2/0 | 10.4.0.17/30 | 13 | 3 | point-to-point | 61 |
+| BR2-R2 | Gi0/0 | 10.4.0.6/30 | 13 | 3 | point-to-point | 58 |
+| BR2-R2 | Gi1/0 | 10.4.0.13/30 | 13 | 3 | point-to-point | 60 |
+| BR2-R2 | Gi2/0 | 10.4.0.18/30 | 13 | 3 | point-to-point | 61 |
+| BR2-R2 | Gi4/0 | 203.0.113.17/30 | 2 | 100 | point-to-point | 64 |
+| BR2-R2 | Tunnel0 | 172.16.0.12/24 | 13 | 0 | broadcast, priority 0 | - |
+| BR2-SW1-L3 | Gi0/0 | 10.4.0.2/30 | 13 | 3 | point-to-point | 57 |
+| BR2-SW1-L3 | Gi0/1 | 10.4.0.5/30 | 13 | 3 | point-to-point | 58 |
+| BR2-SW2-L3 | Gi0/0 | 10.4.0.10/30 | 13 | 3 | point-to-point | 59 |
+| BR2-SW2-L3 | Gi0/1 | 10.4.0.14/30 | 13 | 3 | point-to-point | 60 |
+| PrivI-net | Gi0/0 | 203.0.113.2/30 | 2 | 100 | point-to-point | 31 |
+| PrivI-net | Gi1/0 | 203.0.113.6/30 | 2 | 100 | point-to-point | 32 |
+| PrivI-net | Gi2/0 | 203.0.113.10/30 | 2 | 100 | point-to-point | 8 |
+| PrivI-net | Gi3/0 | 203.0.113.14/30 | 2 | 100 | point-to-point | 50 |
+| PrivI-net | Gi4/0 | 203.0.113.18/30 | 2 | 100 | point-to-point | 64 |
+
+## 4. DMVPN 터널(Tunnel0)
+
+- 터널 `172.16.0.0/24`는 Area 0. Hub `DC-R2`(`172.16.0.1`)는 DC 프로세스 10, Spoke `BR1-R1`(`172.16.0.11`)은 프로세스 12, `BR2-R2`(`172.16.0.12`)는 프로세스 13에 속하며 프로세스 번호는 장비 로컬 값이라 인접 관계에 영향 없음.
+- 네트워크 타입은 `broadcast`. Hub는 `ip ospf priority 255`(DR), Spoke는 `ip ospf priority 0`.
+- `BR1-R1`은 터널(Area 0)과 BR1 내부(Area 2), `BR2-R2`는 터널(Area 0)과 BR2 내부(Area 3)를 가져 ABR 역할. `DC-R2`는 DC 전체가 Area 0이므로 ABR 아님.
+- Spoke 라우터 한 대만 터널을 가지므로 `BR1-R2`, `BR2-R1`은 Area 내부 라우터.
+
+## 5. Private Internet 언더레이(프로세스 2, Area 100)
+
+- 대상: `PrivI-net`(5포트)과 PI 연결 사이트 라우터(`DC-R1`, `DC-R2`, `HQ-R2`, `BR1-R1`, `BR2-R2`)의 PI 연결 인터페이스.
+- 사이트 내부 OSPF와 별도 프로세스이며 Area 100만 사용. ACL 화이트리스트가 OSPF(224.0.0.5/6)를 허용.
+
+## 6. 정적 경로와 재분배
+
+- 사이트↔ISP 구간은 OSPF를 사용하지 않고 정적 경로와 IP SLA/track으로 구성하며, 정적 경로를 사이트 OSPF 프로세스에 `redistribute static`으로 재분배.
+- 대상 링크는 아래 표와 같음. 재분배 매개변수(metric, metric-type)는 컨피그 단계에서 확정.
+
+| 링크 # | 사이트 장비 | 포트 | IP | ISP 장비 | 포트 | IP | 프로세스 |
+|---|---|---|---|---|---|---|---|
+| 6 | HQ-R1 | Gi3/0 | 100.1.11.1/30 | ISP-1-PE-A | Gi2/0 | 100.1.11.2/30 | 11 |
+| 7 | HQ-R2 | Gi3/0 | 100.2.12.1/30 | ISP-2-PE-A | Gi2/0 | 100.2.12.2/30 | 11 |
+| 33 | DC-R3 | Gi3/0 | 100.1.21.1/30 | ISP-1-PE-A | Gi3/0 | 100.1.21.2/30 | 10 |
+| 34 | DC-R4 | Gi3/0 | 100.2.22.1/30 | ISP-2-PE-A | Gi3/0 | 100.2.22.2/30 | 10 |
+| 48 | BR1-R1 | Gi3/0 | 100.1.31.1/30 | ISP-1-PE-B | Gi2/0 | 100.1.31.2/30 | 12 |
+| 49 | BR1-R2 | Gi3/0 | 100.2.32.1/30 | ISP-2-PE-B | Gi2/0 | 100.2.32.2/30 | 12 |
+| 62 | BR2-R1 | Gi3/0 | 100.1.41.1/30 | ISP-1-PE-B | Gi3/0 | 100.1.41.2/30 | 13 |
+| 63 | BR2-R2 | Gi3/0 | 100.2.42.1/30 | ISP-2-PE-B | Gi3/0 | 100.2.42.2/30 | 13 |
+
+## 7. 미확정 항목
+
+- HQ의 DMVPN 스포크 편입 여부. 편입 시 HQ 터널 라우터가 Area 0(터널)과 Area 1의 ABR이 됨.
+- 재분배 metric, metric-type과 기본 경로 광고 방식.
+- ABR 경로 요약(`area range`) 적용 여부.

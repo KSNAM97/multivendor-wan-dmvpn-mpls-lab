@@ -13,7 +13,7 @@
 | 항목 | 내용 |
 | --- | --- |
 | 주제 | HQ / DC / BR1 / BR2 4개 사이트를 ISP 이중화와 DMVPN으로 연결하는 멀티벤더 하이브리드 네트워크 |
-| 장비 구성 | HQ (HQ-R1·HQ-R2, HQ-SW-1 ~ HQ-SW-3), DC (DC-R1 ~ DC-R4, DC-SW1 ~ DC-SW4-L3, DC-SW1·2-L2, DC-DNS-1·DC-DNS-2), BR1 (BR1-R1·R2, BR1-SW1 ~ SW3-L3), BR2 (BR2-R1·R2, BR2-SW1·SW2-L3, BR2-SW3-L2), 호스트 H1·H2, ISP-1·ISP-2 (ISP-n-PE-A·P1·P2·PE-B 각 4대), Private Internet (PrivI-net) |
+| 장비 구성 | HQ (HQ-R1·HQ-R2, HQ-SW-1 – HQ-SW-3), DC (DC-R1 – DC-R4, DC-SW1 – DC-SW4-L3, DC-SW1·2-L2, DC-DNS-1·DC-DNS-2), BR1 (BR1-R1·R2, BR1-SW1 ~ SW3-L3), BR2 (BR2-R1·R2, BR2-SW1·SW2-L3, BR2-SW3-L2), 호스트 H1·H2, ISP-1·ISP-2 (ISP-n-PE-A·P1·P2·PE-B 각 4대), Private Internet (PrivI-net) |
 | 핵심 기술 | 사이트 OSPF, ISP eBGP(라우터별 개별 AS), 정적 경로 + 재분배(IP SLA/track), DMVPN Phase3, IPsec, HSRP / VARP, EtherChannel, QoS, ACL 화이트리스트 |
 | 시뮬레이터 | GNS3 (Cisco 7200 / IOU, Arista cEOS) |
 | 일정 | 3.5주(2026-10-12 ~ 11-04), 1인 체제 (남기석) |
@@ -102,14 +102,14 @@ network-project/
 
 | 사이트 | AS | 대역 | 비고 |
 | --- | --- | --- | --- |
-| HQ | 65001 | 10.1.0.0/16 | OSPF 프로세스1 Area 0 |
-| DC | 65002 | 10.2.0.0/16 | OSPF 프로세스1 Area 10, DMVPN Hub (DC-R2) |
-| BR1 | 65003 | 10.3.0.0/16 | OSPF 프로세스1 Area 20, DMVPN Spoke (R1) |
-| BR2 | 65004 | 10.4.0.0/16 | OSPF 프로세스1 Area 30, DMVPN Spoke (R2) |
+| HQ | 65001 | 10.1.0.0/16 | OSPF 프로세스 11 Area 1 |
+| DC | 65002 | 10.2.0.0/16 | OSPF 프로세스 10 Area 0, DMVPN Hub (DC-R2) |
+| BR1 | 65003 | 10.3.0.0/16 | OSPF 프로세스 12 Area 2, DMVPN Spoke (BR1-R1) |
+| BR2 | 65004 | 10.4.0.0/16 | OSPF 프로세스 13 Area 3, DMVPN Spoke (BR2-R2) |
 | ISP-1 | 65111 ~ 65114 | 100.1.0.0/16 | eBGP 전용 (PE-A / P1 / P2 / PE-B 개별 AS) |
 | ISP-2 | 65121 ~ 65124 | 100.2.0.0/16 | eBGP 전용 |
 | Private Internet | 없음 | 203.0.113.0/24 | OSPF 프로세스2 Area 100, DMVPN 언더레이 전용 |
-| DMVPN 터널 | - | 172.16.0.0/24 | OSPF 프로세스1 Area 0 |
+| DMVPN 터널 | - | 172.16.0.0/24 | Area 0 (DC 프로세스 10, BR1 프로세스 12, BR2 프로세스 13) |
 
 ### 라우팅 설계
 
@@ -148,8 +148,8 @@ network-project/
 
 ### 미확정 항목
 
-- HQ의 DMVPN 스포크 편입 여부 (편입 시 Area 번호 재조정 필요)
-- DC 서버 VLAN50: DC-DNS-1(주)과 DC-DNS-2(백업) 두 대, Alpine Linux 가상 이미지. IP와 DNS 소프트웨어는 미확정. DHCP는 각 사이트 게이트웨이 장비(IOS DHCP 서버)에서 제공하는 것으로 제안하며 풀 범위와 담당 장비는 미확정
+- HQ의 DMVPN 스포크 편입 여부 (편입 시 HQ 터널 라우터가 Area 0과 Area 1의 ABR)
+- DC 서버 VLAN50: DC-DNS-1(주), DC-DNS-2(백업) 두 대, Alpine Linux 가상 이미지. IP와 DNS 소프트웨어는 미확정. DHCP는 각 사이트 게이트웨이 장비(IOS DHCP 서버)에서 제공하며 풀 구성은 `docs/ip-mapping.md` 5절 기준. 담당 장비는 미확정.
 - 스위치 (IOU L2 / cEOS) QoS 지원 여부 실측
 
 > 브랜치 전략, 커밋 규칙, Jira 연동 → [`CONTRIBUTING.md`](./CONTRIBUTING.md)
