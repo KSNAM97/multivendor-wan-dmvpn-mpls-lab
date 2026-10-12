@@ -53,80 +53,80 @@
 - 사용자 VLAN과 서버 VLAN(`10.2.50.0/24`)의 SVI는 해당 사이트 Area에 포함하고 `passive-interface` 처리.
 - 타이머는 기본값, 인증은 미적용(실습 환경).
 
-| 장비 | 인터페이스 | IP | 프로세스 | Area | 네트워크 타입 | 링크 # |
-|---|---|---|---|---|---|---|
-| HQ-R1 | Gi0/0 | 10.1.0.1/30 | 11 | 1 | point-to-point | 1 |
-| HQ-R1 | Gi1/0 | 10.1.0.9/30 | 11 | 1 | point-to-point | 3 |
-| HQ-R1 | Gi2/0 | 10.1.0.17/30 | 11 | 1 | point-to-point | 5 |
-| HQ-R2 | Gi0/0 | 10.1.0.5/30 | 11 | 1 | point-to-point | 2 |
-| HQ-R2 | Gi1/0 | 10.1.0.13/30 | 11 | 1 | point-to-point | 4 |
-| HQ-R2 | Gi2/0 | 10.1.0.18/30 | 11 | 1 | point-to-point | 5 |
-| HQ-R2 | Gi4/0 | 203.0.113.9/30 | 2 | 100 | point-to-point | 8 |
-| HQ-R2 | Tunnel0 | 172.16.0.13/24 | 11 | 0 | broadcast, priority 0 | - |
-| HQ-SW-2 | Gi1/0 | 10.1.0.2/30 | 11 | 1 | point-to-point | 1 |
-| HQ-SW-2 | Gi1/1 | 10.1.0.6/30 | 11 | 1 | point-to-point | 2 |
-| HQ-SW-3 | Gi1/0 | 10.1.0.10/30 | 11 | 1 | point-to-point | 3 |
-| HQ-SW-3 | Gi1/1 | 10.1.0.14/30 | 11 | 1 | point-to-point | 4 |
-| DC-R1 | Gi0/0 | 10.2.0.1/30 | 10 | 0 | point-to-point | 17 |
-| DC-R1 | Gi1/0 | 10.2.0.5/30 | 10 | 0 | point-to-point | 18 |
-| DC-R1 | Gi2/0 | 203.0.113.1/30 | 2 | 100 | point-to-point | 31 |
-| DC-R2 | Gi0/0 | 10.2.0.10/30 | 10 | 0 | point-to-point | 19 |
-| DC-R2 | Gi1/0 | 10.2.0.13/30 | 10 | 0 | point-to-point | 20 |
-| DC-R2 | Gi2/0 | 203.0.113.5/30 | 2 | 100 | point-to-point | 32 |
-| DC-R2 | Tunnel0 | 172.16.0.1/24 | 10 | 0 | broadcast, priority 255 (DR) | - |
-| DC-R3 | Gi0/0 | 10.2.0.37/30 | 10 | 0 | point-to-point | 26 |
-| DC-R3 | Gi1/0 | 10.2.0.45/30 | 10 | 0 | point-to-point | 28 |
-| DC-R3 | Gi2/0 | 10.2.0.53/30 | 10 | 0 | point-to-point | 30 |
-| DC-R4 | Gi0/0 | 10.2.0.42/30 | 10 | 0 | point-to-point | 27 |
-| DC-R4 | Gi1/0 | 10.2.0.49/30 | 10 | 0 | point-to-point | 29 |
-| DC-R4 | Gi2/0 | 10.2.0.54/30 | 10 | 0 | point-to-point | 30 |
-| DC-SW1-L3 | Et1 | 10.2.0.2/30 | 10 | 0 | point-to-point | 17 |
-| DC-SW1-L3 | Et2 | 10.2.0.9/30 | 10 | 0 | point-to-point | 19 |
-| DC-SW1-L3 | Et3 | 10.2.0.17/30 | 10 | 0 | point-to-point | 21 |
-| DC-SW1-L3 | Et4 | 10.2.0.21/30 | 10 | 0 | point-to-point | 22 |
-| DC-SW1-L3 | Et5 | 10.2.0.25/30 | 10 | 0 | point-to-point | 23 |
-| DC-SW2-L3 | Et1 | 10.2.0.6/30 | 10 | 0 | point-to-point | 18 |
-| DC-SW2-L3 | Et2 | 10.2.0.14/30 | 10 | 0 | point-to-point | 20 |
-| DC-SW2-L3 | Et3 | 10.2.0.18/30 | 10 | 0 | point-to-point | 21 |
-| DC-SW2-L3 | Et4 | 10.2.0.29/30 | 10 | 0 | point-to-point | 24 |
-| DC-SW2-L3 | Et5 | 10.2.0.33/30 | 10 | 0 | point-to-point | 25 |
-| DC-SW3-L3 | Et1 | 10.2.0.22/30 | 10 | 0 | point-to-point | 22 |
-| DC-SW3-L3 | Et2 | 10.2.0.30/30 | 10 | 0 | point-to-point | 24 |
-| DC-SW3-L3 | Et3 | 10.2.0.38/30 | 10 | 0 | point-to-point | 26 |
-| DC-SW3-L3 | Et4 | 10.2.0.41/30 | 10 | 0 | point-to-point | 27 |
-| DC-SW4-L3 | Et1 | 10.2.0.26/30 | 10 | 0 | point-to-point | 23 |
-| DC-SW4-L3 | Et2 | 10.2.0.34/30 | 10 | 0 | point-to-point | 25 |
-| DC-SW4-L3 | Et3 | 10.2.0.46/30 | 10 | 0 | point-to-point | 28 |
-| DC-SW4-L3 | Et4 | 10.2.0.50/30 | 10 | 0 | point-to-point | 29 |
-| BR1-R1 | Gi0/0 | 10.3.0.1/30 | 12 | 2 | point-to-point | 43 |
-| BR1-R1 | Gi1/0 | 10.3.0.9/30 | 12 | 2 | point-to-point | 45 |
-| BR1-R1 | Gi2/0 | 10.3.0.17/30 | 12 | 2 | point-to-point | 47 |
-| BR1-R1 | Gi4/0 | 203.0.113.13/30 | 2 | 100 | point-to-point | 50 |
-| BR1-R1 | Tunnel0 | 172.16.0.11/24 | 12 | 0 | broadcast, priority 0 | - |
-| BR1-R2 | Gi0/0 | 10.3.0.6/30 | 12 | 2 | point-to-point | 44 |
-| BR1-R2 | Gi1/0 | 10.3.0.13/30 | 12 | 2 | point-to-point | 46 |
-| BR1-R2 | Gi2/0 | 10.3.0.18/30 | 12 | 2 | point-to-point | 47 |
-| BR1-SW1-L3 | Gi0/0 | 10.3.0.2/30 | 12 | 2 | point-to-point | 43 |
-| BR1-SW1-L3 | Gi0/1 | 10.3.0.5/30 | 12 | 2 | point-to-point | 44 |
-| BR1-SW2-L3 | Gi0/0 | 10.3.0.10/30 | 12 | 2 | point-to-point | 45 |
-| BR1-SW2-L3 | Gi0/1 | 10.3.0.14/30 | 12 | 2 | point-to-point | 46 |
-| BR2-R1 | Gi0/0 | 10.4.0.1/30 | 13 | 3 | point-to-point | 57 |
-| BR2-R1 | Gi1/0 | 10.4.0.9/30 | 13 | 3 | point-to-point | 59 |
-| BR2-R1 | Gi2/0 | 10.4.0.17/30 | 13 | 3 | point-to-point | 61 |
-| BR2-R2 | Gi0/0 | 10.4.0.6/30 | 13 | 3 | point-to-point | 58 |
-| BR2-R2 | Gi1/0 | 10.4.0.13/30 | 13 | 3 | point-to-point | 60 |
-| BR2-R2 | Gi2/0 | 10.4.0.18/30 | 13 | 3 | point-to-point | 61 |
-| BR2-R2 | Gi4/0 | 203.0.113.17/30 | 2 | 100 | point-to-point | 64 |
-| BR2-R2 | Tunnel0 | 172.16.0.12/24 | 13 | 0 | broadcast, priority 0 | - |
-| BR2-SW1-L3 | Gi0/0 | 10.4.0.2/30 | 13 | 3 | point-to-point | 57 |
-| BR2-SW1-L3 | Gi0/1 | 10.4.0.5/30 | 13 | 3 | point-to-point | 58 |
-| BR2-SW2-L3 | Gi0/0 | 10.4.0.10/30 | 13 | 3 | point-to-point | 59 |
-| BR2-SW2-L3 | Gi0/1 | 10.4.0.14/30 | 13 | 3 | point-to-point | 60 |
-| Private-net | Gi0/0 | 203.0.113.2/30 | 2 | 100 | point-to-point | 31 |
-| Private-net | Gi1/0 | 203.0.113.6/30 | 2 | 100 | point-to-point | 32 |
-| Private-net | Gi2/0 | 203.0.113.10/30 | 2 | 100 | point-to-point | 8 |
-| Private-net | Gi3/0 | 203.0.113.14/30 | 2 | 100 | point-to-point | 50 |
-| Private-net | Gi4/0 | 203.0.113.18/30 | 2 | 100 | point-to-point | 64 |
+| 장비          | 인터페이스   | IP              | 프로세스 | Area | 네트워크 타입                      | 링크 # |
+| ----------- | ------- | --------------- | ---- | ---- | ---------------------------- | ---- |
+| HQ-R1       | Gi0/0   | 10.1.0.1/30     | 11   | 1    | point-to-point               | 1    |
+| HQ-R1       | Gi1/0   | 10.1.0.9/30     | 11   | 1    | point-to-point               | 3    |
+| HQ-R1       | Gi2/0   | 10.1.0.17/30    | 11   | 1    | point-to-point               | 5    |
+| HQ-R2       | Gi0/0   | 10.1.0.5/30     | 11   | 1    | point-to-point               | 2    |
+| HQ-R2       | Gi1/0   | 10.1.0.13/30    | 11   | 1    | point-to-point               | 4    |
+| HQ-R2       | Gi2/0   | 10.1.0.18/30    | 11   | 1    | point-to-point               | 5    |
+| HQ-R2       | Gi4/0   | 203.0.113.9/30  | 2    | 100  | point-to-point               | 8    |
+| HQ-R2       | Tunnel0 | 172.16.0.13/24  | 11   | 0    | broadcast, priority 0        | -    |
+| HQ-SW-2     | Gi1/0   | 10.1.0.2/30     | 11   | 1    | point-to-point               | 1    |
+| HQ-SW-2     | Gi1/1   | 10.1.0.6/30     | 11   | 1    | point-to-point               | 2    |
+| HQ-SW-3     | Gi1/0   | 10.1.0.10/30    | 11   | 1    | point-to-point               | 3    |
+| HQ-SW-3     | Gi1/1   | 10.1.0.14/30    | 11   | 1    | point-to-point               | 4    |
+| DC-R1       | Gi0/0   | 10.2.0.1/30     | 10   | 0    | point-to-point               | 17   |
+| DC-R1       | Gi1/0   | 10.2.0.5/30     | 10   | 0    | point-to-point               | 18   |
+| DC-R1       | Gi2/0   | 203.0.113.1/30  | 2    | 100  | point-to-point               | 31   |
+| DC-R2       | Gi0/0   | 10.2.0.10/30    | 10   | 0    | point-to-point               | 19   |
+| DC-R2       | Gi1/0   | 10.2.0.13/30    | 10   | 0    | point-to-point               | 20   |
+| DC-R2       | Gi2/0   | 203.0.113.5/30  | 2    | 100  | point-to-point               | 32   |
+| DC-R2       | Tunnel0 | 172.16.0.1/24   | 10   | 0    | broadcast, priority 255 (DR) | -    |
+| DC-R3       | Gi0/0   | 10.2.0.37/30    | 10   | 0    | point-to-point               | 26   |
+| DC-R3       | Gi1/0   | 10.2.0.45/30    | 10   | 0    | point-to-point               | 28   |
+| DC-R3       | Gi2/0   | 10.2.0.53/30    | 10   | 0    | point-to-point               | 30   |
+| DC-R4       | Gi0/0   | 10.2.0.42/30    | 10   | 0    | point-to-point               | 27   |
+| DC-R4       | Gi1/0   | 10.2.0.49/30    | 10   | 0    | point-to-point               | 29   |
+| DC-R4       | Gi2/0   | 10.2.0.54/30    | 10   | 0    | point-to-point               | 30   |
+| DC-SW1-L3   | Et1     | 10.2.0.2/30     | 10   | 0    | point-to-point               | 17   |
+| DC-SW1-L3   | Et2     | 10.2.0.9/30     | 10   | 0    | point-to-point               | 19   |
+| DC-SW1-L3   | Et3     | 10.2.0.17/30    | 10   | 0    | point-to-point               | 21   |
+| DC-SW1-L3   | Et4     | 10.2.0.21/30    | 10   | 0    | point-to-point               | 22   |
+| DC-SW1-L3   | Et5     | 10.2.0.25/30    | 10   | 0    | point-to-point               | 23   |
+| DC-SW2-L3   | Et1     | 10.2.0.6/30     | 10   | 0    | point-to-point               | 18   |
+| DC-SW2-L3   | Et2     | 10.2.0.14/30    | 10   | 0    | point-to-point               | 20   |
+| DC-SW2-L3   | Et3     | 10.2.0.18/30    | 10   | 0    | point-to-point               | 21   |
+| DC-SW2-L3   | Et4     | 10.2.0.29/30    | 10   | 0    | point-to-point               | 24   |
+| DC-SW2-L3   | Et5     | 10.2.0.33/30    | 10   | 0    | point-to-point               | 25   |
+| DC-SW3-L3   | Et1     | 10.2.0.22/30    | 10   | 0    | point-to-point               | 22   |
+| DC-SW3-L3   | Et2     | 10.2.0.30/30    | 10   | 0    | point-to-point               | 24   |
+| DC-SW3-L3   | Et3     | 10.2.0.38/30    | 10   | 0    | point-to-point               | 26   |
+| DC-SW3-L3   | Et4     | 10.2.0.41/30    | 10   | 0    | point-to-point               | 27   |
+| DC-SW4-L3   | Et1     | 10.2.0.26/30    | 10   | 0    | point-to-point               | 23   |
+| DC-SW4-L3   | Et2     | 10.2.0.34/30    | 10   | 0    | point-to-point               | 25   |
+| DC-SW4-L3   | Et3     | 10.2.0.46/30    | 10   | 0    | point-to-point               | 28   |
+| DC-SW4-L3   | Et4     | 10.2.0.50/30    | 10   | 0    | point-to-point               | 29   |
+| BR1-R1      | Gi0/0   | 10.3.0.1/30     | 12   | 2    | point-to-point               | 43   |
+| BR1-R1      | Gi1/0   | 10.3.0.9/30     | 12   | 2    | point-to-point               | 45   |
+| BR1-R1      | Gi2/0   | 10.3.0.17/30    | 12   | 2    | point-to-point               | 47   |
+| BR1-R1      | Gi4/0   | 203.0.113.13/30 | 2    | 100  | point-to-point               | 50   |
+| BR1-R1      | Tunnel0 | 172.16.0.11/24  | 12   | 0    | broadcast, priority 0        | -    |
+| BR1-R2      | Gi0/0   | 10.3.0.6/30     | 12   | 2    | point-to-point               | 44   |
+| BR1-R2      | Gi1/0   | 10.3.0.13/30    | 12   | 2    | point-to-point               | 46   |
+| BR1-R2      | Gi2/0   | 10.3.0.18/30    | 12   | 2    | point-to-point               | 47   |
+| BR1-SW1-L3  | Gi0/0   | 10.3.0.2/30     | 12   | 2    | point-to-point               | 43   |
+| BR1-SW1-L3  | Gi0/1   | 10.3.0.5/30     | 12   | 2    | point-to-point               | 44   |
+| BR1-SW2-L3  | Gi0/0   | 10.3.0.10/30    | 12   | 2    | point-to-point               | 45   |
+| BR1-SW2-L3  | Gi0/1   | 10.3.0.14/30    | 12   | 2    | point-to-point               | 46   |
+| BR2-R1      | Gi0/0   | 10.4.0.1/30     | 13   | 3    | point-to-point               | 57   |
+| BR2-R1      | Gi1/0   | 10.4.0.9/30     | 13   | 3    | point-to-point               | 59   |
+| BR2-R1      | Gi2/0   | 10.4.0.17/30    | 13   | 3    | point-to-point               | 61   |
+| BR2-R2      | Gi0/0   | 10.4.0.6/30     | 13   | 3    | point-to-point               | 58   |
+| BR2-R2      | Gi1/0   | 10.4.0.13/30    | 13   | 3    | point-to-point               | 60   |
+| BR2-R2      | Gi2/0   | 10.4.0.18/30    | 13   | 3    | point-to-point               | 61   |
+| BR2-R2      | Gi4/0   | 203.0.113.17/30 | 2    | 100  | point-to-point               | 64   |
+| BR2-R2      | Tunnel0 | 172.16.0.12/24  | 13   | 0    | broadcast, priority 0        | -    |
+| BR2-SW1-L3  | Gi0/0   | 10.4.0.2/30     | 13   | 3    | point-to-point               | 57   |
+| BR2-SW1-L3  | Gi0/1   | 10.4.0.5/30     | 13   | 3    | point-to-point               | 58   |
+| BR2-SW2-L3  | Gi0/0   | 10.4.0.10/30    | 13   | 3    | point-to-point               | 59   |
+| BR2-SW2-L3  | Gi0/1   | 10.4.0.14/30    | 13   | 3    | point-to-point               | 60   |
+| Private-net | Gi0/0   | 203.0.113.2/30  | 2    | 100  | point-to-point               | 31   |
+| Private-net | Gi1/0   | 203.0.113.6/30  | 2    | 100  | point-to-point               | 32   |
+| Private-net | Gi2/0   | 203.0.113.10/30 | 2    | 100  | point-to-point               | 8    |
+| Private-net | Gi3/0   | 203.0.113.14/30 | 2    | 100  | point-to-point               | 50   |
+| Private-net | Gi4/0   | 203.0.113.18/30 | 2    | 100  | point-to-point               | 64   |
 
 ## 4. DMVPN 터널(Tunnel0)
 
