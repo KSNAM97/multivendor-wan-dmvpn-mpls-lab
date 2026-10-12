@@ -49,11 +49,12 @@ int lo0
 int gi0/0
  ip ospf 10 area 0
  ip ospf network point-to-point
+!
 int gi1/0
  ip ospf 10 area 0
  ip ospf network point-to-point
 !
-int Gi2/0
+int gi2/0
  ip ospf 10 area 0
  ip ospf network point-to-point
 !

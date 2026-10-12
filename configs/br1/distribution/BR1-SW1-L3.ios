@@ -99,7 +99,7 @@ int gi0/1
 !
 int vlan10
  ip ospf 12 area 2
-
+!
 int vlan20
  ip ospf 12 area 2
 !
