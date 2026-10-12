@@ -37,13 +37,13 @@ int gi0/1
  switchport trunk allowed vlan 10,20,100
 !
 int gi3/0
- desc to to br1-pc1 eth0 eth0
+ desc to br1-pc1 eth0 
  switchport access vlan 10
  switchport mode access
  spanning-tree portfast
 !
 int gi3/1
- desc to to br1-pc2 eth0 eth0
+ desc to br1-pc2 eth0 
  switchport access vlan 20
  switchport mode access
  spanning-tree portfast
