@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "verification/dc/distribution/vlan-trunk.md",
-                "mode": "source",
+                "file": "docs/port-mapping.md",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "vlan-trunk"
+              "title": "port-mapping"
             }
           }
         ]
@@ -190,6 +190,10 @@
   },
   "active": "5aff95b4dcd4e49e",
   "lastOpenFiles": [
+    "docs/vrrp-mstp-design.md",
+    "docs/ip-mapping.md",
+    "docs/port-mapping.md",
+    "verification/dc/distribution/vlan-trunk.md",
     "verification/dc/distribution/l3-interface.md",
     "verification/hq/core/l3-interface.md",
     "verification/dc/distribution/images/dc-sw4-l3-vlan.png",
@@ -231,10 +235,6 @@
     "verification/hq/access/po-channel.md",
     "verification/hq/distribution/ospf.md",
     "verification/hq/distribution/dhcp.md",
-    "verification/hq/core/qos.md",
-    "verification/hq/core/ospf.md",
-    "verification/hq/core/isp-link.md",
-    "verification/hq/core/dmvpn.md",
-    "verification/dc/distribution/vlan-trunk.md"
+    "verification/hq/core/qos.md"
   ]
 }
