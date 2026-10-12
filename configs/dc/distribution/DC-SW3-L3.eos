@@ -75,3 +75,33 @@ spanning-tree mst configuration
 !
 spanning-tree mst 1 priority 4096
 !
+router ospf 10
+ router-id 10.10.10.13
+ passive-interface default
+ no passive-interface et1
+ no passive-interface et2
+ no passive-interface et3
+ no passive-interface et4
+!
+int lo0
+ ip ospf area 0
+!
+int et1
+ ip ospf area 0
+ ip ospf network point-to-point
+!
+int et2
+ ip ospf area 0
+ ip ospf network point-to-point
+!
+int et3
+ ip ospf area 0
+ ip ospf network point-to-point
+!
+int et4
+ ip ospf area 0
+ ip ospf network point-to-point
+!
+int vlan50
+ ip ospf area 0
+!

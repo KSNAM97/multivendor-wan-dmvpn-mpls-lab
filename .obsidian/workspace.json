@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "docs/ospf-design.md",
+                "file": "verification/hq/core/ospf.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "ospf-design"
+              "title": "ospf"
             }
           }
         ]
@@ -190,16 +190,27 @@
   },
   "active": "5aff95b4dcd4e49e",
   "lastOpenFiles": [
-    "docs/ip-mapping.md",
+    "verification/dc/distribution/ospf.md",
+    "verification/_unreferenced/Pasted image 20261012190403.png",
+    "verification/_unreferenced/Pasted image 20261012190341.png",
+    "verification/_unreferenced/Pasted image 20261012190308.png",
+    "verification/_unreferenced/Pasted image 20261012190241.png",
+    "verification/dc/distribution/images/Pasted image 20261012192402.png",
+    "verification/hq/core/images/Pasted image 20261012185446.png",
+    "verification/hq/core/images/Pasted image 20261012185358.png",
+    "verification/dc/core/images/Pasted image 20261012191853.png",
+    "verification/dc/core/images/Pasted image 20261012191821.png",
+    "verification/dc/core/images/Pasted image 20261012191753.png",
+    "verification/dc/core/images",
+    "verification/dc/core/ospf.md",
     "docs/ospf-design.md",
+    "verification/hq/core/l3-interface.md",
+    "verification/hq/core/ospf.md",
+    "verification/hq/access/l3-interface.md",
+    "docs/ip-mapping.md",
     "docs/dhcp-dns-design.md",
     "docs/vlan-design.md",
     "verification/dc/access/stp.md",
-    "verification/dc/access/images/Pasted image 20261011233201.png",
-    "verification/dc/access/images/Pasted image 20261011233005.png",
-    "verification/dc/access/images/Pasted image 20261011232918.png",
-    "verification/dc/access/images/Pasted image 20261011232807.png",
-    "verification/dc/access/images/Pasted image 20261011232742.png",
     "verification/dc/access/vlan-trunk.md",
     "docs/port-mapping.md",
     "docs/archive/schedule-3person.md",
@@ -210,9 +221,6 @@
     "docs/bgp-design.md.tmp.14004.03df8c3f4997",
     "verification/dc/distribution/vlan-trunk.md",
     "verification/dc/distribution/l3-interface.md",
-    "verification/hq/core/l3-interface.md",
-    "verification/dc/distribution/images/dc-sw4-l3-vlan.png",
-    "verification/dc/distribution/images/dc-sw3-l3-vlan.png",
     "configs/private-internet/core/Private-net.ios",
     "configs/private-internet/core",
     "configs/isp2/core/ISP-2-PE-B.ios",
@@ -220,21 +228,13 @@
     "configs/isp2/core/ISP-2-P2.ios",
     "configs/isp2/core/ISP-2-P1.ios",
     "configs/isp2/core",
-    "configs/isp1/core/ISP-1-PE-B.ios",
-    "verification/hq/core/images/hq-r1-ip-int-br.webp",
-    "verification/hq/access/l3-interface.md",
     "verification/hq/distribution/stp.md",
-    "verification/hq/core/images/hq-r2-ip-int-br.webp",
     "README.md",
-    "Pasted image 20261012000638.png",
     "CONTRIBUTING.md",
     "verification/hq/distribution/l3-interface.md",
     "verification/hq/distribution/vrrp.md",
     "verification/scenarios/vrrp-failover.md",
     "verification/scenarios/isp1-failure.md",
-    "verification/scenarios/etherchannel-link-down.md",
-    "verification/scenarios/dmvpn-hub-failure.md",
-    "verification/dc/distribution/vrrp.md",
-    "verification/hq/distribution/vlan-trunk.md"
+    "verification/scenarios/etherchannel-link-down.md"
   ]
 }

@@ -39,6 +39,7 @@ router ospf 10
 !
 int lo0
  ip ospf 10 area 0
+!
 int gi0/0
  ip ospf 10 area 0
  ip ospf network point-to-point

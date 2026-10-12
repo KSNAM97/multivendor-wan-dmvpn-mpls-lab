@@ -35,4 +35,35 @@ int et5
  no switchport
  ip add 10.2.0.33 255.255.255.252
 !
-
+router ospf 10
+ router-id 10.10.10.12
+ passive-interface default
+ no passive-interface et1
+ no passive-interface et2
+ no passive-interface et3
+ no passive-interface et4
+ no passive-interface et5
+!
+int lo0
+ ip ospf area 0
+!
+int et1
+ ip ospf area 0
+ ip ospf network point-to-point
+!
+int et2
+ ip ospf area 0
+ ip ospf network point-to-point
+!
+int et3
+ ip ospf area 0
+ ip ospf network point-to-point
+!
+int et4
+ ip ospf area 0
+ ip ospf network point-to-point
+!
+int et5
+ ip ospf area 0
+ ip ospf network point-to-point
+!
