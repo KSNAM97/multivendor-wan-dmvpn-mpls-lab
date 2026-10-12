@@ -85,3 +85,23 @@ spanning-tree mst configuration
 ! stp backup root
 spanning-tree mst 1 priority 8192
 !
+router ospf 11
+ router-id 11.11.11.13
+ passive-interface default
+ no passive-interface gi1/0
+ no passive-interface gi1/1
+!
+int lo0
+ ip ospf 11 area 1
+int gi1/0
+ ip ospf 11 area 1
+ ip ospf network point-to-point
+int gi1/1
+ ip ospf 11 area 1
+ ip ospf network point-to-point
+!
+int vlan10
+ ip ospf 11 area 1
+int vlan20
+ ip ospf 11 area 1
+!
