@@ -1,0 +1,61 @@
+! cisco
+!
+hostname br1-r2
+enable secret admin1234
+no ip domain-lookup
+service timestamps debug datetime msec
+service timestamps log datetime msec
+!
+line con 0
+ logging synchronous
+ exec-timeout 0 0
+line vty 0 4
+ password admin1234
+ login
+!
+int lo0
+ ip addr 12.12.12.2 255.255.255.255
+!
+int gi0/0
+ desc to br1-sw1-l3 gi0/1
+ ip addr 10.3.0.6 255.255.255.252
+ no sh
+!
+int gi1/0
+ desc to br1-sw2-l3 gi0/1
+ ip addr 10.3.0.13 255.255.255.252
+ no sh
+!
+int gi2/0
+ desc to br1-r1 gi2/0
+ ip addr 10.3.0.18 255.255.255.252
+ no sh
+!
+int gi3/0
+ desc to isp-2-pe-b gi2/0
+ ip addr 100.2.32.1 255.255.255.252
+ no sh
+!
+router ospf 12
+ router-id 12.12.12.2
+ passive-interface default
+ no passive-interface gi0/0
+ no passive-interface gi1/0
+ no passive-interface gi2/0
+!
+int lo0
+ ip ospf 12 area 2
+!
+int gi0/0
+ ip ospf 12 area 2
+ ip ospf network point-to-point
+!
+int gi1/0
+ ip ospf 12 area 2
+ ip ospf network point-to-point
+!
+int gi2/0
+ ip ospf 12 area 2
+ ip ospf network point-to-point
+!
+
