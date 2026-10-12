@@ -190,8 +190,9 @@
   },
   "active": "5aff95b4dcd4e49e",
   "lastOpenFiles": [
-    "docs/dhcp-dns-design.md",
+    "docs/ip-mapping.md",
     "docs/ospf-design.md",
+    "docs/dhcp-dns-design.md",
     "docs/vlan-design.md",
     "verification/dc/access/stp.md",
     "verification/dc/access/images/Pasted image 20261011233201.png",
@@ -204,7 +205,6 @@
     "docs/archive/schedule-3person.md",
     "docs/archive/schedule-2person.md",
     "docs/vrrp-mstp-design.md",
-    "docs/ip-mapping.md",
     "docs/sedTjurub",
     "docs/bgp-design.md",
     "docs/bgp-design.md.tmp.14004.03df8c3f4997",

@@ -1,0 +1,48 @@
+! cisco
+!
+hostname dc-r1
+enable secret admin1234
+no ip domain-lookup
+service timestamps debug datetime msec
+service timestamps log datetime msec
+!
+line con 0
+ logging synchronous
+ exec-timeout 0 0
+line vty 0 4
+ password admin1234
+ login
+!
+int lo0
+ ip addr 10.10.10.1 255.255.255.255
+!
+int gi0/0
+ desc to dc-sw1-l3 et1
+ ip addr 10.2.0.1 255.255.255.252
+ no sh
+!
+int gi1/0
+ desc to dc-sw2-l3 et1
+ ip addr 10.2.0.5 255.255.255.252
+ no sh
+!
+int gi2/0
+ desc to private-net gi0/0
+ ip addr 203.0.113.1 255.255.255.252
+ no sh
+!
+router ospf 10
+ router-id 10.10.10.1
+ passive-interface default
+ no passive-interface gi0/0
+ no passive-interface gi1/0
+!
+int lo0
+ ip ospf 10 area 0
+int gi0/0
+ ip ospf 10 area 0
+ ip ospf network point-to-point
+int gi1/0
+ ip ospf 10 area 0
+ ip ospf network point-to-point
+!
