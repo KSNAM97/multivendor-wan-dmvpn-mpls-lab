@@ -101,7 +101,7 @@
 | 62 | BR2-R1 | Gi3/0 | ISP-1-PE-B | Gi3/0 | 100.1.41.0/30 | ISP-1 연결 |
 | 63 | BR2-R2 | Gi3/0 | ISP-2-PE-B | Gi3/0 | 100.2.42.0/30 | ISP-2 연결 |
 | 64 | BR2-R2 | Gi4/0 | Private-net | Gi4/0 | 203.0.113.16/30 | PI 연결, DMVPN Spoke Tunnel0 source |
-| 65 | BR2-SW1-L3 | Gi1/0 | BR2-SW2-L3 | Gi1/0 | - | Po1 (VLAN 10/100) |
+| 65 | BR2-SW1-L3 | Gi1/0 | BR2-SW2-L3 | Gi1/0 | - | Po1 (VLAN 10/20/100) |
 | 66 | BR2-SW1-L3 | Gi1/1 | BR2-SW2-L3 | Gi1/1 | - | Po1 |
 | 67 | BR2-SW1-L3 | Gi2/0 | BR2-SW3-L2 | Gi0/0 | - | 트렁크 (연결 확인됨) |
 | 68 | BR2-SW2-L3 | Gi2/0 | BR2-SW3-L2 | Gi0/1 | - | 트렁크 (연결 확인됨) |
