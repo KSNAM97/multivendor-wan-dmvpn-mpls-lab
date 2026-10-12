@@ -75,10 +75,12 @@ spanning-tree mode mst
 spanning-tree mst configuration
  name br2
  revision 1
- instance 1 vlan 10,100
+ instance 1 vlan 10,20,100
 !
 vlan 10
- name br2-user
+ name br2-public
+vlan 20
+ name br2-private
 vlan 100
  name mgmt
 vlan 999
@@ -89,13 +91,13 @@ int gi0/0
  switchport trunk encapsulation dot1q
  switchport mode trunk
  switchport trunk native vlan 999
- switchport trunk allowed vlan 10,100
+ switchport trunk allowed vlan 10,20,100
 int gi0/1
  desc to br2-sw2-l3 gi2/0
  switchport trunk encapsulation dot1q
  switchport mode trunk
  switchport trunk native vlan 999
- switchport trunk allowed vlan 10,100
+ switchport trunk allowed vlan 10,20,100
 int gi3/0
  desc to br2-pc1 eth0
  switchport mode access
@@ -104,7 +106,7 @@ int gi3/0
 int gi3/1
  desc to br2-pc2 eth0
  switchport mode access
- switchport access vlan 10
+ switchport access vlan 20
  spanning-tree portfast
 int vlan100
  ip addr 10.4.100.23 255.255.255.0
@@ -199,8 +201,8 @@ spanning-tree mst configuration
 | 사이트 | region 이름 | instance 1 VLAN | 루트 (4096) | 보조 루트 (8192) | 기본값 장비 |
 |---|---|---|---|---|---|
 | HQ | `hq` | 10,20,100 | HQ-SW-2 | HQ-SW-3 | HQ-SW-1 |
-| BR1 | `br1` | 10,100 | BR1-SW1-L3 | BR1-SW2-L3 | BR1-SW3-L3 |
-| BR2 | `br2` | 10,100 | BR2-SW1-L3 | BR2-SW2-L3 | BR2-SW3-L2 |
+| BR1 | `br1` | 10,20,100 | BR1-SW1-L3 | BR1-SW2-L3 | BR1-SW3-L3 |
+| BR2 | `br2` | 10,20,100 | BR2-SW1-L3 | BR2-SW2-L3 | BR2-SW3-L2 |
 
 - `native` VLAN 999는 instance 0에 남기므로 instance 1에 넣지 않음.
 - 모드를 바꾸면 STP가 재수렴하므로 사이트의 모든 스위치에 연달아 입력한 뒤 확인.

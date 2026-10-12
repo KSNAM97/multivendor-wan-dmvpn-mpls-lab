@@ -147,7 +147,7 @@ network-project/
 | --- | --- | --- | --- | --- |
 | HQ | 10 / 20 | HQ-PUBLIC / HQ-PRIVATE | 10.1.10.0/24, 10.1.20.0/24 | VRRP |
 | DC | 50 | SERVER (DC-DNS-1, DC-DNS-2) | 10.2.50.0/24 | VRRP |
-| BR1 / BR2 | 10 | BR-USER | 10.3.10.0/24, 10.4.10.0/24 | VRRP |
+| BR1 / BR2 | 10 / 20 | BR1-PUBLIC / BR1-PRIVATE, BR2-PUBLIC / BR2-PRIVATE | 10.3.10.0/24, 10.3.20.0/24, 10.4.10.0/24, 10.4.20.0/24 | VRRP |
 | 전 사이트 | 100 / 999 | MGMT / NATIVE | 10.X.100.0/24 / IP 없음 | - |
 
 ### QoS와 접근 통제

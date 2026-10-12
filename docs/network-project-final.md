@@ -43,8 +43,10 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ HQ
 | HQ | 10 | HQ-PUBLIC | 10.1.10.0/24 | VRRP (HQ-SW-2 .2 / HQ-SW-3 .3, VIP .1) |
 | HQ | 20 | HQ-PRIVATE | 10.1.20.0/24 | VRRP |
 | DC | 50 | SERVER (DC-DNS-1, DC-DNS-2) | 10.2.50.0/24 | VRRP (DC-SW3-L3 .2 / DC-SW4-L3 .3, VIP .1) |
-| BR1 | 10 | BR1-USER | 10.3.10.0/24 | VRRP |
-| BR2 | 10 | BR2-USER | 10.4.10.0/24 | VRRP |
+| BR1 | 10 | BR1-PUBLIC | 10.3.10.0/24 | VRRP |
+| BR1 | 20 | BR1-PRIVATE | 10.3.20.0/24 | VRRP |
+| BR2 | 10 | BR2-PUBLIC | 10.4.10.0/24 | VRRP |
+| BR2 | 20 | BR2-PRIVATE | 10.4.20.0/24 | VRRP |
 | 전 사이트 | 100 | MGMT | 10.X.100.0/24 | - |
 | 전 사이트 | 999 | NATIVE | IP 없음 | 모든 트렁크 native |
 
@@ -142,12 +144,12 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ HQ
 | BR1-R1 Gi3/0 | ISP-1-PE-B Gi2/0 | 100.1.31.0/30 |
 | BR1-R2 Gi3/0 | ISP-2-PE-B Gi2/0 | 100.2.32.0/30 |
 | BR1-R1 Gi4/0 | Private-net Gi3/0 | 203.0.113.12/30 (Tunnel0 source, DMVPN Spoke) |
-| BR1-SW1-L3 Gi1/0 | BR1-SW2-L3 Gi1/0 | Po1 (VLAN10/100) |
+| BR1-SW1-L3 Gi1/0 | BR1-SW2-L3 Gi1/0 | Po1 (VLAN10/20/100) |
 | BR1-SW1-L3 Gi1/1 | BR1-SW2-L3 Gi1/1 | Po1 |
 | BR1-SW1-L3 Gi2/0 | BR1-SW3-L3 Gi0/0 | 트렁크 (연결 확인됨) |
 | BR1-SW2-L3 Gi2/0 | BR1-SW3-L3 Gi0/1 | 트렁크 (연결 확인됨) |
 | BR1-PC1 eth0 | BR1-SW3-L3 Gi3/0 | VLAN10 access |
-| BR1-PC2 eth0 | BR1-SW3-L3 Gi3/1 | VLAN10 access |
+| BR1-PC2 eth0 | BR1-SW3-L3 Gi3/1 | VLAN20 access |
 | **QoS 대상** | BR1-R1 Gi0/0,Gi1/0 / BR1-R2 Gi0/0,Gi1/0 |
 
 ### BR2 (BR1과 동일 패턴, 장비명 BR2-*, 스포크는 BR2-R2)

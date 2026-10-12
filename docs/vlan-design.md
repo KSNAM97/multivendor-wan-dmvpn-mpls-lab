@@ -9,8 +9,10 @@ VLAN, 게이트웨이 이중화, EtherChannel, 트렁크, STP(MSTP), DHCP 배치
 | HQ | 10 | HQ-PUBLIC | 10.1.10.0/24 | `vlan-hq-public` | VRRP |
 | HQ | 20 | HQ-PRIVATE | 10.1.20.0/24 | `vlan-hq-private` | VRRP |
 | DC | 50 | SERVER | 10.2.50.0/24 | `vlan-dc-server` | VRRP |
-| BR1 | 10 | BR1-USER | 10.3.10.0/24 | `vlan-br1-user` | VRRP |
-| BR2 | 10 | BR2-USER | 10.4.10.0/24 | `vlan-br2-user` | VRRP |
+| BR1 | 10 | BR1-PUBLIC | 10.3.10.0/24 | `vlan-br1-public` | VRRP |
+| BR1 | 20 | BR1-PRIVATE | 10.3.20.0/24 | `vlan-br1-private` | VRRP |
+| BR2 | 10 | BR2-PUBLIC | 10.4.10.0/24 | `vlan-br2-public` | VRRP |
+| BR2 | 20 | BR2-PRIVATE | 10.4.20.0/24 | `vlan-br2-private` | VRRP |
 | 전 사이트 | 100 | MGMT | 10.<사이트>.100.0/24 | `vlan-mgmt` | - |
 | 전 사이트 | 999 | NATIVE | 없음 | `vlan-native` | - |
 
@@ -29,7 +31,9 @@ VLAN, 게이트웨이 이중화, EtherChannel, 트렁크, STP(MSTP), DHCP 배치
 | HQ | 20 | VRRP | HQ-SW-2 `10.1.20.2` (110) | HQ-SW-3 `10.1.20.3` (90) | 10.1.20.1 | 10.1.20.0/24 |
 | DC | 50 | VRRP | DC-SW3-L3 `10.2.50.2` (110) | DC-SW4-L3 `10.2.50.3` (90) | 10.2.50.1 | 10.2.50.0/24 |
 | BR1 | 10 | VRRP | BR1-SW1-L3 `10.3.10.2` (110) | BR1-SW2-L3 `10.3.10.3` (90) | 10.3.10.1 | 10.3.10.0/24 |
+| BR1 | 20 | VRRP | BR1-SW1-L3 `10.3.20.2` (110) | BR1-SW2-L3 `10.3.20.3` (90) | 10.3.20.1 | 10.3.20.0/24 |
 | BR2 | 10 | VRRP | BR2-SW1-L3 `10.4.10.2` (110) | BR2-SW2-L3 `10.4.10.3` (90) | 10.4.10.1 | 10.4.10.0/24 |
+| BR2 | 20 | VRRP | BR2-SW1-L3 `10.4.20.2` (110) | BR2-SW2-L3 `10.4.20.3` (90) | 10.4.20.1 | 10.4.20.0/24 |
 
 ## 3. STP(MSTP)
 
@@ -48,8 +52,8 @@ VLAN, 게이트웨이 이중화, EtherChannel, 트렁크, STP(MSTP), DHCP 배치
 |---|---|---|
 | HQ | `hq` | 10,20,100 |
 | DC | `dc` | 50,100 |
-| BR1 | `br1` | 10,100 |
-| BR2 | `br2` | 10,100 |
+| BR1 | `br1` | 10,20,100 |
+| BR2 | `br2` | 10,20,100 |
 
 ## 4. EtherChannel
 
@@ -61,12 +65,12 @@ VLAN, 게이트웨이 이중화, EtherChannel, 트렁크, STP(MSTP), DHCP 배치
 | HQ | Po2 | HQ-SW-1 | Gi1/2, Gi1/3 | HQ-SW-3 | Gi0/0, Gi0/1 | 10,20,100 |
 | HQ | Po3 | HQ-SW-2 | Gi0/2, Gi0/3 | HQ-SW-3 | Gi0/2, Gi0/3 | 10,20,100 |
 | DC | Po1 | DC-SW3-L3 | Et5, Et6 | DC-SW4-L3 | Et5, Et6 | 50,100 |
-| BR1 | Po1 | BR1-SW1-L3 | Gi1/0, Gi1/1 | BR1-SW2-L3 | Gi1/0, Gi1/1 | 10,100 |
-| BR2 | Po1 | BR2-SW1-L3 | Gi1/0, Gi1/1 | BR2-SW2-L3 | Gi1/0, Gi1/1 | 10,100 |
+| BR1 | Po1 | BR1-SW1-L3 | Gi1/0, Gi1/1 | BR1-SW2-L3 | Gi1/0, Gi1/1 | 10,20,100 |
+| BR2 | Po1 | BR2-SW1-L3 | Gi1/0, Gi1/1 | BR2-SW2-L3 | Gi1/0, Gi1/1 | 10,20,100 |
 
 ## 5. 트렁크
 
-- 허용 VLAN은 사이트별 값(HQ 10, 20, 100 / DC 50, 100 / BR1·BR2 10, 100)만 통과, native 999.
+- 허용 VLAN은 사이트별 값(HQ 10, 20, 100 / DC 50, 100 / BR1·BR2 10, 20, 100)만 통과, native 999.
 
 | 사이트 | 장비 A | A 포트 | 장비 B | B 포트 | 허용 VLAN |
 |---|---|---|---|---|---|
@@ -74,10 +78,10 @@ VLAN, 게이트웨이 이중화, EtherChannel, 트렁크, STP(MSTP), DHCP 배치
 | DC | DC-SW3-L3 | Et8 | DC-SW2-L2 | Et1 | 50,100 |
 | DC | DC-SW4-L3 | Et7 | DC-SW1-L2 | Et2 | 50,100 |
 | DC | DC-SW4-L3 | Et8 | DC-SW2-L2 | Et2 | 50,100 |
-| BR1 | BR1-SW1-L3 | Gi2/0 | BR1-SW3-L3 | Gi0/0 | 10,100 |
-| BR1 | BR1-SW2-L3 | Gi2/0 | BR1-SW3-L3 | Gi0/1 | 10,100 |
-| BR2 | BR2-SW1-L3 | Gi2/0 | BR2-SW3-L2 | Gi0/0 | 10,100 |
-| BR2 | BR2-SW2-L3 | Gi2/0 | BR2-SW3-L2 | Gi0/1 | 10,100 |
+| BR1 | BR1-SW1-L3 | Gi2/0 | BR1-SW3-L3 | Gi0/0 | 10,20,100 |
+| BR1 | BR1-SW2-L3 | Gi2/0 | BR1-SW3-L3 | Gi0/1 | 10,20,100 |
+| BR2 | BR2-SW1-L3 | Gi2/0 | BR2-SW3-L2 | Gi0/0 | 10,20,100 |
+| BR2 | BR2-SW2-L3 | Gi2/0 | BR2-SW3-L2 | Gi0/1 | 10,20,100 |
 
 ## 6. 액세스 포트
 
@@ -88,9 +92,9 @@ VLAN, 게이트웨이 이중화, EtherChannel, 트렁크, STP(MSTP), DHCP 배치
 | DC-SW1-L2 | Et12 | DC-DNS-1 | eth0 | 50 |
 | DC-SW2-L2 | Et12 | DC-DNS-2 | eth0 | 50 |
 | BR1-SW3-L3 | Gi3/0 | BR1-PC1 | eth0 | 10 |
-| BR1-SW3-L3 | Gi3/1 | BR1-PC2 | eth0 | 10 |
+| BR1-SW3-L3 | Gi3/1 | BR1-PC2 | eth0 | 20 |
 | BR2-SW3-L2 | Gi3/0 | BR2-PC1 | eth0 | 10 |
-| BR2-SW3-L2 | Gi3/1 | BR2-PC2 | eth0 | 10 |
+| BR2-SW3-L2 | Gi3/1 | BR2-PC2 | eth0 | 20 |
 
 ## 7. DHCP 배치
 
@@ -102,5 +106,7 @@ VLAN, 게이트웨이 이중화, EtherChannel, 트렁크, STP(MSTP), DHCP 배치
 | HQ | 10 | HQ-SW-2 `10.1.10.100` – `10.1.10.163` | HQ-SW-3 `10.1.10.164` – `10.1.10.227` |
 | HQ | 20 | HQ-SW-2 `10.1.20.100` – `10.1.20.163` | HQ-SW-3 `10.1.20.164` – `10.1.20.227` |
 | BR1 | 10 | BR1-SW1-L3 `10.3.10.100` – `10.3.10.163` | BR1-SW2-L3 `10.3.10.164` – `10.3.10.227` |
+| BR1 | 20 | BR1-SW1-L3 `10.3.20.100` – `10.3.20.163` | BR1-SW2-L3 `10.3.20.164` – `10.3.20.227` |
 | BR2 | 10 | BR2-SW1-L3 `10.4.10.100` – `10.4.10.163` | BR2-SW2-L3 `10.4.10.164` – `10.4.10.227` |
+| BR2 | 20 | BR2-SW1-L3 `10.4.20.100` – `10.4.20.163` | BR2-SW2-L3 `10.4.20.164` – `10.4.20.227` |
 

@@ -21,7 +21,7 @@ DC 서버 VLAN(50)은 DC-DNS-1(주)과 DC-DNS-2(백업) 두 대로 구성합니�
 
 ■ 컨벤션
 - VLAN: 10=HQ-PUBLIC, 20=HQ-PRIVATE, 50=DC-SERVER(DC-DNS-1, DC-DNS-2), 100=MGMT, 999=NATIVE
-  (BR1·BR2는 각 VLAN 10)
+  (BR1, BR2도 HQ와 같이 10=BRx-PUBLIC, 20=BRx-PRIVATE)
 - 인터페이스/IP 매핑은 docs/network-project-final.md 참고, 실제 케이블링과 반드시 대조
 - 브랜치: feature/<역할>-<내용>, PR 후 본인 검토를 거쳐 main에 merge
 - 커밋 메시지: <Jira키>: [역할][VLAN태그] 내용

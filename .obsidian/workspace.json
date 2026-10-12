@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "docs/port-mapping.md",
+                "file": "docs/vrrp-mstp-design.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "port-mapping"
+              "title": "vrrp-mstp-design"
             }
           }
         ]
@@ -190,9 +190,9 @@
   },
   "active": "5aff95b4dcd4e49e",
   "lastOpenFiles": [
-    "docs/vrrp-mstp-design.md",
     "docs/ip-mapping.md",
     "docs/port-mapping.md",
+    "docs/vrrp-mstp-design.md",
     "verification/dc/distribution/vlan-trunk.md",
     "verification/dc/distribution/l3-interface.md",
     "verification/hq/core/l3-interface.md",

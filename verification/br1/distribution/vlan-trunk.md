@@ -7,8 +7,8 @@
 
 | 장비 | 명령 | 기대 결과 | 실제 결과 | 판정 |
 |---|---|---|---|---|
-| BR1-SW1-L3 | `show interfaces trunk` | Po1과 BR1-SW3-L3 방향 `Gi2/0` trunking, native 999, 허용 10,100 | - | 미확인 |
-| BR1-SW2-L3 | `show interfaces trunk` | Po1과 BR1-SW3-L3 방향 `Gi2/0` trunking, native 999, 허용 10,100 | - | 미확인 |
-| BR1-SW1-L3, BR1-SW2-L3 | `show vlan brief` | VLAN 10 br1-user, 100 mgmt, 999 native active | - | 미확인 |
+| BR1-SW1-L3 | `show interfaces trunk` | Po1과 BR1-SW3-L3 방향 `Gi2/0` trunking, native 999, 허용 10,20,100 | - | 미확인 |
+| BR1-SW2-L3 | `show interfaces trunk` | Po1과 BR1-SW3-L3 방향 `Gi2/0` trunking, native 999, 허용 10,20,100 | - | 미확인 |
+| BR1-SW1-L3, BR1-SW2-L3 | `show vlan brief` | VLAN 10 br1-public, 20 br1-private, 100 mgmt, 999 native active | - | 미확인 |
 
 트렁크 링크: BR1-SW1-L3 Gi2/0 ↔ BR1-SW3-L3 Gi0/0, BR1-SW2-L3 Gi2/0 ↔ BR1-SW3-L3 Gi0/1

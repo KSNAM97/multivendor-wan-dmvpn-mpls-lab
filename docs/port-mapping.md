@@ -82,12 +82,12 @@
 | 48 | BR1-R1 | Gi3/0 | ISP-1-PE-B | Gi2/0 | 100.1.31.0/30 | ISP-1 연결 |
 | 49 | BR1-R2 | Gi3/0 | ISP-2-PE-B | Gi2/0 | 100.2.32.0/30 | ISP-2 연결 |
 | 50 | BR1-R1 | Gi4/0 | Private-net | Gi3/0 | 203.0.113.12/30 | PI 연결, DMVPN Spoke Tunnel0 source |
-| 51 | BR1-SW1-L3 | Gi1/0 | BR1-SW2-L3 | Gi1/0 | - | Po1 (VLAN 10/100) |
+| 51 | BR1-SW1-L3 | Gi1/0 | BR1-SW2-L3 | Gi1/0 | - | Po1 (VLAN 10/20/100) |
 | 52 | BR1-SW1-L3 | Gi1/1 | BR1-SW2-L3 | Gi1/1 | - | Po1 |
 | 53 | BR1-SW1-L3 | Gi2/0 | BR1-SW3-L3 | Gi0/0 | - | 트렁크 (연결 확인됨) |
 | 54 | BR1-SW2-L3 | Gi2/0 | BR1-SW3-L3 | Gi0/1 | - | 트렁크 (연결 확인됨) |
-| 55 | BR1-PC1 | eth0 | BR1-SW3-L3 | Gi3/0 | - | VLAN 10 access (Alpine Linux, 연결 확인됨) |
-| 56 | BR1-PC2 | eth0 | BR1-SW3-L3 | Gi3/1 | - | VLAN 10 access (Alpine Linux, 연결 확인됨) |
+| 55 | BR1-PC1 | eth0 | BR1-SW3-L3 | Gi3/0 | - | VLAN 10 access, BR1-PUBLIC (Alpine Linux, 연결 확인됨) |
+| 56 | BR1-PC2 | eth0 | BR1-SW3-L3 | Gi3/1 | - | VLAN 20 access, BR1-PRIVATE (Alpine Linux, 연결 확인됨) |
 
 ### BR2 (BR1과 같은 패턴)
 
@@ -105,8 +105,8 @@
 | 66 | BR2-SW1-L3 | Gi1/1 | BR2-SW2-L3 | Gi1/1 | - | Po1 |
 | 67 | BR2-SW1-L3 | Gi2/0 | BR2-SW3-L2 | Gi0/0 | - | 트렁크 (연결 확인됨) |
 | 68 | BR2-SW2-L3 | Gi2/0 | BR2-SW3-L2 | Gi0/1 | - | 트렁크 (연결 확인됨) |
-| 69 | BR2-PC1 | eth0 | BR2-SW3-L2 | Gi3/0 | - | VLAN 10 access (Alpine Linux, 연결 확인됨) |
-| 70 | BR2-PC2 | eth0 | BR2-SW3-L2 | Gi3/1 | - | VLAN 10 access (Alpine Linux, 연결 확인됨) |
+| 69 | BR2-PC1 | eth0 | BR2-SW3-L2 | Gi3/0 | - | VLAN 10 access, BR2-PUBLIC (Alpine Linux, 연결 확인됨) |
+| 70 | BR2-PC2 | eth0 | BR2-SW3-L2 | Gi3/1 | - | VLAN 20 access, BR2-PRIVATE (Alpine Linux, 연결 확인됨) |
 
 ### ISP-1
 
@@ -171,4 +171,5 @@
 
 - BR1·BR2 스위치↔라우터 L3 링크 4개씩의 서브넷: `10.3.0.0/30` – `10.3.0.12/30`, `10.4.0.0/30` – `10.4.0.12/30`(HQ 패턴).
 - HQ 호스트의 VLAN: `HQ-PC1` VLAN 10(HQ-PUBLIC), `HQ-PC2` VLAN 20(HQ-PRIVATE). 두 호스트 모두 DHCP로 주소를 받음.
+- BR1·BR2 호스트의 VLAN: `BR1-PC1`, `BR2-PC1` VLAN 10(PUBLIC), `BR1-PC2`, `BR2-PC2` VLAN 20(PRIVATE). 두 호스트 모두 DHCP로 주소를 받음.
 - 서버 IP는 고정(`docs/ip-mapping.md`), 호스트 IP는 DHCP(`docs/dhcp-dns-design.md`).

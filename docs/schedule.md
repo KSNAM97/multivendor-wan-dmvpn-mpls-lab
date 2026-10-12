@@ -15,8 +15,10 @@
 | 10 | `vlan-hq-public` |
 | 20 | `vlan-hq-private` |
 | 50 | `vlan-dc-server` |
-| BR1 10 | `vlan-br1-user` |
-| BR2 10 | `vlan-br2-user` |
+| BR1 10 | `vlan-br1-public` |
+| BR1 20 | `vlan-br1-private` |
+| BR2 10 | `vlan-br2-public` |
+| BR2 20 | `vlan-br2-private` |
 | 100 | `vlan-mgmt` |
 | 999 | `vlan-native` |
 

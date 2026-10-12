@@ -7,5 +7,5 @@
 
 | 장비 | 명령 | 기대 결과 | 실제 결과 | 판정 |
 |---|---|---|---|---|
-| BR1-SW3-L3 | `show interfaces trunk` | `Gi0/0`, `Gi0/1` trunking, native 999, 허용 10,100 | - | 미확인 |
-| BR1-SW3-L3 | `show vlan brief` | VLAN 10 br1-user, Gi3/0, Gi3/1 (BR1-PC1, BR1-PC2) access VLAN 10 | - | 미확인 |
+| BR1-SW3-L3 | `show interfaces trunk` | `Gi0/0`, `Gi0/1` trunking, native 999, 허용 10,20,100 | - | 미확인 |
+| BR1-SW3-L3 | `show vlan brief` | VLAN 10 br1-public(Gi3/0, BR1-PC1), VLAN 20 br1-private(Gi3/1, BR1-PC2) | - | 미확인 |
