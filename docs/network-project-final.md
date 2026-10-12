@@ -5,7 +5,7 @@
 ```
 HQ(65001) ─┬─ ISP-1 ─┐
            └─ ISP-2 ─┤
-DC(65002) ─┬─ ISP-1 ─┼─ ISP 내부: eBGP
+DC(65002) ─┬─ ISP-1 ─┼─ ISP 내부: iBGP RR
            └─ ISP-2 ─┤
 BR1        ─┬─ ISP-1 ─┤
            └─ ISP-2 ─┤
@@ -16,7 +16,7 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ HQ
 ```
 
 - 사이트(HQ/DC/BR1/BR2) 내부: OSPF 전용, BGP 없음(프로세스와 Area는 `docs/ospf-design.md`)
-- ISP-1/ISP-2: 라우터별 개별 AS의 eBGP 전용, OSPF 없음
+- ISP-1/ISP-2: ISP별 단일 AS의 iBGP Route Reflector(P1, P2 RR), ISP 내부 OSPF process 1 Area 0
 - 사이트 ↔ ISP: 라우팅 프로토콜 없음, 정적 기본 경로 + OSPF 기본 경로 광고(track)
 - Private Internet(DMVPN 언더레이): 별도 OSPF 프로세스(2), ACL 화이트리스트
 - DC만 Arista cEOS, 나머지 전부 Cisco (7200 / IOU)
@@ -29,8 +29,8 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ HQ
 | DC | 65002 | 10.2.0.0/16 | OSPF 프로세스10 Area0, DMVPN Hub(DC-R2) |
 | BR1 | 65003 | 10.3.0.0/16 | OSPF 프로세스12 Area2, DMVPN Spoke(BR1-R1) |
 | BR2 | 65004 | 10.4.0.0/16 | OSPF 프로세스13 Area3, DMVPN Spoke(BR2-R2) |
-| ISP-1 | PE-A 65111 / P1 65112 / P2 65113 / PE-B 65114 | 100.1.0.0/16 | eBGP 전용 |
-| ISP-2 | PE-A 65121 / P1 65122 / P2 65123 / PE-B 65124 | 100.2.0.0/16 | eBGP 전용 |
+| ISP-1 | 65100 (P1, P2 RR / PE-A, PE-B Client) | 100.1.0.0/16 | iBGP RR + ISP 내부 OSPF |
+| ISP-2 | 65200 (P1, P2 RR / PE-A, PE-B Client) | 100.2.0.0/16 | iBGP RR + ISP 내부 OSPF |
 | Private Internet | 없음(BGP 미사용) | 203.0.113.0/24 | OSPF 프로세스2 Area100, DMVPN 언더레이 전용 |
 | DMVPN 터널 | - | 172.16.0.0/24 | Area0(DC 프로세스10, HQ 프로세스11, BR1 프로세스12, BR2 프로세스13) |
 
@@ -67,8 +67,8 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ HQ
 | DC | DC-SW3-L3 / DC-SW4-L3 | SW201 / SW202 | L3 스위치(Arista cEOS, VRRP) | |
 | DC | DC-SW1-L2 / DC-SW2-L2 | SW-SVR1 / SW-SVR2 | 서버용 L2 스위치(Arista cEOS) | |
 | DC | DC-DNS-1 / DC-DNS-2 | DNS1(주) / DNS2(백업) | 서버(VLAN50, Alpine Linux, docker) | |
-| ISP-1 | ISP-1-PE-A / ISP-1-P1 / ISP-1-P2 / ISP-1-PE-B | PE-A / P1 / P2 / PE-B | eBGP | |
-| ISP-2 | ISP-2-PE-A / ISP-2-P1 / ISP-2-P2 / ISP-2-PE-B | PE-A / P1 / P2 / PE-B | eBGP | |
+| ISP-1 | ISP-1-PE-A / ISP-1-P1 / ISP-1-P2 / ISP-1-PE-B | PE-A / P1 / P2 / PE-B | iBGP RR | |
+| ISP-2 | ISP-2-PE-A / ISP-2-P1 / ISP-2-P2 / ISP-2-PE-B | PE-A / P1 / P2 / PE-B | iBGP RR | |
 | BR1 | BR1-R1 / BR1-R2 | R1 / R2 | 라우터(R1이 DMVPN Spoke) | |
 | BR1 | BR1-SW1-L3 / BR1-SW2-L3 / BR1-SW3-L3 | SW1 / SW2 / SW3 | 스위치(SW3은 호스트 연결) | |
 | BR1 | BR1-PC1 / BR1-PC2 | H1 / H2 | 호스트(Alpine Linux, docker) | |
@@ -199,7 +199,7 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ HQ
 |---|---|
 | 1주 | AS/IP/VLAN 확정, GNS3 환경 세팅, 이미지별 RAM 실측(cEOS 포함), 노드 배치, 사이트 내부 L2/L3(VLAN, 트렁크, EtherChannel, VRRP, MSTP, 사이트 내부 OSPF, 사이트 DHCP) |
 | 2주 | 사이트↔ISP 정적 기본 경로+OSPF 기본 경로 광고, PI ACL, DMVPN(mGRE over IPsec), DNS 서버, 서버 VLAN ACL |
-| 3주 | 이중화 장애 실측(VRRP, EtherChannel, DMVPN Hub 장애), ISP 내부 eBGP 풀메시, ISP 장애 실측, QoS 정책, 트러블슈팅 로그 |
+| 3주 | 이중화 장애 실측(VRRP, EtherChannel, DMVPN Hub 장애), ISP 내부 iBGP RR, ISP 장애 실측, QoS 정책, 트러블슈팅 로그 |
 | 3.5주 | PPT 제작, 리허설 |
 
 ## 7. 비고

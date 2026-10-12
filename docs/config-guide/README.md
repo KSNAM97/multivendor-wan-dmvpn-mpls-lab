@@ -6,7 +6,7 @@
 
 | 대상 | 문서 | 내용 |
 |---|---|---|
-| Cisco 라우터(7200) | [cisco-router.md](./cisco-router.md) | 기본, OSPF, 정적 경로·IP SLA, eBGP, DMVPN, PI ACL, QoS |
+| Cisco 라우터(7200) | [cisco-router.md](./cisco-router.md) | 기본, OSPF, 정적 경로·IP SLA, iBGP RR, DMVPN, PI ACL, QoS |
 | Cisco 스위치(vIOS) | [cisco-switch.md](./cisco-switch.md) | L2·L3 기능, VRRP, MSTP, OSPF, MGMT SVI, DHCP |
 | Arista 스위치(cEOS) | [arista-switch.md](./arista-switch.md) | DC L3·L2 스위치, 접속 설정, 서버 VLAN ACL |
 | 알파인 노드 | [alpine.md](./alpine.md) | DNS 서버, 호스트 DHCP 클라이언트 |
@@ -59,7 +59,7 @@
 | 6 | 2주 화~수 | DC-R2, HQ-R2, BR1-R1, BR2-R2 | IPsec, Tunnel0, NHRP, 터널 OSPF | dmvpn-design |
 | 7 | 2주 목 | DC-DNS-1, DC-DNS-2 | dnsmasq, 레코드 | dhcp-dns-design |
 | 8 | 2주 금 | DC 게이트웨이 | 서버 VLAN ACL | dhcp-dns-design 5절 |
-| 9 | 3주 수~목 | ISP 장비 | eBGP, PE 정적 경로·광고 | bgp-design |
+| 9 | 3주 수~목 | ISP 장비 | ISP OSPF, iBGP RR, PE 정적 경로·광고 | bgp-design |
 | 10 | 3주 금 | 라우터 | QoS | [cisco-router.md](./cisco-router.md) 3.7절 |
 
 ## 7. 저장과 백업

@@ -10,8 +10,8 @@ Summary,Issue Type,Label,Priority,Description,Due Date
 [1주] BR1 VLAN/트렁크/VRRP(vlan-br1-public/private),Task,policy;vlan-br1-public;vlan-br1-private,High,BR1-SW1~3-L3 + BR1-R1/R2 / 일정: 1주 수(10/14),2026-10-14
 [1주] BR2 VLAN/트렁크/VRRP(vlan-br2-public/private),Task,policy;vlan-br2-public;vlan-br2-private,High,BR2-SW1-L3/SW2-L3/SW3-L2 + BR2-R1/R2 / 일정: 1주 목(10/15),2026-10-15
 "[1주] 사이트 내부 OSPF(DC Area0, HQ Area1, BR1 Area2, BR2 Area3) + 사이트 DHCP 확정",Task,net-cloud;policy,Medium,"프로세스 DC 10, HQ 11, BR1 12, BR2 13 / ABR: HQ-R2, BR1-R1, BR2-R2 / 사이트 DHCP: HQ, BR1, BR2 게이트웨이 스위치 풀(.100~.227) / 상세: docs/ospf-design.md, docs/dhcp-dns-design.md / 일정: 1주 금(10/16), DC/HQ와 BR1/BR2 내부통신 검증 포함",2026-10-16
-[3주] ISP-1 내부 eBGP 4세션,Task,net-cloud,High,"PE-A/P1/P2/PE-B, AS65111-65114 / 일정: 3주 수(10/28)",2026-10-28
-[3주] ISP-2 내부 eBGP 4세션,Task,net-cloud,High,"PE-A/P1/P2/PE-B, AS65121-65124 / 일정: 3주 수(10/28)",2026-10-28
+[3주] ISP-1 내부 OSPF + iBGP RR 5세션,Task,net-cloud,High,"AS65100, P1/P2 RR, PE-A/PE-B Client, Loopback 100.100.100.1-4 / 기한: 3주 수(10/28)",2026-10-28
+[3주] ISP-2 내부 OSPF + iBGP RR 5세션,Task,net-cloud,High,"AS65200, P1/P2 RR, PE-A/PE-B Client, Loopback 200.200.200.1-4 / 기한: 3주 수(10/28)",2026-10-28
 [3주] PE 고객 대역 network 광고,Task,net-cloud,High,사이트별 /16 announce / 일정: 3주 목(10/29),2026-10-29
 [2주] 사이트-ISP 정적경로 + track,Task,net-cloud;policy,High,"정적 기본 경로, IP SLA/track, OSPF default-information originate / 일정: 2주 월(10/19)",2026-10-19
 [2주] Private Internet ACL 화이트리스트,Task,net-cloud,High,"5개 링크, OSPF/GRE/ESP/UDP500만 허용 / 일정: 2주 화(10/20)",2026-10-20
@@ -24,7 +24,7 @@ Summary,Issue Type,Label,Priority,Description,Due Date
 [2주] DNS 접근 ACL(53 포트),Task,policy,Medium,"사이트간 화이트리스트 / 일정: 2주 금(10/23), 전 사이트 상호도달 확인과 통합 테스트 포함",2026-10-23
 [3주] VRRP Failover 실측,Task,net-cloud;policy,High,"전환시간 측정, 면접 대비 핵심 / 일정: 3주 월(10/26)",2026-10-26
 [3주] EtherChannel 멤버 다운 실측,Task,net-cloud;policy,Medium,일정: 3주 월(10/26),2026-10-26
-[3주] ISP-1 장애시 ISP-2/DMVPN 전환 실측,Task,net-cloud,High,eBGP hold-time 영향 확인 / 일정: 3주 목(10/29),2026-10-29
+[3주] ISP-1 장애시 ISP-2/DMVPN 전환 실측,Task,net-cloud,High,BGP hold-time 영향 확인 / 일정: 3주 목(10/29),2026-10-29
 [3주] DMVPN Hub 장애 실측,Task,net-cloud,High,Private Internet 단일 노드 리스크 / 일정: 3주 화(10/27),2026-10-27
 [3주] 트러블슈팅 로그 정리,Task,policy,Medium,docs/troubleshooting-log.md / 일정: 3주 금(10/30),2026-10-30
 [3.5주] PPT 슬라이드 작성 및 리허설,Task,net-cloud;policy,High,"일정: 3.5주 월~수(11/2~11/4, 수요일은 반일)",2026-11-04

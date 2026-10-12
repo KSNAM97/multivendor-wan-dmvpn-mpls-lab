@@ -14,7 +14,7 @@
 
 - 프로세스 번호는 장비 로컬 값이며 IOS와 EOS 모두 1 ~ 65535만 허용. 사이트 번호(DC 0, HQ 1, BR1 2, BR2 3)에 10을 더해 사용하고, 언더레이 프로세스 2와 겹치지 않도록 구성.
 - Area 0은 DC와 DMVPN 터널. HQ(Area 1), BR1(Area 2), BR2(Area 3)는 터널을 통해 Area 0에 연결.
-- ISP-1, ISP-2는 OSPF 미사용(eBGP 전용). 사이트↔ISP 구간은 정적 경로와 재분배.
+- ISP-1, ISP-2는 ISP 내부에서만 OSPF process 1 Area 0 사용(iBGP Loopback0 도달성, `docs/bgp-design.md` 3절). 사이트↔ISP 구간은 정적 경로와 재분배.
 
 ## 2. Router ID (Loopback0)
 
@@ -145,7 +145,7 @@
 - 사이트↔ISP 구간은 OSPF를 사용하지 않음. ISP 연결 라우터는 PE 방향 정적 기본 경로(`ip route 0.0.0.0 0.0.0.0 <PE IP> track <번호>`)를 두고 IP SLA(ICMP echo, 주기 5초)로 PE 도달성을 추적.
 - 정적 기본 경로는 사이트 OSPF 프로세스에 `default-information originate metric <값> metric-type 1`로 광고. ISP-1 연결 라우터 metric 100, ISP-2 연결 라우터 metric 200으로 ISP-1을 우선 경로로 사용.
 - ISP 도달성 상실 시 track이 정적 기본 경로를 제거하여 기본 경로 광고가 중단되고 ISP-2 경로로 전환.
-- 사이트 prefix와 다른 사이트 prefix는 ISP 내부 eBGP로 전달(`docs/bgp-design.md`). 경로 요약(`area range`)은 적용하지 않음.
+- 사이트 prefix와 다른 사이트 prefix는 ISP 내부 iBGP(Route Reflector)로 전달(`docs/bgp-design.md`). 경로 요약(`area range`)은 적용하지 않음.
 
 | 링크 # | 사이트 장비 | 포트 | IP | ISP 장비 | 포트 | IP | 프로세스 | 광고 metric |
 |---|---|---|---|---|---|---|---|---|

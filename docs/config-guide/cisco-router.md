@@ -68,19 +68,49 @@ router ospf 11
 
 - 예시는 `HQ-R2`(ISP-2 연결). ISP-1 연결 라우터는 metric 100. 대상 장비와 값은 `docs/ospf-design.md` 6절 표.
 
-### 3.4 ISP 라우터 eBGP
+### 3.4 ISP 라우터 OSPF와 iBGP Route Reflector
 
 ```
-router bgp 65111
- bgp router-id 111.111.111.111
+! isp-1-pe-a (RR Client)
+router ospf 1
+ router-id 100.100.100.1
+int lo0
+ ip ospf 1 area 0
+int range gi0/0 - 1
+ ip ospf 1 area 0
+router bgp 65100
+ bgp router-id 100.100.100.1
  bgp log-neighbor-changes
- neighbor 100.1.0.2 remote-as 65112
- neighbor 100.1.0.2 timers 3 9
+ neighbor 100.100.100.2 remote-as 65100
+ neighbor 100.100.100.2 update-source lo0
+ neighbor 100.100.100.2 timers 3 9
+ neighbor 100.100.100.3 remote-as 65100
+ neighbor 100.100.100.3 update-source lo0
+ neighbor 100.100.100.3 timers 3 9
  network 10.1.0.0 mask 255.255.0.0
 ip route 10.1.0.0 255.255.0.0 100.1.11.1
 ```
 
-- 예시는 `ISP-1-PE-A`. 세션, AS, 광고 prefix는 `docs/bgp-design.md` 3~4절 표 값을 사용. P1, P2는 `network` 구문 없음.
+```
+! isp-1-p1 (Route Reflector)
+router bgp 65100
+ bgp router-id 100.100.100.2
+ bgp cluster-id 1.1.1.1
+ bgp log-neighbor-changes
+ neighbor 100.100.100.1 remote-as 65100
+ neighbor 100.100.100.1 update-source lo0
+ neighbor 100.100.100.1 route-reflector-client
+ neighbor 100.100.100.1 timers 3 9
+ neighbor 100.100.100.4 remote-as 65100
+ neighbor 100.100.100.4 update-source lo0
+ neighbor 100.100.100.4 route-reflector-client
+ neighbor 100.100.100.4 timers 3 9
+ neighbor 100.100.100.3 remote-as 65100
+ neighbor 100.100.100.3 update-source lo0
+ neighbor 100.100.100.3 timers 3 9
+```
+
+- 예시는 `ISP-1-PE-A`와 `ISP-1-P1`. AS, Loopback0, 세션, 광고 prefix는 `docs/bgp-design.md` 1~5절 표 값을 사용. P1, P2는 `network` 구문 없음. PE의 OSPF 대상은 ISP 내부 링크(Gi0/0, Gi1/0)와 Loopback0이며 사이트 방향 링크는 제외.
 
 ### 3.5 DMVPN(Hub와 Spoke)
 

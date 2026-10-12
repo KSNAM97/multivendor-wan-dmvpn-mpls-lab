@@ -4,7 +4,7 @@
 [![Arista](https://img.shields.io/badge/Arista-cEOS-orange)](https://github.com/KSNAM97)
 [![GNS3](https://img.shields.io/badge/GNS3-Topology-green)](https://github.com/KSNAM97)
 
-**ISP 이중화 eBGP · DMVPN Phase3 (mGRE over IPsec) · OSPF · VRRP · MSTP · QoS · 화이트리스트 ACL — Cisco + Arista 멀티벤더 4개 사이트 WAN 종합 구축**
+**ISP 이중화 iBGP Route Reflector · DMVPN Phase3 (mGRE over IPsec) · OSPF · VRRP · MSTP · QoS · 화이트리스트 ACL — Cisco + Arista 멀티벤더 4개 사이트 WAN 종합 구축**
 
 ---
 
@@ -14,7 +14,7 @@
 | --- | --- |
 | 주제 | HQ / DC / BR1 / BR2 4개 사이트를 ISP 이중화와 DMVPN으로 연결하는 멀티벤더 하이브리드 네트워크 |
 | 장비 구성 | HQ (HQ-R1·HQ-R2, HQ-SW-1 – HQ-SW-3), DC (DC-R1 – DC-R4, DC-SW1 – DC-SW4-L3, DC-SW1·2-L2, DC-DNS-1·DC-DNS-2), BR1 (BR1-R1·R2, BR1-SW1 ~ SW3-L3), BR2 (BR2-R1·R2, BR2-SW1·SW2-L3, BR2-SW3-L2), 호스트 H1·H2, ISP-1·ISP-2 (ISP-n-PE-A·P1·P2·PE-B 각 4대), Private Internet (Private-net) |
-| 핵심 기술 | 사이트 OSPF, ISP eBGP(라우터별 개별 AS), 정적 기본 경로 + OSPF 기본 경로 광고(IP SLA/track), DMVPN Phase3, IPsec, VRRP, MSTP, EtherChannel, QoS, ACL 화이트리스트 |
+| 핵심 기술 | 사이트 OSPF, ISP iBGP Route Reflector(ISP-1 AS 65100, ISP-2 AS 65200), 정적 기본 경로 + OSPF 기본 경로 광고(IP SLA/track), DMVPN Phase3, IPsec, VRRP, MSTP, EtherChannel, QoS, ACL 화이트리스트 |
 | 시뮬레이터 | GNS3 (Cisco 7200 / IOU, Arista cEOS) |
 | 일정 | 3.5주(2026-10-12 ~ 11-04), 1인 체제 (남기석) |
 | 검증 | 이중화 장애 실측 (FHRP, EtherChannel, ISP 장애, DMVPN Hub 장애), 트러블슈팅 로그 |
@@ -28,7 +28,7 @@
 ```text
 HQ(65001) ─┬─ ISP-1 ─┐
            └─ ISP-2 ─┤
-DC(65002) ─┬─ ISP-1 ─┼─ ISP 내부: eBGP
+DC(65002) ─┬─ ISP-1 ─┼─ ISP 내부: iBGP RR
            └─ ISP-2 ─┤
 BR1        ─┬─ ISP-1 ─┤
            └─ ISP-2 ─┤
@@ -101,7 +101,7 @@ network-project/
 | --- | --- | --- |
 | **1주** | 설계 확정, 환경 세팅, 사이트 내부 | AS / IP / VLAN 확정, GNS3 환경, RAM 실측, 노드 배치, VLAN / 트렁크 / EtherChannel / VRRP / MSTP, 사이트 내부 OSPF, 사이트 DHCP |
 | **2주** | 사이트 ↔ ISP, DMVPN | 정적 기본 경로 + OSPF 기본 경로 광고(track), Private Internet ACL, DMVPN(mGRE over IPsec), DNS, 서버 VLAN ACL |
-| **3주** | 이중화 실측, ISP BGP, QoS | VRRP / EtherChannel / DMVPN Hub 장애 실측, ISP 내부 eBGP, ISP-1 장애 전환 실측, QoS 정책, 트러블슈팅 로그 |
+| **3주** | 이중화 실측, ISP BGP, QoS | VRRP / EtherChannel / DMVPN Hub 장애 실측, ISP 내부 iBGP RR, ISP-1 장애 전환 실측, QoS 정책, 트러블슈팅 로그 |
 | **3.5주** | 정리 | PPT 제작, 리허설 |
 
 > 역할 분담과 일별 목표 → [`docs/schedule.md`](./docs/schedule.md)  
@@ -119,15 +119,15 @@ network-project/
 | DC | 65002 | 10.2.0.0/16 | OSPF 프로세스 10 Area 0, DMVPN Hub (DC-R2) |
 | BR1 | 65003 | 10.3.0.0/16 | OSPF 프로세스 12 Area 2, DMVPN Spoke (BR1-R1) |
 | BR2 | 65004 | 10.4.0.0/16 | OSPF 프로세스 13 Area 3, DMVPN Spoke (BR2-R2) |
-| ISP-1 | 65111 ~ 65114 | 100.1.0.0/16 | eBGP 전용 (PE-A / P1 / P2 / PE-B 개별 AS) |
-| ISP-2 | 65121 ~ 65124 | 100.2.0.0/16 | eBGP 전용 |
+| ISP-1 | 65100 | 100.1.0.0/16 | iBGP (P1, P2 Route Reflector / PE-A, PE-B Client) + ISP 내부 OSPF |
+| ISP-2 | 65200 | 100.2.0.0/16 | iBGP (P1, P2 Route Reflector / PE-A, PE-B Client) + ISP 내부 OSPF |
 | Private Internet | 없음 | 203.0.113.0/24 | OSPF 프로세스2 Area 100, DMVPN 언더레이 전용 |
 | DMVPN 터널 | - | 172.16.0.0/24 | Area 0 (DC 프로세스 10, HQ 프로세스 11, BR1 프로세스 12, BR2 프로세스 13) |
 
 ### 라우팅 설계
 
 - 사이트 (HQ / DC / BR1 / BR2) 내부: OSPF 전용, BGP 없음
-- ISP-1 / ISP-2: 라우터별 개별 AS의 eBGP 전용, OSPF 없음
+- ISP-1 / ISP-2: ISP별 단일 AS의 iBGP Route Reflector(P1, P2 이중 RR), ISP 내부 OSPF process 1 Area 0
 - 사이트 ↔ ISP: 라우팅 프로토콜 없이 정적 기본 경로 + OSPF 기본 경로 광고 (IP SLA / track)
 - Private Internet: 별도 OSPF 프로세스, ACL 화이트리스트로 언더레이 트래픽만 허용
 - DC 내부 스위치만 Arista cEOS, 나머지는 Cisco (7200 / IOU)
