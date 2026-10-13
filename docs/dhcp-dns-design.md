@@ -53,39 +53,39 @@ log-queries
 
 - 총 31개. Router ID는 `docs/ospf-design.md` 2절(사이트 장비, `Private-net`)과 `docs/bgp-design.md` 2절(ISP 장비) 기준.
 
-| 이름 | IP |
-|---|---|
-| hq-r1.lab.local | 11.11.11.1 |
-| hq-r2.lab.local | 11.11.11.2 |
-| hq-sw-2.lab.local | 11.11.11.12 |
-| hq-sw-3.lab.local | 11.11.11.13 |
-| dc-r1.lab.local | 10.10.10.1 |
-| dc-r2.lab.local | 10.10.10.2 |
-| dc-r3.lab.local | 10.10.10.3 |
-| dc-r4.lab.local | 10.10.10.4 |
-| dc-sw1-l3.lab.local | 10.10.10.11 |
-| dc-sw2-l3.lab.local | 10.10.10.12 |
-| dc-sw3-l3.lab.local | 10.10.10.13 |
-| dc-sw4-l3.lab.local | 10.10.10.14 |
-| br1-r1.lab.local | 12.12.12.1 |
-| br1-r2.lab.local | 12.12.12.2 |
-| br1-sw1-l3.lab.local | 12.12.12.11 |
-| br1-sw2-l3.lab.local | 12.12.12.12 |
-| br2-r1.lab.local | 13.13.13.1 |
-| br2-r2.lab.local | 13.13.13.2 |
-| br2-sw1-l3.lab.local | 13.13.13.11 |
-| br2-sw2-l3.lab.local | 13.13.13.12 |
-| private-net.lab.local | 2.2.2.2 |
-| isp-1-pe-a.lab.local | 100.100.100.1 |
-| isp-1-p1.lab.local | 100.100.100.2 |
-| isp-1-p2.lab.local | 100.100.100.3 |
-| isp-1-pe-b.lab.local | 100.100.100.4 |
-| isp-2-pe-a.lab.local | 200.200.200.1 |
-| isp-2-p1.lab.local | 200.200.200.2 |
-| isp-2-p2.lab.local | 200.200.200.3 |
-| isp-2-pe-b.lab.local | 200.200.200.4 |
-| dc-dns-1.lab.local | 10.2.50.10 |
-| dc-dns-2.lab.local | 10.2.50.11 |
+| 이름                    | IP            |
+| --------------------- | ------------- |
+| hq-r1.lab.local       | 11.11.11.1    |
+| hq-r2.lab.local       | 11.11.11.2    |
+| hq-sw-2.lab.local     | 11.11.11.12   |
+| hq-sw-3.lab.local     | 11.11.11.13   |
+| dc-r1.lab.local       | 10.10.10.1    |
+| dc-r2.lab.local       | 10.10.10.2    |
+| dc-r3.lab.local       | 10.10.10.3    |
+| dc-r4.lab.local       | 10.10.10.4    |
+| dc-sw1-l3.lab.local   | 10.10.10.11   |
+| dc-sw2-l3.lab.local   | 10.10.10.12   |
+| dc-sw3-l3.lab.local   | 10.10.10.13   |
+| dc-sw4-l3.lab.local   | 10.10.10.14   |
+| br1-r1.lab.local      | 12.12.12.1    |
+| br1-r2.lab.local      | 12.12.12.2    |
+| br1-sw1-l3.lab.local  | 12.12.12.11   |
+| br1-sw2-l3.lab.local  | 12.12.12.12   |
+| br2-r1.lab.local      | 13.13.13.1    |
+| br2-r2.lab.local      | 13.13.13.2    |
+| br2-sw1-l3.lab.local  | 13.13.13.11   |
+| br2-sw2-l3.lab.local  | 13.13.13.12   |
+| private-net.lab.local | 2.2.2.2       |
+| isp-1-pe-a.lab.local  | 100.100.100.1 |
+| isp-1-p1.lab.local    | 100.100.100.2 |
+| isp-1-p2.lab.local    | 100.100.100.3 |
+| isp-1-pe-b.lab.local  | 100.100.100.4 |
+| isp-2-pe-a.lab.local  | 200.200.200.1 |
+| isp-2-p1.lab.local    | 200.200.200.2 |
+| isp-2-p2.lab.local    | 200.200.200.3 |
+| isp-2-pe-b.lab.local  | 200.200.200.4 |
+| dc-dns-1.lab.local    | 10.2.50.10    |
+| dc-dns-2.lab.local    | 10.2.50.11    |
 
 ## 3. DHCP 서버
 
