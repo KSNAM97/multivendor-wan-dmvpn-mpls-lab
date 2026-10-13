@@ -26,7 +26,7 @@
 ## 1-1. 컨피그 표기 규칙
 
 - 컨피그 파일의 모든 문자는 **소문자**(호스트네임, 설명, 이름, 키 포함).
-- 확장자는 벤더 기준: Cisco `.ios`, Arista `.eos`(Arista 장비는 `DC-SW*`). 파일 이름은 `<장비명>.<확장자>`.
+- 확장자는 벤더 기준: Cisco `.ios`, Arista `.eos`(Arista 장비는 `DC-SW*`), 알파인 호스트 `.alp`(`configs/<사이트>/host/`). 파일 이름은 `<장비명>.<확장자>`.
 - 첫 줄은 벤더 표기: Cisco는 `! cisco` + `!`, Arista는 `! arista` + `!`.
 - 폴더는 `configs/<사이트>/<계층>/`로 나눔. 사이트(대분류)는 `hq`, `dc`, `br1`, `br2`, `isp1`, `isp2`, `private-internet`, 계층은 장비 역할 기준 `core`(라우터), `distribution`(L3 스위치, VRRP 게이트웨이), `access`(호스트 연결 스위치).
 - 약어 사용:

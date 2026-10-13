@@ -105,3 +105,23 @@ int vlan10
 int vlan20
  ip ospf 11 area 1
 !
+service dhcp
+ip dhcp excluded-address 10.1.10.1 10.1.10.99
+ip dhcp excluded-address 10.1.10.164 10.1.10.254
+ip dhcp excluded-address 10.1.20.1 10.1.20.99
+ip dhcp excluded-address 10.1.20.164 10.1.20.254
+!
+ip dhcp pool hq-public
+ network 10.1.10.0 255.255.255.0
+ default-router 10.1.10.1
+ dns-server 10.2.50.10 10.2.50.11
+ domain-name lab.local
+ lease 1
+!
+ip dhcp pool hq-private
+ network 10.1.20.0 255.255.255.0
+ default-router 10.1.20.1
+ dns-server 10.2.50.10 10.2.50.11
+ domain-name lab.local
+ lease 1
+!

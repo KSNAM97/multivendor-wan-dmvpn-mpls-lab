@@ -3,7 +3,7 @@
 > 설정 가이드 목차: [README.md](./README.md) | [Cisco 라우터](./cisco-router.md) | [Cisco 스위치](./cisco-switch.md) | [Arista 스위치](./arista-switch.md) | [알파인](./alpine.md)
 
 - `DC-DNS-1`, `DC-DNS-2`: `docs/dhcp-dns-design.md` 2절의 `interfaces`, `dnsmasq.conf`, `hosts.lab` 사용.
-- 호스트(`HQ-PC*`, `BR*-PC*`): DHCP 클라이언트(`docs/dhcp-dns-design.md` 4절). 별도 컨피그 파일 없음.
+- 호스트(`HQ-PC*`, `BR*-PC*`): DHCP 클라이언트(`docs/dhcp-dns-design.md` 4절). 설정은 `configs/<사이트>/host/<장비명>.alp`에 기록. 파일은 콘솔에 순서대로 붙여 넣는 명령 모음(hostname 지정, `interfaces` 작성, DHCP 요청, `cat`/`ip`로 확인)이며 주석은 `#`.
 
 - 호스트 `/etc/network/interfaces`(DHCP 클라이언트):
 
