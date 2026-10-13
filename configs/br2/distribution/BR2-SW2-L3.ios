@@ -103,3 +103,23 @@ int vlan10
 int vlan20
  ip ospf 13 area 3
 !
+service dhcp
+ip dhcp excluded-address 10.4.10.1 10.4.10.163
+ip dhcp excluded-address 10.4.10.228 10.4.10.254
+ip dhcp excluded-address 10.4.20.1 10.4.20.163
+ip dhcp excluded-address 10.4.20.228 10.4.20.254
+!
+ip dhcp pool br2-public
+ network 10.4.10.0 255.255.255.0
+ default-router 10.4.10.1
+ dns-server 10.2.50.10 10.2.50.11
+ domain-name lab.local
+ lease 1
+!
+ip dhcp pool br2-private
+ network 10.4.20.0 255.255.255.0
+ default-router 10.4.20.1
+ dns-server 10.2.50.10 10.2.50.11
+ domain-name lab.local
+ lease 1
+!

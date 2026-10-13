@@ -4,35 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "359699b252cacd95",
+        "id": "6a9e5a93faad3520",
         "type": "tabs",
         "children": [
           {
-            "id": "5aff95b4dcd4e49e",
+            "id": "d976c2d18d080041",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "verification/br1/distribution/dhcp.md",
+                "file": "verification/br2/distribution/dhcp.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
               "title": "dhcp"
-            }
-          },
-          {
-            "id": "e17ae4ccbe007922",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "verification/br1/distribution/vrrp.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "vrrp"
             }
           }
         ]
@@ -202,26 +188,27 @@
       "bases:새 베이스 생성하기": false
     }
   },
-  "active": "5aff95b4dcd4e49e",
+  "active": "d976c2d18d080041",
   "lastOpenFiles": [
-    "verification/_unreferenced/Pasted image 20261013202018.png",
-    "verification/_unreferenced/Pasted image 20261013201940.png",
-    "verification/_unreferenced/Pasted image 20261013201640.png",
-    "verification/_unreferenced/Pasted image 20261013201627.png",
-    "verification/_unreferenced/Pasted image 20261013201602.png",
-    "verification/_unreferenced/Pasted image 20261013201551.png",
-    "verification/br1/distribution/images/Pasted image 20261013202444.png",
-    "verification/br1/distribution/images/Pasted image 20261013202422.png",
-    "verification/br1/distribution/images/Pasted image 20261013202620.png",
-    "verification/br1/distribution/images/Pasted image 20261013202611.png",
-    "verification/br1/distribution/images/Pasted image 20261013202536.png",
+    "verification/br2/distribution/images/Pasted image 20261013203549.png",
+    "verification/br2/distribution/images/Pasted image 20261013203539.png",
+    "verification/br2/distribution/images/Pasted image 20261013203510.png",
+    "verification/br2/distribution/images/Pasted image 20261013203445.png",
+    "verification/br2/distribution/images/Pasted image 20261013203705.png",
+    "verification/br2/distribution/images/Pasted image 20261013203653.png",
+    "verification/br2/distribution/images/Pasted image 20261013203626.png",
+    "verification/br2/distribution/images/Pasted image 20261013203615.png",
+    "Pasted image 20261013203705.png",
+    "Pasted image 20261013203653.png",
+    "Pasted image 20261013203626.png",
+    "verification/br1/distribution/dhcp.md",
+    "verification/br2/distribution/dhcp.md",
     "verification/hq/distribution/dhcp.md",
+    "docs/dhcp-dns-design.md",
     "verification/hq/access/vlan-trunk.md",
     "verification/hq/access/stp.md",
     "verification/hq/access/po-channel.md",
     "verification/hq/access/l3-interface.md",
-    "verification/br1/distribution/dhcp.md",
-    "docs/dhcp-dns-design.md",
     "configs/hq/host/sedEVhSlh",
     "configs/hq/host/sedWZmJw1",
     "configs/br2/host/sedknfIvv",
@@ -248,7 +235,6 @@
     "verification/scenarios/dmvpn-hub-failure.md",
     "verification/br1/distribution/ospf.md",
     "verification/br1/distribution/vlan-trunk.md",
-    "verification/br1/distribution/stp.md",
-    "verification/br1/distribution/po-channel.md"
+    "verification/br1/distribution/stp.md"
   ]
 }
