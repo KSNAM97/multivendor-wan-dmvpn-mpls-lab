@@ -3,12 +3,23 @@
 - Jira: KAN-12
 - 대상 장비: BR1-SW1-L3, BR1-SW2-L3
 - 기준 문서: [vlan-design.md](../../../docs/vlan-design.md) 1, 4~6절
-- 검증일: -
+- 검증일: 2026-10-13
 
-| 장비 | 명령 | 기대 결과 | 실제 결과 | 판정 |
-|---|---|---|---|---|
-| BR1-SW1-L3 | `show interfaces trunk` | Po1과 BR1-SW3-L3 방향 `Gi2/0` trunking, native 999, 허용 10,20,100 | - | 미확인 |
-| BR1-SW2-L3 | `show interfaces trunk` | Po1과 BR1-SW3-L3 방향 `Gi2/0` trunking, native 999, 허용 10,20,100 | - | 미확인 |
-| BR1-SW1-L3, BR1-SW2-L3 | `show vlan brief` | VLAN 10 br1-public, 20 br1-private, 100 mgmt, 999 native active | - | 미확인 |
+| 장비                     | 명령                      | 기대 결과                                                           | 실제 결과 | 판정  |
+| ---------------------- | ----------------------- | --------------------------------------------------------------- | ----- | --- |
+| BR1-SW1-L3 | `show interfaces trunk` | Po1과 BR1-SW3-L3 방향 `Gi2/0` trunking, native 999, 허용 10,20,100 | Po1, Gi2/0 trunking, native 999, 허용 10,20,100, 전부 STP forwarding | 통과 |
+| BR1-SW2-L3 | `show interfaces trunk` | Po1과 BR1-SW3-L3 방향 `Gi2/0` trunking, native 999, 허용 10,20,100 | Po1, Gi2/0 trunking, native 999, 허용 10,20,100, 전부 STP forwarding | 통과 |
+| BR1-SW1-L3, BR1-SW2-L3 | `show vlan brief` | VLAN 10 br1-public, 20 br1-private, 100 mgmt, 999 native active | VLAN 10 br1-public, 20 br1-private, 100 mgmt, 999 native 모두 active (BR1-SW1-L3, SW2-L3 동일) | 통과 |
 
 트렁크 링크: BR1-SW1-L3 Gi2/0 ↔ BR1-SW3-L3 Gi0/0, BR1-SW2-L3 Gi2/0 ↔ BR1-SW3-L3 Gi0/1
+BR1-SW1-L3 TRUNK
+![BR1-SW1-L3 TRUNK](images/Pasted%20image%2020261013181305.png)
+
+BR1-SW1-L3 VLAN
+![BR1-SW1-L3 VLAN](images/Pasted%20image%2020261013181329.png)
+
+BR1-SW2-L3 TRUNK
+![BR1-SW2-L3 TRUNK](images/Pasted%20image%2020261013181352.png)
+
+BR1-SW2-L3 VLAN
+![BR1-SW2-L3 VLAN](images/Pasted%20image%2020261013181415.png)
