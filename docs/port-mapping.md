@@ -67,8 +67,8 @@
 | 38 | DC-SW3-L3 | Et8 | DC-SW2-L2 | Et1 | - | 트렁크 (연결 확인됨) |
 | 39 | DC-SW4-L3 | Et7 | DC-SW1-L2 | Et2 | - | 트렁크 (연결 확인됨) |
 | 40 | DC-SW4-L3 | Et8 | DC-SW2-L2 | Et2 | - | 트렁크 (연결 확인됨) |
-| 41 | DC-SW1-L2 | Et12 | DC-DNS-1 | eth0 | - | VLAN 50 access (주 DNS, Alpine Linux, 연결 확인됨) |
-| 42 | DC-SW2-L2 | Et12 | DC-DNS-2 | eth0 | - | VLAN 50 access (백업 DNS, Alpine Linux, 연결 확인됨) |
+| 41 | DC-SW1-L2 | Et12 | DC-DNS-1 | eth0 | - | VLAN 50 access (주 DNS, DNS 템플릿, 연결 확인됨) |
+| 42 | DC-SW2-L2 | Et12 | DC-DNS-2 | eth0 | - | VLAN 50 access (백업 DNS, DNS 템플릿, 연결 확인됨) |
 
 ### BR1
 

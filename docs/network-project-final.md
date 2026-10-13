@@ -66,7 +66,7 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ HQ
 | DC | DC-SW1-L3 / DC-SW2-L3 | SW211 / SW212 | L3 스위치(Arista cEOS) | |
 | DC | DC-SW3-L3 / DC-SW4-L3 | SW201 / SW202 | L3 스위치(Arista cEOS, VRRP) | |
 | DC | DC-SW1-L2 / DC-SW2-L2 | SW-SVR1 / SW-SVR2 | 서버용 L2 스위치(Arista cEOS) | |
-| DC | DC-DNS-1 / DC-DNS-2 | DNS1(주) / DNS2(백업) | 서버(VLAN50, Alpine Linux, docker) | |
+| DC | DC-DNS-1 / DC-DNS-2 | DNS1(주) / DNS2(백업) | 서버(VLAN50, DNS 템플릿, docker) | |
 | ISP-1 | ISP-1-PE-A / ISP-1-P1 / ISP-1-P2 / ISP-1-PE-B | PE-A / P1 / P2 / PE-B | iBGP RR | |
 | ISP-2 | ISP-2-PE-A / ISP-2-P1 / ISP-2-P2 / ISP-2-PE-B | PE-A / P1 / P2 / PE-B | iBGP RR | |
 | BR1 | BR1-R1 / BR1-R2 | R1 / R2 | 라우터(R1이 DMVPN Spoke) | |
@@ -203,7 +203,7 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ HQ
 | 3.5주 | PPT 제작, 리허설 |
 
 ## 7. 비고
-- DC 서버 VLAN50: DC-DNS-1(주), DC-DNS-2(백업) 두 대, Alpine Linux 가상 이미지, `dnsmasq`로 DNS 제공(`docs/dhcp-dns-design.md`). DHCP는 사용자 VLAN 게이트웨이 스위치 두 대가 풀을 나눠 제공.
+- DC 서버 VLAN50: DC-DNS-1(주), DC-DNS-2(백업) 두 대, GNS3 `DNS` 템플릿(Debian 계열) 이미지, `dnsmasq`로 DNS 제공(`docs/dhcp-dns-design.md`). DHCP는 사용자 VLAN 게이트웨이 스위치 두 대가 풀을 나눠 제공.
 - QoS는 사이트 스위치와 연결된 라우터 인터페이스 20포트에 적용하며 스위치 QoS는 적용하지 않음.
 
 ## 8. 상세 설계 문서

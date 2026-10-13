@@ -9,7 +9,7 @@
 | Cisco 라우터(7200) | [cisco-router.md](./cisco-router.md) | 기본, OSPF, 정적 경로·IP SLA, iBGP RR, DMVPN, PI ACL, QoS |
 | Cisco 스위치(vIOS) | [cisco-switch.md](./cisco-switch.md) | L2·L3 기능, VRRP, MSTP, OSPF, MGMT SVI, DHCP |
 | Arista 스위치(cEOS) | [arista-switch.md](./arista-switch.md) | DC L3·L2 스위치, 접속 설정, 서버 VLAN ACL |
-| 알파인 노드 | [alpine.md](./alpine.md) | DNS 서버, 호스트 DHCP 클라이언트 |
+| 알파인 노드, DNS 템플릿 | [alpine.md](./alpine.md) | 호스트 DHCP 클라이언트(알파인), DNS 서버(DNS 템플릿) |
 
 ## 1. 설계 문서 대응
 
@@ -26,7 +26,7 @@
 ## 1-1. 컨피그 표기 규칙
 
 - 컨피그 파일의 모든 문자는 **소문자**(호스트네임, 설명, 이름, 키 포함).
-- 확장자는 벤더 기준: Cisco `.ios`, Arista `.eos`(Arista 장비는 `DC-SW*`), 알파인 호스트 `.alp`(`configs/<사이트>/host/`). 파일 이름은 `<장비명>.<확장자>`.
+- 확장자는 벤더 기준: Cisco `.ios`, Arista `.eos`(Arista 장비는 `DC-SW*`), 알파인 호스트 `.alp`, DNS 서버(Debian 계열) `.sh`(`configs/<사이트>/host/`). 파일 이름은 `<장비명>.<확장자>`.
 - 첫 줄은 벤더 표기: Cisco는 `! cisco` + `!`, Arista는 `! arista` + `!`.
 - 폴더는 `configs/<사이트>/<계층>/`로 나눔. 사이트(대분류)는 `hq`, `dc`, `br1`, `br2`, `isp1`, `isp2`, `private-internet`, 계층은 장비 역할 기준 `core`(라우터), `distribution`(L3 스위치, VRRP 게이트웨이), `access`(호스트 연결 스위치).
 - 약어 사용:

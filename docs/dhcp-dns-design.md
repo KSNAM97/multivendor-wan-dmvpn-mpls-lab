@@ -4,7 +4,7 @@
 
 ## 1. 구성 개요
 
-- DNS: DC 서버 VLAN 50의 알파인 리눅스 2대(`DC-DNS-1` 주, `DC-DNS-2` 백업)가 `dnsmasq`로 DNS만 제공(DHCP 기능 비활성).
+- DNS: DC 서버 VLAN 50의 GNS3 `DNS` 템플릿(Debian 계열, `dnsmasq` 사전 설치) 노드 2대(`DC-DNS-1` 주, `DC-DNS-2` 백업)가 `dnsmasq`로 DNS만 제공(DHCP 기능 비활성).
 - DHCP: 사용자 VLAN의 게이트웨이 스위치 두 대(Cisco IOS DHCP 서버)가 풀을 나눠 제공. 서버 VLAN은 고정 주소.
 - 호스트(`HQ-PC*`, `BR*-PC*`, 알파인 docker)는 DHCP로 주소, 기본 게이트웨이(VRRP VIP), DNS 서버 두 대를 수신.
 
@@ -44,10 +44,11 @@ local=/lab.local/
 expand-hosts
 addn-hosts=/etc/hosts.lab
 log-queries
+log-facility=/var/log/dnsmasq.log
 ```
 
-- `/etc/hosts.lab` 형식은 `<IP> <이름>` 한 줄씩(아래 2.2절 표 기준). `log-queries`는 조회 확인용.
-- 패키지(`dnsmasq`, `bind-tools`)는 GNS3 안에서 인터넷 접속이 없으므로 이미지에 미리 설치. docker 노드에 OpenRC가 없으면 `dnsmasq --conf-file=/etc/dnsmasq.conf`로 직접 실행.
+- `/etc/hosts.lab` 형식은 `<IP> <이름>` 한 줄씩(아래 2.2절 표 기준). `log-queries`는 조회 확인용이며 `log-facility`로 질의 기록을 `/var/log/dnsmasq.log`에 저장(이미지에 syslog 데몬이 없어 파일로 직접 기록, 확인은 `tail /var/log/dnsmasq.log`).
+- `dnsmasq`는 GNS3 `DNS` 템플릿 이미지에 설치되어 있고 부팅 시 자동 시작. `dnsmasq.conf`와 `hosts.lab` 반영은 `service dnsmasq restart`. 확인은 `service dnsmasq status`, `ss -lun | grep :53`, `nslookup`.
 
 ### 2.2 DNS 레코드
 

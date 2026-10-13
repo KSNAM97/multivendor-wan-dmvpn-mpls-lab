@@ -34,7 +34,7 @@
 | 2주 (10/19~10/23) | 월 | DC/HQ↔ISP 정적 기본 경로+OSPF 기본 경로 광고, PI 기본연결+OSPF(프로세스2) / BR1/BR2↔ISP 정적경로+track |
 |  | 화 | PI ACL 화이트리스트, DMVPN Hub(DC-R2) crypto / DMVPN Spoke 사전 준비 |
 |  | 수 | DMVPN Spoke(HQ) / DMVPN Spoke(BR1, BR2) |
-|  | 목 | DC-DNS-1·DC-DNS-2(Alpine) 배치+검증, 호스트 DHCP 할당 확인 / Phase3 shortcut 검증 |
+|  | 목 | DC-DNS-1·DC-DNS-2(DNS 템플릿) 배치+검증, 호스트 DHCP 할당 확인 / Phase3 shortcut 검증 |
 |  | 금 | DNS 서버 VLAN ACL, 전 사이트 상호도달 확인 / 통합 테스트 |
 | 3주 (10/26~10/30) | 월 | VRRP 장애 전환, EtherChannel 멤버 다운 실측 |
 |  | 화 | DMVPN Hub 장애 실측 |

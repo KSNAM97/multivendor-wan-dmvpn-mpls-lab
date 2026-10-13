@@ -162,7 +162,7 @@ network-project/
 
 ### 서버·부가 서비스
 
-- DC 서버 VLAN50: DC-DNS-1(주), DC-DNS-2(백업) 두 대, Alpine Linux 가상 이미지, `dnsmasq`로 DNS 제공. 주소는 `10.2.50.10`, `10.2.50.11`.
+- DC 서버 VLAN50: DC-DNS-1(주), DC-DNS-2(백업) 두 대, GNS3 `DNS` 템플릿(Debian 계열) 이미지, `dnsmasq`로 DNS 제공. 주소는 `10.2.50.10`, `10.2.50.11`.
 - DHCP: 사용자 VLAN 게이트웨이 스위치 두 대(IOS DHCP 서버)가 풀을 나눠 제공(앞 64개 Active, 뒤 64개 Standby). 풀은 `docs/ip-mapping.md` 5절, 구성은 `docs/dhcp-dns-design.md`.
 - QoS: 사이트 스위치와 연결된 라우터 인터페이스 20포트에 적용하며 스위치(IOU L2 / cEOS) QoS는 적용하지 않음.
 
