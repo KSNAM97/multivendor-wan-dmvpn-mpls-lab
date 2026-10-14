@@ -6,7 +6,7 @@
 
 | 대상 | 문서 | 내용 |
 |---|---|---|
-| Cisco 라우터(7200) | [cisco-router.md](./cisco-router.md) | 기본, OSPF, 정적 경로·IP SLA, iBGP RR, DMVPN, PI ACL, QoS |
+| Cisco 라우터(7200) | [cisco-router.md](./cisco-router.md) | 기본, OSPF, 사이트 엣지 eBGP, iBGP RR, DMVPN, PI ACL, QoS |
 | Cisco 스위치(vIOS) | [cisco-switch.md](./cisco-switch.md) | L2·L3 기능, VRRP, MSTP, OSPF, MGMT SVI, DHCP |
 | Arista 스위치(cEOS) | [arista-switch.md](./arista-switch.md) | DC L3·L2 스위치, 접속 설정, 서버 VLAN ACL |
 | 알파인 노드, DNS 템플릿 | [alpine.md](./alpine.md) | 호스트 DHCP 클라이언트(알파인), DNS 서버(DNS 템플릿) |
@@ -54,12 +54,12 @@
 | 1 | 1주 월~화 | 전 장비 | 호스트네임, lo0, 인터페이스 설명·IP, 콘솔 설정 | port-mapping, ip-mapping, ospf-design |
 | 2 | 1주 수~목 | 스위치 | VLAN, 트렁크, EtherChannel, MSTP, SVI, VRRP | vlan-design |
 | 3 | 1주 금 | 사이트 장비 | 사이트 내부 OSPF, 사용자 VLAN DHCP | ospf-design, dhcp-dns-design |
-| 4 | 2주 월 | 사이트 ISP 연결 라우터 | 정적 기본 경로, IP SLA/track, OSPF 기본 경로 광고 | ospf-design 6절 |
+| 4 | 2주 월 | 사이트 ISP 연결 라우터, ISP PE | 사이트 엣지 eBGP(route-map, prefix-list), PE 사이트 세션과 `default-originate`, OSPF 기본 경로 광고 | bgp-design 5~6절, ospf-design 6절 |
 | 5 | 2주 월~화 | Private-net, PI 연결 라우터 | 언더레이 OSPF(프로세스 2), PI ACL | ospf-design 5절, dmvpn-design 5절 |
 | 6 | 2주 화~수 | DC-R2, HQ-R2, BR1-R1, BR2-R2 | IPsec, Tunnel0, NHRP, 터널 OSPF | dmvpn-design |
 | 7 | 2주 목 | DC-DNS-1, DC-DNS-2 | dnsmasq, 레코드 | dhcp-dns-design |
 | 8 | 2주 금 | DC 게이트웨이 | 서버 VLAN ACL | dhcp-dns-design 5절 |
-| 9 | 3주 수~목 | ISP 장비 | ISP OSPF, iBGP RR, PE 정적 경로·광고 | bgp-design |
+| 9 | 3주 수~목 | ISP 장비 | ISP OSPF, iBGP RR, PE `next-hop-self` | bgp-design 1~4절 |
 | 10 | 3주 금 | 라우터 | QoS | [cisco-router.md](./cisco-router.md) 3.7절 |
 
 ## 7. 저장과 백업
@@ -80,7 +80,7 @@
 | MSTP | `show spanning-tree mst`, `show spanning-tree mst configuration` | `show spanning-tree mst`, `show spanning-tree mst configuration` |
 | DMVPN | `show dmvpn`, `show ip nhrp`, `show crypto ipsec sa` | - |
 | DHCP | `show ip dhcp binding`, `show ip dhcp pool` | - |
-| IP SLA, track | `show ip sla statistics`, `show track` | - |
+| route-map, prefix-list | `show route-map`, `show ip prefix-list` | - |
 | ACL | `show ip access-lists` | `show ip access-lists` |
 | QoS | `show policy-map interface gi0/0` | - |
 

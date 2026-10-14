@@ -1,9 +1,9 @@
 📢 [프로젝트] 최종 설계 확정 — HQ/DC/BR1/BR2 + ISP 이중화 + DMVPN
 
 ■ 구조
-사이트(HQ 65001 / DC 65002 / BR1 65003 / BR2 65004) 내부는 OSPF 전용,
+사이트(HQ 65001 / DC 65002 / BR1 65003 / BR2 65004) 내부는 OSPF, 사이트 엣지 라우터만 ISP와 eBGP,
 ISP-1(AS 65100) · ISP-2(AS 65200)는 iBGP Route Reflector 구성 (P1/P2 RR, PE-A/PE-B Client, ISP 내부 OSPF).
-사이트↔ISP는 정적 기본 경로+OSPF 기본 경로 광고(IP SLA/track), DC↔HQ/BR1/BR2는 DMVPN Phase3(mGRE over IPsec)으로
+사이트↔ISP는 엣지 eBGP(PE가 기본 경로 전달, 사이트 /16 광고, route-map/prefix-list)+OSPF 기본 경로 광고, DC↔HQ/BR1/BR2는 DMVPN Phase3(mGRE over IPsec)으로
 Private Internet(203.0.113.0/24) 경유. Private Internet에는 화이트리스트 ACL 적용.
 DC 내부 스위치 6대(L3 4대 + 서버용 L2 2대)만 Arista cEOS, 나머지는 전부 Cisco.
 게이트웨이 이중화는 VRRP, 스패닝 트리는 MSTP로 전 사이트 통일합니다.
@@ -14,7 +14,7 @@ DC 서버 VLAN(50)은 DC-DNS-1(주)과 DC-DNS-2(백업) 두 대로 구성합니�
 
 ■ 일정 (3.5주, 10/12~11/4)
 - 1주: 설계·환경, VLAN/트렁크/EtherChannel/VRRP/MSTP, 금요일에 사이트 내부 OSPF + 사이트 DHCP
-- 2주: 월 정적 기본 경로+IP SLA/track, PI OSPF / 화 PI ACL, DMVPN Hub / 수 DMVPN Spoke / 목 DNS 서버, Phase3 검증 / 금 서버 VLAN ACL, 전 사이트 상호도달
+- 2주: 월 사이트 엣지 eBGP, PI OSPF / 화 PI ACL, DMVPN Hub / 수 DMVPN Spoke / 목 DNS 서버, Phase3 검증 / 금 서버 VLAN ACL, 전 사이트 상호도달
 - 3주: 월 VRRP·EtherChannel 장애 실측 / 화 DMVPN Hub 장애 / 수 ISP 내부 iBGP RR / 목 PE 광고, ISP-1 장애 전환 / 금 QoS, 트러블슈팅 로그
 - 3.5주: PPT, 리허설
 - BGP와 QoS는 후반에 배치하고 OSPF, DHCP는 1주차로 앞당겼습니다. 상세는 docs/schedule.md 참고.

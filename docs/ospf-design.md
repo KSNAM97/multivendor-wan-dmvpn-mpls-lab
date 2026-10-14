@@ -1,6 +1,6 @@
 # OSPF 설계
 
-사이트별 OSPF 프로세스와 Area, Router ID, 인터페이스 소속을 정리한 문서. 인터페이스와 IP는 `docs/ip-mapping.md`, 포트는 `docs/port-mapping.md` 기준.
+사이트별 OSPF 프로세스와 Area, Router ID, 인터페이스 소속을 정리한 문서(ISP 내부 OSPF 포함). 인터페이스와 IP는 `docs/ip-mapping.md`, 포트는 `docs/port-mapping.md` 기준.
 
 ## 1. 프로세스와 Area
 
@@ -11,10 +11,11 @@
 | BR1 | 12 | 2 | 터널(Area 0) 연결 라우터 `BR1-R1`이 ABR |
 | BR2 | 13 | 3 | 터널(Area 0) 연결 라우터 `BR2-R2`가 ABR |
 | Private Internet(DMVPN 언더레이) | 2 | 100 | `Private-net`과 사이트의 PI 연결 라우터 |
+| ISP-1, ISP-2 내부 | 1 | 0 | 각 ISP가 독립된 OSPF 도메인(ISP끼리 연결되지 않음). iBGP Loopback0 도달성 용도이며 사이트와는 OSPF로 연결하지 않음(eBGP) |
 
-- 프로세스 번호는 장비 로컬 값이며 IOS와 EOS 모두 1 ~ 65535만 허용. 사이트 번호(DC 0, HQ 1, BR1 2, BR2 3)에 10을 더해 사용하고, 언더레이 프로세스 2와 겹치지 않도록 구성.
+- 프로세스 번호는 장비 로컬 값이며 IOS와 EOS 모두 1 ~ 65535만 허용. 사이트 번호(DC 0, HQ 1, BR1 2, BR2 3)에 10을 더해 사용하고, 언더레이 프로세스 2와 겹치지 않도록 구성. ISP 내부는 프로세스 1.
 - Area 0은 DC와 DMVPN 터널. HQ(Area 1), BR1(Area 2), BR2(Area 3)는 터널을 통해 Area 0에 연결.
-- ISP-1, ISP-2는 ISP 내부에서만 OSPF process 1 Area 0 사용(iBGP Loopback0 도달성, `docs/bgp-design.md` 3절). 사이트↔ISP 구간은 정적 경로와 재분배.
+- ISP-1, ISP-2는 ISP 내부에서만 OSPF process 1 Area 0 사용(iBGP Loopback0 도달성, `docs/bgp-design.md` 3절). 사이트↔ISP 구간은 OSPF를 쓰지 않고 eBGP 사용(`docs/bgp-design.md` 5절).
 
 ## 2. Router ID (Loopback0)
 
@@ -22,6 +23,7 @@
 - 같은 OSPF 도메인 안에서 Router ID는 장비마다 고유해야 하므로 사이트 내 장비는 끝자리로 구분.
 - Loopback0은 해당 사이트 Area에 포함하고 `passive-interface` 처리. 이 값을 `router-id`로 사용.
 - `Private-net`의 Router ID는 `203.0.113.254`(Loopback0, `/32`).
+- ISP 장비의 Router ID는 `bgp router-id`와 같은 Loopback0 값(ISP-1 `100.100.100.<n>`, ISP-2 `200.200.200.<n>`, PE-A 1, P1 2, P2 3, PE-B 4). Loopback0은 Area 0에 포함하고 `passive-interface` 처리.
 
 | 장비          | Loopback0      | 프로세스 | Area |
 | ----------- | -------------- | ---- | ---- |
@@ -46,6 +48,14 @@
 | BR2-SW1-L3  | 13.13.13.11/32 | 13   | 3    |
 | BR2-SW2-L3  | 13.13.13.12/32 | 13   | 3    |
 | Private-net | 2.2.2.2/32     | 2    | 100  |
+| ISP-1-PE-A | 100.100.100.1/32 | 1 | 0 |
+| ISP-1-P1 | 100.100.100.2/32 | 1 | 0 |
+| ISP-1-P2 | 100.100.100.3/32 | 1 | 0 |
+| ISP-1-PE-B | 100.100.100.4/32 | 1 | 0 |
+| ISP-2-PE-A | 200.200.200.1/32 | 1 | 0 |
+| ISP-2-P1 | 200.200.200.2/32 | 1 | 0 |
+| ISP-2-P2 | 200.200.200.3/32 | 1 | 0 |
+| ISP-2-PE-B | 200.200.200.4/32 | 1 | 0 |
 
 ## 3. 인터페이스별 OSPF 소속
 
@@ -127,6 +137,26 @@
 | Private-net | Gi2/0   | 203.0.113.10/30 | 2    | 100  | point-to-point               | 8    |
 | Private-net | Gi3/0   | 203.0.113.14/30 | 2    | 100  | point-to-point               | 50   |
 | Private-net | Gi4/0   | 203.0.113.18/30 | 2    | 100  | point-to-point               | 64   |
+| ISP-1-PE-A | Gi0/0 | 100.1.0.1/30 | 1 | 0 | point-to-point | 71 |
+| ISP-1-PE-A | Gi1/0 | 100.1.0.5/30 | 1 | 0 | point-to-point | 72 |
+| ISP-1-P1 | Gi0/0 | 100.1.0.2/30 | 1 | 0 | point-to-point | 71 |
+| ISP-1-P1 | Gi1/0 | 100.1.0.9/30 | 1 | 0 | point-to-point | 73 |
+| ISP-1-P1 | Gi2/0 | 100.1.0.17/30 | 1 | 0 | point-to-point | 75 |
+| ISP-1-P2 | Gi0/0 | 100.1.0.6/30 | 1 | 0 | point-to-point | 72 |
+| ISP-1-P2 | Gi1/0 | 100.1.0.13/30 | 1 | 0 | point-to-point | 74 |
+| ISP-1-P2 | Gi2/0 | 100.1.0.18/30 | 1 | 0 | point-to-point | 75 |
+| ISP-1-PE-B | Gi0/0 | 100.1.0.10/30 | 1 | 0 | point-to-point | 73 |
+| ISP-1-PE-B | Gi1/0 | 100.1.0.14/30 | 1 | 0 | point-to-point | 74 |
+| ISP-2-PE-A | Gi0/0 | 100.2.0.1/30 | 1 | 0 | point-to-point | 76 |
+| ISP-2-PE-A | Gi1/0 | 100.2.0.5/30 | 1 | 0 | point-to-point | 77 |
+| ISP-2-P1 | Gi0/0 | 100.2.0.2/30 | 1 | 0 | point-to-point | 76 |
+| ISP-2-P1 | Gi1/0 | 100.2.0.9/30 | 1 | 0 | point-to-point | 78 |
+| ISP-2-P1 | Gi2/0 | 100.2.0.17/30 | 1 | 0 | point-to-point | 80 |
+| ISP-2-P2 | Gi0/0 | 100.2.0.6/30 | 1 | 0 | point-to-point | 77 |
+| ISP-2-P2 | Gi1/0 | 100.2.0.13/30 | 1 | 0 | point-to-point | 79 |
+| ISP-2-P2 | Gi2/0 | 100.2.0.18/30 | 1 | 0 | point-to-point | 80 |
+| ISP-2-PE-B | Gi0/0 | 100.2.0.10/30 | 1 | 0 | point-to-point | 78 |
+| ISP-2-PE-B | Gi1/0 | 100.2.0.14/30 | 1 | 0 | point-to-point | 79 |
 
 ## 4. DMVPN 터널(Tunnel0)
 
@@ -140,12 +170,12 @@
 - 대상: `Private-net`(5포트)과 PI 연결 사이트 라우터(`DC-R1`, `DC-R2`, `HQ-R2`, `BR1-R1`, `BR2-R2`)의 PI 연결 인터페이스.
 - 사이트 내부 OSPF와 별도 프로세스이며 Area 100만 사용. ACL 화이트리스트가 OSPF(224.0.0.5/6)를 허용.
 
-## 6. 정적 기본 경로와 OSPF 기본 경로 광고
+## 6. 사이트 엣지 eBGP와 OSPF 기본 경로 광고
 
-- 사이트↔ISP 구간은 OSPF를 사용하지 않음. ISP 연결 라우터는 PE 방향 정적 기본 경로(`ip route 0.0.0.0 0.0.0.0 <PE IP> track <번호>`)를 두고 IP SLA(ICMP echo, 주기 5초)로 PE 도달성을 추적.
-- 정적 기본 경로는 사이트 OSPF 프로세스에 `default-information originate metric <값> metric-type 1`로 광고. ISP-1 연결 라우터 metric 100, ISP-2 연결 라우터 metric 200으로 ISP-1을 우선 경로로 사용.
-- ISP 도달성 상실 시 track이 정적 기본 경로를 제거하여 기본 경로 광고가 중단되고 ISP-2 경로로 전환.
-- 사이트 prefix와 다른 사이트 prefix는 ISP 내부 iBGP(Route Reflector)로 전달(`docs/bgp-design.md`). 경로 요약(`area range`)은 적용하지 않음.
+- 사이트↔ISP 구간은 OSPF를 사용하지 않음. 사이트 엣지 라우터와 ISP PE가 eBGP로 연결되며(`docs/bgp-design.md` 5절) PE가 `default-originate`로 기본 경로를 전달.
+- 사이트 엣지 라우터는 BGP로 받은 기본 경로를 사이트 OSPF 프로세스에 `default-information originate metric <값> metric-type 1`(`always` 없음)로 광고. ISP-1 연결 라우터 metric 100, ISP-2 연결 라우터 metric 200으로 ISP-1을 우선 경로로 사용.
+- ISP 도달성 상실 시 BGP 세션이 hold-time 9초 후 내려가 기본 경로가 라우팅 테이블에서 사라지고 OSPF 기본 경로 광고가 철회되어 ISP-2 경로로 전환. IP SLA와 track은 사용하지 않음.
+- 사이트 prefix는 사이트 엣지 라우터가 eBGP로 ISP에 광고하고 ISP 내부 iBGP(Route Reflector)로 전달(`docs/bgp-design.md`). 경로 요약(`area range`)은 적용하지 않음.
 
 | 링크 # | 사이트 장비 | 포트 | IP | ISP 장비 | 포트 | IP | 프로세스 | 광고 metric |
 |---|---|---|---|---|---|---|---|---|

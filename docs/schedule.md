@@ -31,7 +31,7 @@
 |  | 수 | DC VLAN/트렁크(Arista), DC VRRP / BR1 VLAN/트렁크, VRRP |
 |  | 목 | HQ VLAN/트렁크, VRRP, Po1-3 / BR2 VLAN/트렁크, VRRP |
 |  | 금 | 사이트 내부 OSPF, 사이트 DHCP(HQ), DC/HQ 내부통신 검증 / 사이트 내부 OSPF, 사이트 DHCP(BR1, BR2), BR1/BR2 내부통신 검증 |
-| 2주 (10/19~10/23) | 월 | DC/HQ↔ISP 정적 기본 경로+OSPF 기본 경로 광고, PI 기본연결+OSPF(프로세스2) / BR1/BR2↔ISP 정적경로+track |
+| 2주 (10/19~10/23) | 월 | DC/HQ↔ISP 사이트 엣지 eBGP+OSPF 기본 경로 광고, PI 기본연결+OSPF(프로세스2) / BR1/BR2↔ISP 사이트 엣지 eBGP |
 |  | 화 | PI ACL 화이트리스트, DMVPN Hub(DC-R2) crypto / DMVPN Spoke 사전 준비 |
 |  | 수 | DMVPN Spoke(HQ) / DMVPN Spoke(BR1, BR2) |
 |  | 목 | DC-DNS-1·DC-DNS-2(DNS 템플릿) 배치+검증, 호스트 DHCP 할당 확인 / Phase3 shortcut 검증 |
@@ -39,7 +39,7 @@
 | 3주 (10/26~10/30) | 월 | VRRP 장애 전환, EtherChannel 멤버 다운 실측 |
 |  | 화 | DMVPN Hub 장애 실측 |
 |  | 수 | ISP-1, ISP-2 내부 OSPF, iBGP RR 10세션 |
-|  | 목 | PE 고객 대역 광고, ISP-1 장애→ISP-2/DMVPN 전환 실측 |
+|  | 목 | PE 정책(prefix-list, next-hop-self), 사이트 간 ISP 경유 도달, ISP-1 장애→ISP-2/DMVPN 전환 실측 |
 |  | 금 | QoS 20포트(DC/HQ 12대, BR 8대), 트러블슈팅 로그 정리 |
 | 3.5주 (11/2~11/4) | 월 | PPT(DC/HQ/ISP/이중화) / PPT(BR/DMVPN) |
 |  | 화 | PPT 마무리, 리허설 |

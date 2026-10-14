@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "docs/ip-mapping.md",
+                "file": "verification/isp1/core/bgp.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "ip-mapping"
+              "title": "bgp"
             }
           }
         ]
@@ -190,8 +190,18 @@
   },
   "active": "d976c2d18d080041",
   "lastOpenFiles": [
-    "verification/isp1/core/bgp.md",
+    "verification/dc/distribution/ospf.md",
+    "verification/dc/core/ospf.md",
+    "docs/bgp-design.md",
+    "verification/isp2/core/images/isp-2-pe-b-bgp-ospf.png",
+    "verification/isp2/core/images/isp-2-p2-bgp-ospf.png",
+    "verification/isp2/core/images/isp-2-p1-bgp-ospf.png",
+    "verification/isp2/core/images/isp-2-pe-a-bgp-ospf.png",
+    "verification/isp2/core/images",
+    "docs/ospf-design.md",
+    "docs/bgp-design.md.tmp.18372.f5ac18a6f755",
     "docs/ip-mapping.md",
+    "verification/isp1/core/bgp.md",
     "verification/dc/host/dns.md",
     "verification/dc/host/images/Pasted image 20261013210246.png",
     "Pasted image 20261013210246.png",
@@ -200,9 +210,6 @@
     "verification/dc/host/images/Pasted image 20261013205309.png",
     "verification/dc/host/images/dc-dns-1-log.png",
     "verification/dc/host/images",
-    "Pasted image 20261013205826.png",
-    "Pasted image 20261013205338.png",
-    "Pasted image 20261013205309.png",
     "CONTRIBUTING.md",
     "configs/dc/host/sedIOAvmi",
     "configs/dc/host/sedKfFFea",
@@ -213,7 +220,6 @@
     "configs/dc/host",
     "docs/port-mapping.md",
     "verification/br2/distribution/dhcp.md",
-    "verification/br2/distribution/images/Pasted image 20261013203549.png",
     "verification/br1/distribution/dhcp.md",
     "verification/hq/distribution/dhcp.md",
     "docs/dhcp-dns-design.md",
@@ -221,8 +227,6 @@
     "verification/hq/access/stp.md",
     "verification/hq/access/po-channel.md",
     "verification/hq/access/l3-interface.md",
-    "configs/hq/host/sedEVhSlh",
-    "configs/hq/host/sedWZmJw1",
     "verification/scenarios/vrrp-failover.md",
     "verification/br2/distribution/vrrp.md",
     "verification/br2/distribution/po-channel.md",
@@ -231,10 +235,6 @@
     "verification/br1/distribution/vrrp.md",
     "verification/br2/distribution/ospf.md",
     "verification/br2/access/vlan-trunk.md",
-    "verification/br2/access/stp.md",
-    "verification/br1/core/ospf.md",
-    "verification/br1/access/vlan-trunk.md",
-    "verification/br1/access/stp.md",
-    "verification/scenarios/etherchannel-link-down.md"
+    "verification/br2/access/stp.md"
   ]
 }

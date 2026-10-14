@@ -5,7 +5,7 @@
 ```
 HQ(65001) ─┬─ ISP-1 ─┐
            └─ ISP-2 ─┤
-DC(65002) ─┬─ ISP-1 ─┼─ ISP 내부: iBGP RR
+DC(65002) ─┬─ ISP-1 ─┼─ ISP 내부 iBGP RR, 사이트 엣지 eBGP
            └─ ISP-2 ─┤
 BR1        ─┬─ ISP-1 ─┤
            └─ ISP-2 ─┤
@@ -15,9 +15,9 @@ BR2        ─┬─ ISP-1 ─┘
 DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ HQ, BR1, BR2
 ```
 
-- 사이트(HQ/DC/BR1/BR2) 내부: OSPF 전용, BGP 없음(프로세스와 Area는 `docs/ospf-design.md`)
+- 사이트(HQ/DC/BR1/BR2) 내부: OSPF(프로세스와 Area는 `docs/ospf-design.md`), 사이트 엣지 라우터만 ISP와 eBGP
 - ISP-1/ISP-2: ISP별 단일 AS의 iBGP Route Reflector(P1, P2 RR), ISP 내부 OSPF process 1 Area 0
-- 사이트 ↔ ISP: 라우팅 프로토콜 없음, 정적 기본 경로 + OSPF 기본 경로 광고(track)
+- 사이트 ↔ ISP: 사이트 엣지 eBGP(사이트 AS ↔ ISP AS), PE가 기본 경로 전달, 사이트 /16 광고(route-map, prefix-list), 사이트 OSPF에 기본 경로 광고
 - Private Internet(DMVPN 언더레이): 별도 OSPF 프로세스(2), ACL 화이트리스트
 - DC만 Arista cEOS, 나머지 전부 Cisco (7200 / IOU)
 
@@ -198,7 +198,7 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ HQ
 | 주차 | 내용 |
 |---|---|
 | 1주 | AS/IP/VLAN 확정, GNS3 환경 세팅, 이미지별 RAM 실측(cEOS 포함), 노드 배치, 사이트 내부 L2/L3(VLAN, 트렁크, EtherChannel, VRRP, MSTP, 사이트 내부 OSPF, 사이트 DHCP) |
-| 2주 | 사이트↔ISP 정적 기본 경로+OSPF 기본 경로 광고, PI ACL, DMVPN(mGRE over IPsec), DNS 서버, 서버 VLAN ACL |
+| 2주 | 사이트↔ISP 엣지 eBGP+OSPF 기본 경로 광고, PI ACL, DMVPN(mGRE over IPsec), DNS 서버, 서버 VLAN ACL |
 | 3주 | 이중화 장애 실측(VRRP, EtherChannel, DMVPN Hub 장애), ISP 내부 iBGP RR, ISP 장애 실측, QoS 정책, 트러블슈팅 로그 |
 | 3.5주 | PPT 제작, 리허설 |
 

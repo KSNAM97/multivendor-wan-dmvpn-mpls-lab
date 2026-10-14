@@ -52,43 +52,79 @@ int gi0/0
 
 - 프로세스, Area, Router ID는 `docs/ospf-design.md` 2~3절의 표 값을 사용. 터널 인터페이스는 3.5절 참조.
 
-### 3.3 ISP 연결(정적 기본 경로, IP SLA, 기본 경로 광고)
+### 3.3 사이트 엣지 eBGP(ISP 연결, 기본 경로 광고)
 
 ```
-ip sla 1
- icmp-echo 100.2.12.2 source-interface gi3/0
- frequency 5
-ip sla schedule 1 life forever start-time now
-track 1 ip sla 1 reachability
-ip route 0.0.0.0 0.0.0.0 100.2.12.2 track 1
+ip route 10.1.0.0 255.255.0.0 null0
+ip prefix-list pl-site seq 5 permit 10.1.0.0/16
+ip prefix-list pl-default seq 5 permit 0.0.0.0/0
+route-map rm-isp-out permit 10
+ match ip address prefix-list pl-site
+route-map rm-isp-in permit 10
+ match ip address prefix-list pl-default
+!
+router bgp 65001
+ bgp router-id 11.11.11.2
+ bgp log-neighbor-changes
+ no auto-summary
+ no synchronization
+ neighbor 100.2.12.2 remote-as 65200
+ neighbor 100.2.12.2 timers 3 9
+ neighbor 100.2.12.2 route-map rm-isp-in in
+ neighbor 100.2.12.2 route-map rm-isp-out out
+ network 10.1.0.0 mask 255.255.0.0
 !
 router ospf 11
  default-information originate metric 200 metric-type 1
 ```
 
-- 예시는 `HQ-R2`(ISP-2 연결). ISP-1 연결 라우터는 metric 100. 대상 장비와 값은 `docs/ospf-design.md` 6절 표.
+- 예시는 `HQ-R2`(ISP-2 연결). ISP-1 연결 라우터는 metric 100. 세션, AS, prefix-list는 `docs/bgp-design.md` 5~6절, metric은 `docs/ospf-design.md` 6절 표 값을 사용. `default-information originate`에 `always`를 붙이지 않아 BGP 기본 경로가 사라지면 광고도 철회됨.
 
-### 3.4 ISP 라우터 OSPF와 iBGP Route Reflector
+### 3.4 ISP 라우터 OSPF, iBGP Route Reflector, PE 사이트 eBGP
 
 ```
-! isp-1-pe-a (RR Client)
+! isp-1-pe-a (RR Client, 사이트 eBGP)
+ip prefix-list pl-hq-in seq 5 permit 10.1.0.0/16
+ip prefix-list pl-dc-in seq 5 permit 10.2.0.0/16
+ip prefix-list pl-deny-all seq 5 deny 0.0.0.0/0 le 32
+!
 router ospf 1
  router-id 100.100.100.1
+ passive-interface default
+ no passive-interface gi0/0
+ no passive-interface gi1/0
 int lo0
  ip ospf 1 area 0
-int range gi0/0 - 1
+int gi0/0
  ip ospf 1 area 0
+ ip ospf network point-to-point
+int gi1/0
+ ip ospf 1 area 0
+ ip ospf network point-to-point
+!
 router bgp 65100
  bgp router-id 100.100.100.1
  bgp log-neighbor-changes
+ no auto-summary
+ no synchronization
  neighbor 100.100.100.2 remote-as 65100
  neighbor 100.100.100.2 update-source lo0
+ neighbor 100.100.100.2 next-hop-self
  neighbor 100.100.100.2 timers 3 9
  neighbor 100.100.100.3 remote-as 65100
  neighbor 100.100.100.3 update-source lo0
+ neighbor 100.100.100.3 next-hop-self
  neighbor 100.100.100.3 timers 3 9
- network 10.1.0.0 mask 255.255.0.0
-ip route 10.1.0.0 255.255.0.0 100.1.11.1
+ neighbor 100.1.11.1 remote-as 65001
+ neighbor 100.1.11.1 timers 3 9
+ neighbor 100.1.11.1 prefix-list pl-hq-in in
+ neighbor 100.1.11.1 prefix-list pl-deny-all out
+ neighbor 100.1.11.1 default-originate
+ neighbor 100.1.21.1 remote-as 65002
+ neighbor 100.1.21.1 timers 3 9
+ neighbor 100.1.21.1 prefix-list pl-dc-in in
+ neighbor 100.1.21.1 prefix-list pl-deny-all out
+ neighbor 100.1.21.1 default-originate
 ```
 
 ```
@@ -97,6 +133,8 @@ router bgp 65100
  bgp router-id 100.100.100.2
  bgp cluster-id 1.1.1.1
  bgp log-neighbor-changes
+ no auto-summary
+ no synchronization
  neighbor 100.100.100.1 remote-as 65100
  neighbor 100.100.100.1 update-source lo0
  neighbor 100.100.100.1 route-reflector-client
@@ -110,7 +148,7 @@ router bgp 65100
  neighbor 100.100.100.3 timers 3 9
 ```
 
-- 예시는 `ISP-1-PE-A`와 `ISP-1-P1`. AS, Loopback0, 세션, 광고 prefix는 `docs/bgp-design.md` 1~5절 표 값을 사용. P1, P2는 `network` 구문 없음. PE의 OSPF 대상은 ISP 내부 링크(Gi0/0, Gi1/0)와 Loopback0이며 사이트 방향 링크는 제외.
+- 예시는 `ISP-1-PE-A`와 `ISP-1-P1`. AS, Loopback0, 세션, prefix-list는 `docs/bgp-design.md` 1~6절 표 값을 사용. P1, P2는 사이트 방향 링크가 없어 사이트 eBGP, `network` 구문 없음. PE의 OSPF 대상은 ISP 내부 링크(Gi0/0, Gi1/0)와 Loopback0이며 사이트 방향 링크는 제외. 7200은 포트마다 슬롯이 달라 `int range` 대신 포트별로 입력.
 
 ### 3.5 DMVPN(Hub와 Spoke)
 

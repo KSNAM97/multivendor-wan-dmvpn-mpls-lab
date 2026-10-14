@@ -38,7 +38,7 @@ verification/
 | 구분 | 항목 | 검증 파일 | 방법 |
 |---|---|---|---|
 | 주요 프로토콜(장비에서 직접 검증) | VLAN, 트렁크, EtherChannel, MSTP, VRRP | `vlan-trunk`, `po-channel`, `stp`, `vrrp` | `show` 출력과 스크린샷 |
-| 주요 프로토콜(장비에서 직접 검증) | OSPF, iBGP RR, ISP 연결(IP SLA, track), DMVPN | `ospf`, `bgp`, `isp-link`, `dmvpn` | 이웃, 경로, 터널 상태 |
+| 주요 프로토콜(장비에서 직접 검증) | OSPF, iBGP RR, 사이트 엣지 eBGP, DMVPN | `ospf`, `bgp`, `isp-link`, `dmvpn` | 이웃, 경로, 터널 상태 |
 | 장애 시나리오 | VRRP 전환, EtherChannel 멤버 다운, ISP 장애, DMVPN Hub 장애 | `scenarios/` | 전환 시간 측정 |
 | 컨피그 대조로 갈음 | 인터페이스 IP, `lo0`, `desc`, 계정, 기본 설정 | `l3-interface` 등(참고용 기록) | 컨피그 파일과 `ip-mapping.md` 대조, 필요 시 `show ip interface brief` |
 | 해당 단계에서 판단 | DHCP, DNS, ACL, QoS | `dhcp`, `dns`, `acl`, `qos` | 서비스 구성 후(호스트 포함) |
@@ -67,7 +67,7 @@ verification/
 | KAN-12 | 1주 수 | BR1 VLAN/트렁크/VRRP | `br1/*/` | 서식 준비 |
 | KAN-13 | 1주 목 | BR2 VLAN/트렁크/VRRP | `br2/*/` | 서식 준비 |
 | KAN-14 | 1주 금 | 사이트 내부 OSPF + 사이트 DHCP | `*/core/ospf.md`, `*/distribution/ospf.md`, `*/distribution/dhcp.md` | 서식 준비 |
-| KAN-18 | 2주 월 | 정적 경로 + IP SLA/track | `*/core/isp-link.md` | 서식 준비 |
+| KAN-18 | 2주 월 | 사이트 엣지 eBGP + route-map | `*/core/isp-link.md` | 서식 준비 |
 | KAN-20 | 2주 월 | Private Internet OSPF | `private-internet/core/ospf.md` | 서식 준비 |
 | KAN-19 | 2주 화 | Private Internet ACL | `private-internet/core/acl.md` | 서식 준비 |
 | KAN-21 | 2주 화 | DMVPN Hub | `dc/core/dmvpn.md` | 서식 준비 |
@@ -78,7 +78,7 @@ verification/
 | KAN-28 | 3주 월 | EtherChannel 멤버 다운 | `scenarios/etherchannel-link-down.md` | 서식 준비 |
 | KAN-30 | 3주 화 | DMVPN Hub 장애 | `scenarios/dmvpn-hub-failure.md` | 서식 준비 |
 | KAN-15, 16 | 3주 수 | ISP 내부 OSPF, iBGP RR | `isp1/core/bgp.md`, `isp2/core/bgp.md` | 서식 준비 |
-| KAN-17 | 3주 목 | PE 사이트 대역 network | `isp*/core/bgp.md` | 서식 준비 |
+| KAN-17 | 3주 목 | PE 정책(prefix-list, next-hop-self) | `isp*/core/bgp.md` | 서식 준비 |
 | KAN-29 | 3주 목 | ISP-1 장애 시 전환 | `scenarios/isp1-failure.md` | 서식 준비 |
 | KAN-25 | 3주 금 | QoS | `*/core/qos.md` | 서식 준비 |
 | KAN-31 | 3주 금 | 트러블슈팅 로그 | 검증 중 나온 불일치와 조치를 정리 | - |
