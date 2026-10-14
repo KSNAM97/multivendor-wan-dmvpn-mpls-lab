@@ -190,6 +190,8 @@
   },
   "active": "d976c2d18d080041",
   "lastOpenFiles": [
+    "verification/dc/distribution/images/dc-sw2-l3-vlan100-removed.png",
+    "verification/dc/distribution/images/dc-sw1-l3-vlan100-removed.png",
     "verification/isp1/core/bgp.md",
     "verification/dc/distribution/ospf.md",
     "verification/dc/core/ospf.md",
@@ -208,7 +210,6 @@
     "verification/dc/host/images/Pasted image 20261013205826.png",
     "verification/dc/host/images/Pasted image 20261013205338.png",
     "verification/dc/host/images/Pasted image 20261013205309.png",
-    "verification/dc/host/images/dc-dns-1-log.png",
     "verification/dc/host/images",
     "CONTRIBUTING.md",
     "configs/dc/host/sedIOAvmi",
@@ -234,7 +235,6 @@
     "verification/br2/distribution/vlan-trunk.md",
     "verification/br1/distribution/vrrp.md",
     "verification/br2/distribution/ospf.md",
-    "verification/br2/access/vlan-trunk.md",
-    "verification/br2/access/stp.md"
+    "verification/br2/access/vlan-trunk.md"
   ]
 }
