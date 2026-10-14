@@ -1,0 +1,38 @@
+! cisco
+!
+hostname isp-2-pe-a
+enable secret admin1234
+no ip domain-lookup
+service timestamps debug datetime msec
+service timestamps log datetime msec
+!
+line con 0
+ logging synchronous
+ exec-timeout 0 0
+line vty 0 4
+ password admin1234
+ login
+!
+int lo0
+ ip addr 200.200.200.1 255.255.255.255
+!
+int gi0/0
+ desc to isp-2-p1 gi0/0
+ ip addr 100.2.0.1 255.255.255.252
+ no sh
+!
+int gi1/0
+ desc to isp-2-p2 gi0/0
+ ip addr 100.2.0.5 255.255.255.252
+ no sh
+!
+int gi2/0
+ desc to hq-r2 gi3/0
+ ip addr 100.2.12.2 255.255.255.252
+ no sh
+!
+int gi3/0
+ desc to dc-r4 gi3/0
+ ip addr 100.2.22.2 255.255.255.252
+ no sh
+!
