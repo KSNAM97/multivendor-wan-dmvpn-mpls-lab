@@ -9,6 +9,7 @@
 | ---------- | ----------------- | ----------------------------------------------------------------------------- | ----- | --- |
 | BR1-SW1-L3 | `show vrrp brief` | Vl10 그룹 10, Vl20 그룹 20, priority 110, Master, VIP 10.3.10.1, 10.3.20.1 | Vl10 그룹 10, Vl20 그룹 20, priority 110, Master, VIP 10.3.10.1, 10.3.20.1 | 통과 |
 | BR1-SW2-L3 | `show vrrp brief` | Vl10 그룹 10, Vl20 그룹 20, priority 90, Backup, Master addr 10.3.10.2, 10.3.20.2 | Vl10, Vl20 priority 90, Backup, Master addr 10.3.10.2, 10.3.20.2. BR1-SW1-L3 shutdown 시 Master 전환, 복구 시 Backup 복귀 확인 | 통과 |
+
 BR1-SW1-L3 VRRP MASTER
 ![BR1-SW1-L3 VRRP MASTER](images/Pasted%20image%2020261013181724.png)
 

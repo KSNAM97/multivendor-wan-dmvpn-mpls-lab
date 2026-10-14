@@ -9,6 +9,7 @@
 | ---------- | --------------------------- | -------------------------------- | ----- | --- |
 | BR1-SW1-L3 | `show etherchannel summary` | Po1(Gi1/0, Gi1/1) LACP, 멤버 `(P)` | Po1(SU) LACP, Gi1/0(P), Gi1/1(P) | 통과 |
 | BR1-SW2-L3 | `show etherchannel summary` | Po1(Gi1/0, Gi1/1) LACP, 멤버 `(P)` | Po1(SU) LACP, Gi1/0(P), Gi1/1(P) | 통과 |
+
 BR1-SW1-L3 Po1
 ![BR1-SW1-L3 Po1](images/Pasted%20image%2020261013181037.png)
 
