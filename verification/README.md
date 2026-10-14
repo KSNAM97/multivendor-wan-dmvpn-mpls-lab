@@ -67,7 +67,7 @@ verification/
 | KAN-12 | 1주 수 | BR1 VLAN/트렁크/VRRP | `br1/*/` | 서식 준비 |
 | KAN-13 | 1주 목 | BR2 VLAN/트렁크/VRRP | `br2/*/` | 서식 준비 |
 | KAN-14 | 1주 금 | 사이트 내부 OSPF + 사이트 DHCP | `*/core/ospf.md`, `*/distribution/ospf.md`, `*/distribution/dhcp.md` | 서식 준비 |
-| KAN-18 | 2주 월 | 사이트 엣지 eBGP + route-map | `*/core/isp-link.md` | 서식 준비 |
+| KAN-18 | 2주 월 | 사이트 엣지 eBGP + route-map | `*/core/isp-link.md`, `isp*/core/bgp.md` 2절 | 서식 준비 |
 | KAN-20 | 2주 월 | Private Internet OSPF | `private-internet/core/ospf.md` | 서식 준비 |
 | KAN-19 | 2주 화 | Private Internet ACL | `private-internet/core/acl.md` | 서식 준비 |
 | KAN-21 | 2주 화 | DMVPN Hub | `dc/core/dmvpn.md` | 서식 준비 |

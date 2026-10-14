@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "verification/isp1/core/bgp.md",
+                "file": "docs/bgp-design.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "bgp"
+              "title": "bgp-design"
             }
           }
         ]
@@ -190,6 +190,7 @@
   },
   "active": "d976c2d18d080041",
   "lastOpenFiles": [
+    "verification/isp1/core/bgp.md",
     "verification/dc/distribution/ospf.md",
     "verification/dc/core/ospf.md",
     "docs/bgp-design.md",
@@ -201,7 +202,6 @@
     "docs/ospf-design.md",
     "docs/bgp-design.md.tmp.18372.f5ac18a6f755",
     "docs/ip-mapping.md",
-    "verification/isp1/core/bgp.md",
     "verification/dc/host/dns.md",
     "verification/dc/host/images/Pasted image 20261013210246.png",
     "Pasted image 20261013210246.png",
