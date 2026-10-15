@@ -17,6 +17,7 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ HQ
 
 - 사이트(HQ/DC/BR1/BR2) 내부: OSPF(프로세스와 Area는 `docs/ospf-design.md`), 사이트 엣지 라우터만 ISP와 eBGP
 - ISP-1/ISP-2: ISP별 단일 AS의 iBGP Route Reflector(P1, P2 RR), ISP 내부 OSPF process 1 Area 0
+- ISP 코어: MPLS L3VPN(내부 링크 LDP, PE의 VRF `corp`, vpnv4는 iBGP RR 경유, `docs/mpls-design.md`)
 - 사이트 ↔ ISP: 사이트 엣지 eBGP(사이트 AS ↔ ISP AS), PE가 기본 경로 전달, 사이트 /16 광고(route-map, prefix-list), 사이트 OSPF에 기본 경로 광고
 - Private Internet(DMVPN 언더레이): 별도 OSPF 프로세스(2), ACL 화이트리스트
 - DC만 Arista cEOS, 나머지 전부 Cisco (7200 / IOU)

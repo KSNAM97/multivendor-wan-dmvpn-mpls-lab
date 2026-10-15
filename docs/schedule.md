@@ -31,7 +31,8 @@
 |  | 수 | DC VLAN/트렁크(Arista), DC VRRP / BR1 VLAN/트렁크, VRRP |
 |  | 목 | HQ VLAN/트렁크, VRRP, Po1-3 / BR2 VLAN/트렁크, VRRP |
 |  | 금 | 사이트 내부 OSPF, 사이트 DHCP(HQ), DC/HQ 내부통신 검증 / 사이트 내부 OSPF, 사이트 DHCP(BR1, BR2), BR1/BR2 내부통신 검증 |
-| 2주 (10/19~10/23) | 월 | DC/HQ↔ISP 사이트 엣지 eBGP+OSPF 기본 경로 광고, PI 기본연결+OSPF(프로세스2) / BR1/BR2↔ISP 사이트 엣지 eBGP |
+| 주말 (10/17~10/18) | 토~일 | ISP MPLS 코어(LDP), PE VRF `corp`, MP-BGP vpnv4(사이트 CE 없이 `show` 확인), QoS 정책 사전 작업 |
+| 2주 (10/19~10/23) | 월 | DC/HQ↔ISP 사이트 엣지 eBGP(PE VRF 안)+OSPF 기본 경로 광고, PI 기본연결+OSPF(프로세스2) / BR1/BR2↔ISP 사이트 엣지 eBGP |
 |  | 화 | PI ACL 화이트리스트, DMVPN Hub(DC-R2) crypto / DMVPN Spoke 사전 준비 |
 |  | 수 | DMVPN Spoke(HQ) / DMVPN Spoke(BR1, BR2) |
 |  | 목 | DC-DNS-1·DC-DNS-2(DNS 템플릿) 배치+검증, 호스트 DHCP 할당 확인 / Phase3 shortcut 검증 |
@@ -61,5 +62,6 @@ Jira 이슈 제목 앞의 `[1주]`, `[2주]`, `[3주]`, `[3.5주]`는 이 일정
 ## 리스크
 - 2인용 일정을 1인이 수행하여 병렬 작업이 직렬로 전환되고, 하루 작업량이 두 배가 되어 예비일이 사실상 없음.
 - 위험 구간: 2주(PI·DMVPN), 3주 수~금(BGP, QoS). BGP와 QoS는 일정 후반에 배치하여 앞 단계(OSPF, DHCP, DMVPN)를 먼저 확보.
+- MPLS(LDP, VRF, vpnv4)는 주말(10/17~10/18) 선행 작업이며 2주 월 이후 사이트 eBGP가 VRF 안으로 이어짐. 지연 시 MPLS를 생략하고 PE의 전역 eBGP(`docs/bgp-design.md` 5~6절)로 되돌릴 수 있음.
 - 지연 발생 시 컷 순서(앞에서부터 생략): ① QoS 스위치 검증 생략(라우터만) ② BR2 구성은 BR1과 같은 패턴을 복제만 하고 장애 실측 생략 ③ ISP-2 생략, ISP-1+DMVPN만 ④ DC-DNS-2(백업) 서버 구축 생략, DC-DNS-1만 운영
 - 일정 연장이 가능하면 위 컷 순서의 생략 항목을 줄이는 방향으로 조정.

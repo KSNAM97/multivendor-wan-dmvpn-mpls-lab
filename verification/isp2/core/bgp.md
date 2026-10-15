@@ -17,19 +17,19 @@
 
 ## 2. 사이트 eBGP 세션 (KAN-18, 2주 월)
 
-- 사이트 쪽 확인은 `*/core/isp-link.md`. 이 절은 PE 쪽 확인.
+- 사이트 쪽 확인은 `*/core/isp-link.md`. 이 절은 PE 쪽 확인(VRF `corp` 안의 세션, `docs/mpls-design.md` 3절).
 
 | 장비 | 명령 | 기대 결과 | 실제 결과 | 판정 |
 |---|---|---|---|---|
-| ISP-2-PE-A | `show ip bgp summary` | HQ-R2(100.2.12.1), DC-R4(100.2.22.1)와 eBGP Established | - | 미확인 |
-| ISP-2-PE-B | `show ip bgp summary` | BR1-R2(100.2.32.1), BR2-R2(100.2.42.1)와 eBGP Established | - | 미확인 |
-| ISP-2-PE-A, PE-B | `show ip bgp neighbors <사이트 주소> advertised-routes` | 사이트에는 기본 경로만 전달(`default-originate`, `pl-deny-all`) | - | 미확인 |
-| ISP-2-PE-A, PE-B | `show ip bgp neighbors <사이트 주소> routes` | 해당 사이트 /16만 수신(`pl-<사이트>-in`) | - | 미확인 |
-| ISP-2-PE-A, PE-B | `show ip bgp neighbors <사이트 주소> \| include hold` | eBGP 세션 timers 3/9 | - | 미확인 |
+| ISP-2-PE-A | `show ip bgp vpnv4 vrf corp summary` | HQ-R2(100.2.12.1), DC-R4(100.2.22.1)와 eBGP Established | - | 미확인 |
+| ISP-2-PE-B | `show ip bgp vpnv4 vrf corp summary` | BR1-R2(100.2.32.1), BR2-R2(100.2.42.1)와 eBGP Established | - | 미확인 |
+| ISP-2-PE-A, PE-B | `show ip bgp vpnv4 vrf corp neighbors <사이트 주소> advertised-routes` | 사이트에는 기본 경로만 전달(`default-originate`, `pl-deny-all`) | - | 미확인 |
+| ISP-2-PE-A, PE-B | `show ip bgp vpnv4 vrf corp neighbors <사이트 주소> routes` | 해당 사이트 /16만 수신(`pl-<사이트>-in`) | - | 미확인 |
+| ISP-2-PE-A, PE-B | `show ip bgp vpnv4 vrf corp neighbors <사이트 주소> \| include hold` | eBGP 세션 timers 3/9 | - | 미확인 |
 
 ## 3. PE 정책과 사이트 간 경로 (KAN-17, 3주 목)
 
 | 장비 | 명령 | 기대 결과 | 실제 결과 | 판정 |
 |---|---|---|---|---|
-| ISP-2-PE-A, PE-B | `show ip bgp` | 사이트 /16을 eBGP로 수신하고 상대 PE의 사이트 /16을 RR 경유로 수신(next-hop은 상대 PE Loopback0, `next-hop-self`) | - | 미확인 |
-| ISP-2-P1, P2 | `show ip bgp` | 모든 사이트 /16 반사, `Originator`, `Cluster list` 표시 | - | 미확인 |
+| ISP-2-PE-A, PE-B | `show ip bgp vpnv4 all` | 사이트 /16을 eBGP로 수신하고 상대 PE의 사이트 /16을 RR 경유로 수신(next-hop은 상대 PE Loopback0, `next-hop-self`) | - | 미확인 |
+| ISP-2-P1, P2 | `show ip bgp vpnv4 all` | 모든 사이트 /16 반사, `Originator`, `Cluster list` 표시 | - | 미확인 |

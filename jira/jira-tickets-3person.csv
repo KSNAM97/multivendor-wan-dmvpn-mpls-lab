@@ -12,8 +12,8 @@ Summary,Issue Type,Label,Priority,Description,Due Date
 "[1주] 사이트 내부 OSPF(DC Area0, HQ Area1, BR1 Area2, BR2 Area3) + 사이트 DHCP 확정",Task,net-cloud;policy,Medium,"프로세스 DC 10, HQ 11, BR1 12, BR2 13 / ABR: HQ-R2, BR1-R1, BR2-R2 / 사이트 DHCP: HQ, BR1, BR2 게이트웨이 스위치 풀(.100~.227) / 상세: docs/ospf-design.md, docs/dhcp-dns-design.md / 일정: 1주 금(10/16), DC/HQ와 BR1/BR2 내부통신 검증 포함",2026-10-16
 [3주] ISP-1 내부 OSPF + iBGP RR 5세션,Task,net-cloud,High,"AS65100, P1/P2 RR, PE-A/PE-B Client, Loopback 100.100.100.1-4 / 기한: 3주 수(10/28)",2026-10-28
 [3주] ISP-2 내부 OSPF + iBGP RR 5세션,Task,net-cloud,High,"AS65200, P1/P2 RR, PE-A/PE-B Client, Loopback 200.200.200.1-4 / 기한: 3주 수(10/28)",2026-10-28
-"[3주] PE 정책(prefix-list, next-hop-self)·사이트 간 ISP 경유 도달",Task,net-cloud,High,"PE 입력 prefix-list, RR용 next-hop-self, 사이트 /16 ISP 경유 학습 / 일정: 3주 목(10/29)",2026-10-29
-[2주] 사이트 엣지 eBGP(8세션) + route-map/prefix-list,Task,net-cloud;policy,High,"사이트 라우터 eBGP, PE default-originate, route-map·prefix-list, OSPF default-information originate / 일정: 2주 월(10/19)",2026-10-19
+[3주] PE 정책(prefix-list)·VRF 경유 사이트 간 도달,Task,net-cloud,High,"PE 입력 prefix-list, vpnv4 사이트 /16 전달, 사이트 간 ISP 경유 도달 / 일정: 3주 목(10/29)",2026-10-29
+"[2주] 사이트 엣지 eBGP(8세션, PE VRF corp) + route-map/prefix-list",Task,net-cloud;policy,High,"사이트 라우터 eBGP, PE VRF corp 안의 eBGP·default-originate, route-map·prefix-list, OSPF default-information originate / 일정: 2주 월(10/19)",2026-10-19
 [2주] Private Internet ACL 화이트리스트,Task,net-cloud,High,"5개 링크, OSPF/GRE/ESP/UDP500만 허용 / 일정: 2주 화(10/20)",2026-10-20
 [2주] Private Internet OSPF(프로세스2) 구성,Task,net-cloud,High,"Area100, 언더레이 전용 / 일정: 2주 월(10/19), NBMA 주소 상호도달 확인 포함",2026-10-19
 [2주] DMVPN Hub 구성(DC-R2),Task,net-cloud,High,"mGRE, NHRP, IPsec profile / 일정: 2주 화(10/20)",2026-10-20
@@ -29,3 +29,5 @@ Summary,Issue Type,Label,Priority,Description,Due Date
 [3주] 트러블슈팅 로그 정리,Task,policy,Medium,docs/troubleshooting-log.md / 일정: 3주 금(10/30),2026-10-30
 [3.5주] PPT 슬라이드 작성 및 리허설,Task,net-cloud;policy,High,"일정: 3.5주 월~수(11/2~11/4, 수요일은 반일)",2026-11-04
 [2주] DMVPN Spoke 구성(HQ-R2),Task,policy,High,"Phase3 shortcut / 일정: 2주 수(10/21), Phase3 shortcut 검증은 2주 목(10/22)",2026-10-21
+"[2주] ISP MPLS 코어(LDP, 내부 링크 mpls ip)",Task,net-cloud,High,"ISP-1, ISP-2 PE·P 8대, LDP 이웃·레이블 확인 / 일정: 주말(10/18)",2026-10-18
+[2주] PE VRF corp + MP-BGP vpnv4(RR),Task,net-cloud,High,"PE 4대 VRF·RD/RT, 10세션 vpnv4, RR route-reflector-client / 일정: 주말(10/18)",2026-10-18

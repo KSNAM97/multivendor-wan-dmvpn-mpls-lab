@@ -6,7 +6,7 @@
 
 | 대상 | 문서 | 내용 |
 |---|---|---|
-| Cisco 라우터(7200) | [cisco-router.md](./cisco-router.md) | 기본, OSPF, 사이트 엣지 eBGP, iBGP RR, DMVPN, PI ACL, QoS |
+| Cisco 라우터(7200) | [cisco-router.md](./cisco-router.md) | 기본, OSPF, 사이트 엣지 eBGP, iBGP RR, MPLS L3VPN, DMVPN, PI ACL, QoS |
 | Cisco 스위치(vIOS) | [cisco-switch.md](./cisco-switch.md) | L2·L3 기능, VRRP, MSTP, OSPF, MGMT SVI, DHCP |
 | Arista 스위치(cEOS) | [arista-switch.md](./arista-switch.md) | DC L3·L2 스위치, 접속 설정, 서버 VLAN ACL |
 | 알파인 노드, DNS 템플릿 | [alpine.md](./alpine.md) | 호스트 DHCP 클라이언트(알파인), DNS 서버(DNS 템플릿) |
@@ -19,6 +19,7 @@
 | 인터페이스 IP | `docs/ip-mapping.md` |
 | OSPF | `docs/ospf-design.md` |
 | BGP(ISP) | `docs/bgp-design.md` |
+| MPLS(ISP 코어) | `docs/mpls-design.md` |
 | VLAN, VRRP, MSTP, EtherChannel | `docs/vlan-design.md` |
 | DMVPN, IPsec | `docs/dmvpn-design.md` |
 | DHCP, DNS | `docs/dhcp-dns-design.md` |
@@ -54,7 +55,8 @@
 | 1 | 1주 월~화 | 전 장비 | 호스트네임, lo0, 인터페이스 설명·IP, 콘솔 설정 | port-mapping, ip-mapping, ospf-design |
 | 2 | 1주 수~목 | 스위치 | VLAN, 트렁크, EtherChannel, MSTP, SVI, VRRP | vlan-design |
 | 3 | 1주 금 | 사이트 장비 | 사이트 내부 OSPF, 사용자 VLAN DHCP | ospf-design, dhcp-dns-design |
-| 4 | 2주 월 | 사이트 ISP 연결 라우터, ISP PE | 사이트 엣지 eBGP(route-map, prefix-list), PE 사이트 세션과 `default-originate`, OSPF 기본 경로 광고 | bgp-design 5~6절, ospf-design 6절 |
+| 3-1 | 주말(10/17~10/18) | ISP 장비 | MPLS 코어(LDP), PE VRF `corp`, vpnv4(RR) | mpls-design |
+| 4 | 2주 월 | 사이트 ISP 연결 라우터, ISP PE | 사이트 엣지 eBGP(route-map, prefix-list), PE 사이트 세션(VRF `corp` 안)과 `default-originate`, OSPF 기본 경로 광고 | bgp-design 5~6절, mpls-design 3절, ospf-design 6절 |
 | 5 | 2주 월~화 | Private-net, PI 연결 라우터 | 언더레이 OSPF(프로세스 2), PI ACL | ospf-design 5절, dmvpn-design 5절 |
 | 6 | 2주 화~수 | DC-R2, HQ-R2, BR1-R1, BR2-R2 | IPsec, Tunnel0, NHRP, 터널 OSPF | dmvpn-design |
 | 7 | 2주 목 | DC-DNS-1, DC-DNS-2 | dnsmasq, 레코드 | dhcp-dns-design |
@@ -81,6 +83,7 @@
 | DMVPN | `show dmvpn`, `show ip nhrp`, `show crypto ipsec sa` | - |
 | DHCP | `show ip dhcp binding`, `show ip dhcp pool` | - |
 | route-map, prefix-list | `show route-map`, `show ip prefix-list` | - |
+| MPLS, VRF | `show mpls ldp neighbor`, `show ip vrf`, `show ip bgp vpnv4 all summary` | - |
 | ACL | `show ip access-lists` | `show ip access-lists` |
 | QoS | `show policy-map interface gi0/0` | - |
 

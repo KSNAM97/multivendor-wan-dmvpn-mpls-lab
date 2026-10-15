@@ -1,6 +1,6 @@
 # BGP 설계
 
-ISP-1, ISP-2 내부의 iBGP Route Reflector와 사이트 엣지 eBGP(사이트 라우터 ↔ ISP PE) 구성을 정리한 문서. Private Internet은 BGP 미사용. ISP-1과 ISP-2는 서로 연결되지 않으며 둘 사이 BGP 세션 없음. 링크 IP는 `docs/ip-mapping.md`, 포트는 `docs/port-mapping.md` 기준.
+ISP-1, ISP-2 내부의 iBGP Route Reflector와 사이트 엣지 eBGP(사이트 라우터 ↔ ISP PE) 구성을 정리한 문서. ISP 쪽은 MPLS L3VPN으로 확장되어 PE가 VRF `corp` 안에서 사이트와 eBGP를 맺고 사이트 경로를 vpnv4로 전달(`docs/mpls-design.md`). Private Internet은 BGP 미사용. ISP-1과 ISP-2는 서로 연결되지 않으며 둘 사이 BGP 세션 없음. 링크 IP는 `docs/ip-mapping.md`, 포트는 `docs/port-mapping.md` 기준.
 
 ## 1. AS 구성
 
@@ -53,7 +53,8 @@ ISP-1, ISP-2 내부의 iBGP Route Reflector와 사이트 엣지 eBGP(사이트 �
 - ISP당 5세션, 합계 10세션. Loopback0 주소로 세션을 맺고 `neighbor <peer-lo0> update-source lo0` 적용.
 - P1–P2는 RR끼리 일반 iBGP(non-client) 피어. PE는 RR 두 대와만 세션을 맺으며 PE끼리는 세션 없음.
 - RR 쪽 설정: `neighbor <PE-lo0> route-reflector-client`.
-- PE 쪽 설정: RR와의 세션에 `neighbor <RR-lo0> next-hop-self`. 사이트 eBGP로 배운 경로의 next-hop이 사이트 방향 링크 주소라 ISP 내부에서 도달할 수 없으므로 PE Loopback0으로 바꿔서 전달.
+- vpnv4: 위 10세션에 `address-family vpnv4`를 추가(`docs/mpls-design.md` 4절).
+- PE 쪽 설정: RR와의 세션에 `neighbor <RR-lo0> next-hop-self`. 사이트 eBGP로 배운 경로의 next-hop이 사이트 방향 링크 주소라 ISP 내부에서 도달할 수 없으므로 PE Loopback0으로 바꿔서 전달. MPLS L3VPN에서는 사이트 경로가 vpnv4로 전달되고 next-hop이 PE Loopback0이라 필수는 아니지만 그대로 유지.
 
 | # | 링크 # | RR 장비 | RR Loopback0 | 상대 장비 | 상대 Loopback0 | 관계 |
 |---|---|---|---|---|---|---|
@@ -70,7 +71,7 @@ ISP-1, ISP-2 내부의 iBGP Route Reflector와 사이트 엣지 eBGP(사이트 �
 
 ## 5. 사이트 엣지 eBGP 세션
 
-- 사이트 라우터와 ISP PE 사이 8세션. 직접 연결 링크의 인터페이스 주소로 세션을 맺으므로 `ebgp-multihop`, `update-source` 불필요.
+- 사이트 라우터와 ISP PE 사이 8세션. 직접 연결 링크의 인터페이스 주소로 세션을 맺으므로 `ebgp-multihop`, `update-source` 불필요. ISP PE 쪽 이웃은 VRF `corp` 안(`address-family ipv4 vrf corp`)에서 구성(`docs/mpls-design.md` 3절).
 - 사이트마다 ISP-1 연결 라우터(R1 계열)와 ISP-2 연결 라우터(R2 계열)가 각각 한 세션.
 
 | # | 링크 # | 사이트 장비 | 사이트 IP | 사이트 AS | ISP 장비 | ISP IP | ISP AS |
@@ -88,7 +89,7 @@ ISP-1, ISP-2 내부의 iBGP Route Reflector와 사이트 엣지 eBGP(사이트 �
 
 - 사이트 → ISP: 사이트 /16만 광고. 사이트 엣지 라우터에 `ip route <사이트 /16> null0`을 두고 `network <사이트 /16> mask 255.255.0.0`으로 광고(사이트 내부 상세 경로는 광고하지 않음). 출력 방향 `route-map rm-isp-out`(`pl-site`: 사이트 /16만 허용).
 - ISP → 사이트: 기본 경로만 전달. PE에서 `neighbor <사이트 라우터> default-originate`를 설정하고 출력 방향 `prefix-list pl-deny-all`(모든 prefix 차단, default-originate 경로는 별도 전송). 사이트 엣지 라우터는 입력 방향 `route-map rm-isp-in`(`pl-default`: `0.0.0.0/0`만 허용).
-- PE 입력 방향: 사이트별 `prefix-list pl-<사이트>-in`으로 해당 사이트 /16만 허용.
+- PE 입력 방향: 사이트별 `prefix-list pl-<사이트>-in`으로 해당 사이트 /16만 허용. 이 설정과 `default-originate`는 PE의 VRF 주소군 안에서 적용하고, 사이트 /16은 PE의 VRF에서 vpnv4로 상대 PE에 전달.
 - RR(P1, P2)은 prefix를 광고하지 않고 반사만 수행. 반사된 경로의 next-hop은 광고한 PE의 Loopback0.
 - 사이트 간 통신은 기본 경로로 ISP에 전달되어, ISP 내부 iBGP로 배운 목적지 사이트 /16을 따라 상대 사이트의 엣지 라우터로 전달.
 

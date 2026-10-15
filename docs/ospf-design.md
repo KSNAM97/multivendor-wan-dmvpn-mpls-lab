@@ -15,7 +15,7 @@
 
 - 프로세스 번호는 장비 로컬 값이며 IOS와 EOS 모두 1 ~ 65535만 허용. 사이트 번호(DC 0, HQ 1, BR1 2, BR2 3)에 10을 더해 사용하고, 언더레이 프로세스 2와 겹치지 않도록 구성. ISP 내부는 프로세스 1.
 - Area 0은 DC와 DMVPN 터널. HQ(Area 1), BR1(Area 2), BR2(Area 3)는 터널을 통해 Area 0에 연결.
-- ISP-1, ISP-2는 ISP 내부에서만 OSPF process 1 Area 0 사용(iBGP Loopback0 도달성, `docs/bgp-design.md` 3절). 사이트↔ISP 구간은 OSPF를 쓰지 않고 eBGP 사용(`docs/bgp-design.md` 5절).
+- ISP-1, ISP-2는 ISP 내부에서만 OSPF process 1 Area 0 사용(iBGP Loopback0 도달성, `docs/bgp-design.md` 3절). 사이트↔ISP 구간은 OSPF를 쓰지 않고 eBGP 사용(`docs/bgp-design.md` 5절). ISP 내부 링크에는 이 OSPF 위에서 LDP(MPLS)가 동작(`docs/mpls-design.md` 2절).
 
 ## 2. Router ID (Loopback0)
 

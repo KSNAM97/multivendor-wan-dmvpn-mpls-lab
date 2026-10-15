@@ -80,14 +80,10 @@ router ospf 11
 
 - 예시는 `HQ-R2`(ISP-2 연결). ISP-1 연결 라우터는 metric 100. 세션, AS, prefix-list는 `docs/bgp-design.md` 5~6절, metric은 `docs/ospf-design.md` 6절 표 값을 사용. `default-information originate`에 `always`를 붙이지 않아 BGP 기본 경로가 사라지면 광고도 철회됨.
 
-### 3.4 ISP 라우터 OSPF, iBGP Route Reflector, PE 사이트 eBGP
+### 3.4 ISP 라우터 OSPF, iBGP Route Reflector
 
 ```
-! isp-1-pe-a (RR Client, 사이트 eBGP)
-ip prefix-list pl-hq-in seq 5 permit 10.1.0.0/16
-ip prefix-list pl-dc-in seq 5 permit 10.2.0.0/16
-ip prefix-list pl-deny-all seq 5 deny 0.0.0.0/0 le 32
-!
+! isp-1-pe-a (RR Client)
 router ospf 1
  router-id 100.100.100.1
  passive-interface default
@@ -115,16 +111,6 @@ router bgp 65100
  neighbor 100.100.100.3 update-source lo0
  neighbor 100.100.100.3 next-hop-self
  neighbor 100.100.100.3 timers 3 9
- neighbor 100.1.11.1 remote-as 65001
- neighbor 100.1.11.1 timers 3 9
- neighbor 100.1.11.1 prefix-list pl-hq-in in
- neighbor 100.1.11.1 prefix-list pl-deny-all out
- neighbor 100.1.11.1 default-originate
- neighbor 100.1.21.1 remote-as 65002
- neighbor 100.1.21.1 timers 3 9
- neighbor 100.1.21.1 prefix-list pl-dc-in in
- neighbor 100.1.21.1 prefix-list pl-deny-all out
- neighbor 100.1.21.1 default-originate
 ```
 
 ```
@@ -148,7 +134,82 @@ router bgp 65100
  neighbor 100.100.100.3 timers 3 9
 ```
 
-- 예시는 `ISP-1-PE-A`와 `ISP-1-P1`. AS, Loopback0, 세션, prefix-list는 `docs/bgp-design.md` 1~6절 표 값을 사용. P1, P2는 사이트 방향 링크가 없어 사이트 eBGP, `network` 구문 없음. PE의 OSPF 대상은 ISP 내부 링크(Gi0/0, Gi1/0)와 Loopback0이며 사이트 방향 링크는 제외. 7200은 포트마다 슬롯이 달라 `int range` 대신 포트별로 입력.
+- 예시는 `ISP-1-PE-A`와 `ISP-1-P1`. AS, Loopback0, 세션, prefix-list는 `docs/bgp-design.md` 1~6절 표 값을 사용. P1, P2는 사이트 방향 링크가 없어 사이트 eBGP, `network` 구문 없음. 사이트 eBGP(PE)와 MPLS, VRF는 3.4-1절. PE의 OSPF 대상은 ISP 내부 링크(Gi0/0, Gi1/0)와 Loopback0이며 사이트 방향 링크는 제외. 7200은 포트마다 슬롯이 달라 `int range` 대신 포트별로 입력.
+
+### 3.4-1 ISP MPLS L3VPN(LDP, VRF, vpnv4, PE 사이트 eBGP)
+
+```
+! isp-1-pe-a (PE)
+ip prefix-list pl-hq-in seq 5 permit 10.1.0.0/16
+ip prefix-list pl-dc-in seq 5 permit 10.2.0.0/16
+ip prefix-list pl-deny-all seq 5 deny 0.0.0.0/0 le 32
+!
+ip vrf corp
+ rd 65100:1
+ route-target export 65100:1
+ route-target import 65100:1
+!
+mpls label protocol ldp
+mpls ldp router-id lo0 force
+int gi0/0
+ mpls ip
+int gi1/0
+ mpls ip
+int gi2/0
+ ip vrf forwarding corp
+ ip addr 100.1.11.2 255.255.255.252
+int gi3/0
+ ip vrf forwarding corp
+ ip addr 100.1.21.2 255.255.255.252
+!
+router bgp 65100
+ address-family vpnv4
+  neighbor 100.100.100.2 activate
+  neighbor 100.100.100.2 send-community extended
+  neighbor 100.100.100.3 activate
+  neighbor 100.100.100.3 send-community extended
+ exit-address-family
+ address-family ipv4 vrf corp
+  neighbor 100.1.11.1 remote-as 65001
+  neighbor 100.1.11.1 activate
+  neighbor 100.1.11.1 timers 3 9
+  neighbor 100.1.11.1 prefix-list pl-hq-in in
+  neighbor 100.1.11.1 prefix-list pl-deny-all out
+  neighbor 100.1.11.1 default-originate
+  neighbor 100.1.21.1 remote-as 65002
+  neighbor 100.1.21.1 activate
+  neighbor 100.1.21.1 timers 3 9
+  neighbor 100.1.21.1 prefix-list pl-dc-in in
+  neighbor 100.1.21.1 prefix-list pl-deny-all out
+  neighbor 100.1.21.1 default-originate
+ exit-address-family
+```
+
+```
+! isp-1-p1 (P + RR)
+mpls label protocol ldp
+mpls ldp router-id lo0 force
+int gi0/0
+ mpls ip
+int gi1/0
+ mpls ip
+int gi2/0
+ mpls ip
+!
+router bgp 65100
+ address-family vpnv4
+  neighbor 100.100.100.1 activate
+  neighbor 100.100.100.1 send-community extended
+  neighbor 100.100.100.1 route-reflector-client
+  neighbor 100.100.100.4 activate
+  neighbor 100.100.100.4 send-community extended
+  neighbor 100.100.100.4 route-reflector-client
+  neighbor 100.100.100.3 activate
+  neighbor 100.100.100.3 send-community extended
+ exit-address-family
+```
+
+- 예시는 `ISP-1-PE-A`와 `ISP-1-P1`. VRF, RD/RT, 인터페이스는 `docs/mpls-design.md` 2~4절, 사이트 이웃과 prefix-list는 `docs/bgp-design.md` 5~6절 표 값을 사용. `ip vrf forwarding`을 입력하면 해당 포트의 IP가 지워지므로 `ip addr`를 다시 입력. 설정 후 `clear ip bgp *`가 필요할 수 있음.
 
 ### 3.5 DMVPN(Hub와 Spoke)
 

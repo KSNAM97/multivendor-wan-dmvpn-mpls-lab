@@ -20,6 +20,7 @@
 |---|---|---|
 | 사이트 내부 라우팅 | [ospf-design.md](./ospf-design.md) | 프로세스, Area, Router ID, 인터페이스별 소속, 기본 경로 광고 |
 | ISP 라우팅 | [bgp-design.md](./bgp-design.md) | AS, Router ID, RR 구조, iBGP·eBGP 세션, 광고 prefix와 정책 |
+| ISP 코어 MPLS | [mpls-design.md](./mpls-design.md) | LDP, VRF(corp), MP-BGP vpnv4, MTU, 검증 항목 |
 | VLAN, 채널, 트렁크 | [vlan-design.md](./vlan-design.md) | VLAN 정의, EtherChannel, 트렁크, 액세스 포트, DHCP 배치 |
 | 게이트웨이 이중화, STP | [vrrp-mstp-design.md](./vrrp-mstp-design.md) | VRRP 그룹과 우선순위, MST region과 루트 |
 | 사이트 간 터널 | [dmvpn-design.md](./dmvpn-design.md) | DMVPN Phase 3, IPsec, NHRP, PI 언더레이 |
