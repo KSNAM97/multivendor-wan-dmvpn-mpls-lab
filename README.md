@@ -24,7 +24,11 @@
 
 ## 🌐 토폴로지
 
-![Topology](./docs/images/topology.svg)
+![Topology](./topology/topology-draft.png)
+
+### 개요도
+
+![Overview](./docs/images/topology.svg)
 
 ```text
 HQ(65001) ─┬─ ISP-1 ─┐
