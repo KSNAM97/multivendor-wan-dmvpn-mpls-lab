@@ -3,6 +3,7 @@
 [![Cisco](https://img.shields.io/badge/Cisco-IOS-blue?logo=cisco)](https://github.com/KSNAM97)
 [![Arista](https://img.shields.io/badge/Arista-cEOS-orange)](https://github.com/KSNAM97)
 [![GNS3](https://img.shields.io/badge/GNS3-Topology-green)](https://github.com/KSNAM97)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 
 **ISP 이중화 사이트 엣지 eBGP + iBGP Route Reflector + MPLS L3VPN · DMVPN Phase3 (mGRE over IPsec) · OSPF · VRRP · MSTP · QoS · 화이트리스트 ACL — Cisco + Arista 멀티벤더 4개 사이트 WAN 종합 구축**
 
@@ -23,7 +24,7 @@
 
 ## 🌐 토폴로지
 
-![Topology](./topology/topology-draft.png)
+![Topology](./docs/images/topology.svg)
 
 ```text
 HQ(65001) ─┬─ ISP-1 ─┐
@@ -172,3 +173,7 @@ network-project/
 상세 설계: [`docs/ospf-design.md`](./docs/ospf-design.md), [`docs/bgp-design.md`](./docs/bgp-design.md), [`docs/vlan-design.md`](./docs/vlan-design.md), [`docs/vrrp-mstp-design.md`](./docs/vrrp-mstp-design.md), [`docs/dmvpn-design.md`](./docs/dmvpn-design.md), [`docs/dhcp-dns-design.md`](./docs/dhcp-dns-design.md), [`docs/config-guide/README.md`](./docs/config-guide/README.md)
 
 > 브랜치 전략, 커밋 규칙, Jira 연동 → [`CONTRIBUTING.md`](./CONTRIBUTING.md)
+
+## 라이선스
+
+MIT License. 자세한 내용은 [`LICENSE`](./LICENSE) 참고.

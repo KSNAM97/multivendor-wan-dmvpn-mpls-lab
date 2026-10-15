@@ -1,0 +1,182 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 1040" width="1280" height="1040" role="img" aria-labelledby="t d">
+<title id="t">네트워크 구성도</title>
+<desc id="d">HQ, DC, BR1, BR2 네 사이트가 ISP-1, ISP-2에 사이트 엣지 eBGP로 연결되고, ISP 내부는 iBGP Route Reflector와 MPLS L3VPN, 사이트 간은 Private Internet 위의 DMVPN Phase 3로도 연결되는 구성도</desc>
+<style>
+:root{--bg:#ffffff;--panel:#f6f8fa;--stroke:#d0d7de;--text:#1f2328;--sub:#59636e;--dev:#ffffff;--site:#ffffff;--isp1:#0969da;--isp2:#bc4c00;--core:#8c959f;--pi:#1a7f37;--pifill:#dafbe1;--tun:#8250df}
+@media (prefers-color-scheme: dark){:root{--bg:#0d1117;--panel:#161b22;--stroke:#30363d;--text:#e6edf3;--sub:#9198a1;--dev:#21262d;--site:#0d1117;--isp1:#58a6ff;--isp2:#f0883e;--core:#8b949e;--pi:#3fb950;--pifill:#12261e;--tun:#bc8cff}}
+text{font-family:"Noto Sans KR","Malgun Gothic","Apple SD Gothic Neo","Segoe UI",Arial,sans-serif;fill:var(--text)}
+.bg{fill:var(--bg)}
+.panel{fill:var(--panel);stroke:var(--stroke);stroke-width:1.5}
+.p1{fill:var(--panel);stroke:var(--isp1);stroke-width:1.8}
+.p2{fill:var(--panel);stroke:var(--isp2);stroke-width:1.8}
+.site{fill:var(--site);stroke:var(--stroke);stroke-width:1.5}
+.dev{fill:var(--dev);stroke:var(--stroke);stroke-width:1.2}
+.dev1{fill:var(--dev);stroke:var(--isp1);stroke-width:1.8}
+.dev2{fill:var(--dev);stroke:var(--isp2);stroke-width:1.8}
+.devp{fill:var(--pifill);stroke:var(--pi);stroke-width:1.8}
+.l1{stroke:var(--isp1);stroke-width:3;fill:none}
+.l2{stroke:var(--isp2);stroke-width:3;fill:none}
+.lc{stroke:var(--core);stroke-width:3;fill:none}
+.lp{stroke:var(--pi);stroke-width:2.5;fill:none}
+.lt{stroke:var(--tun);stroke-width:2.5;stroke-dasharray:7 6;fill:none}
+.title{font-size:22px;font-weight:700}
+.sub{font-size:12px;fill:var(--sub)}
+.h{font-size:14px;font-weight:700}
+.h1{font-size:15px;font-weight:700;fill:var(--isp1)}
+.h2{font-size:15px;font-weight:700;fill:var(--isp2)}
+.hp{font-size:14px;font-weight:700;fill:var(--pi)}
+.n{font-size:12px}
+.s{font-size:11px;fill:var(--sub)}
+.tag{font-size:10px;font-weight:700;fill:var(--tun)}
+</style>
+<rect x="0" y="0" width="1280" height="1040" rx="0" class="bg"/>
+<text x="640.0" y="36" class="title" text-anchor="middle">네트워크 구성도</text>
+<text x="640.0" y="58" class="sub" text-anchor="middle">HQ · DC · BR1 · BR2  |  ISP 이중화(사이트 엣지 eBGP, ISP 내부 iBGP RR, MPLS L3VPN)  |  DMVPN Phase 3</text>
+<rect x="20" y="72" width="290" height="628" rx="12" class="p1"/>
+<text x="165" y="98" class="h1" text-anchor="middle">ISP-1 · AS 65100</text>
+<text x="165" y="116" class="s" text-anchor="middle">iBGP RR(P1·P2) · OSPF 1 / Area 0</text>
+<text x="165" y="131" class="s" text-anchor="middle">MPLS L3VPN(LDP, VRF corp)</text>
+<line x1="165" y1="232" x2="90" y2="358" class="lc"/>
+<line x1="165" y1="232" x2="240" y2="358" class="lc"/>
+<line x1="90" y1="392" x2="165" y2="533" class="lc"/>
+<line x1="240" y1="392" x2="165" y2="533" class="lc"/>
+<line x1="145" y1="375" x2="185" y2="375" class="lc"/>
+<rect x="110" y="198" width="110" height="34" rx="6" class="dev"/>
+<text x="165.0" y="219.0" class="n" text-anchor="middle">ISP-1-PE-A</text>
+<rect x="35" y="358" width="110" height="34" rx="6" class="dev"/>
+<text x="90.0" y="379.0" class="n" text-anchor="middle">ISP-1-P1</text>
+<rect x="185" y="358" width="110" height="34" rx="6" class="dev"/>
+<text x="240.0" y="379.0" class="n" text-anchor="middle">ISP-1-P2</text>
+<rect x="110" y="533" width="110" height="34" rx="6" class="dev"/>
+<text x="165.0" y="554.0" class="n" text-anchor="middle">ISP-1-PE-B</text>
+<text x="90" y="408" class="s" text-anchor="middle">RR</text>
+<text x="240" y="408" class="s" text-anchor="middle">RR</text>
+<rect x="970" y="72" width="290" height="628" rx="12" class="p2"/>
+<text x="1115" y="98" class="h2" text-anchor="middle">ISP-2 · AS 65200</text>
+<text x="1115" y="116" class="s" text-anchor="middle">iBGP RR(P1·P2) · OSPF 1 / Area 0</text>
+<text x="1115" y="131" class="s" text-anchor="middle">MPLS L3VPN(LDP, VRF corp)</text>
+<line x1="1115" y1="232" x2="1040" y2="358" class="lc"/>
+<line x1="1115" y1="232" x2="1190" y2="358" class="lc"/>
+<line x1="1040" y1="392" x2="1115" y2="533" class="lc"/>
+<line x1="1190" y1="392" x2="1115" y2="533" class="lc"/>
+<line x1="1095" y1="375" x2="1135" y2="375" class="lc"/>
+<rect x="1060" y="198" width="110" height="34" rx="6" class="dev"/>
+<text x="1115.0" y="219.0" class="n" text-anchor="middle">ISP-2-PE-A</text>
+<rect x="985" y="358" width="110" height="34" rx="6" class="dev"/>
+<text x="1040.0" y="379.0" class="n" text-anchor="middle">ISP-2-P1</text>
+<rect x="1135" y="358" width="110" height="34" rx="6" class="dev"/>
+<text x="1190.0" y="379.0" class="n" text-anchor="middle">ISP-2-P2</text>
+<rect x="1060" y="533" width="110" height="34" rx="6" class="dev"/>
+<text x="1115.0" y="554.0" class="n" text-anchor="middle">ISP-2-PE-B</text>
+<text x="1040" y="408" class="s" text-anchor="middle">RR</text>
+<text x="1190" y="408" class="s" text-anchor="middle">RR</text>
+<rect x="350" y="72" width="580" height="140" rx="10" class="site"/>
+<text x="640.0" y="94" class="h" text-anchor="middle">HQ · AS 65001 · 10.1.0.0/16 · OSPF 11 / Area 1</text>
+<rect x="362" y="112" width="96" height="34" rx="6" class="dev1"/>
+<text x="410.0" y="133.0" class="n" text-anchor="middle">HQ-R1</text>
+<rect x="822" y="112" width="96" height="34" rx="6" class="dev2"/>
+<text x="870.0" y="133.0" class="n" text-anchor="middle">HQ-R2</text>
+<text x="870" y="162" class="tag" text-anchor="middle">DMVPN Spoke</text>
+<rect x="510" y="108" width="260" height="44" rx="6" class="dev"/>
+<text x="640.0" y="128.0" class="n" text-anchor="middle">HQ-SW-2 · HQ-SW-3 (VRRP)</text>
+<text x="640.0" y="141.0" class="s" text-anchor="middle">HQ-SW-1 (access) · PC1 · PC2</text>
+<rect x="350" y="232" width="580" height="172" rx="10" class="site"/>
+<text x="640.0" y="254" class="h" text-anchor="middle">DC · AS 65002 · 10.2.0.0/16 · OSPF 10 / Area 0</text>
+<rect x="362" y="300" width="96" height="34" rx="6" class="dev1"/>
+<text x="410.0" y="321.0" class="n" text-anchor="middle">DC-R3</text>
+<rect x="822" y="300" width="96" height="34" rx="6" class="dev2"/>
+<text x="870.0" y="321.0" class="n" text-anchor="middle">DC-R4</text>
+<rect x="510" y="258" width="260" height="34" rx="6" class="devp"/>
+<text x="640.0" y="279.0" class="n" text-anchor="middle">DC-R1 · DC-R2</text>
+<text x="640" y="306" class="tag" text-anchor="middle">PI 연결, DMVPN Hub = DC-R2</text>
+<rect x="510" y="316" width="260" height="34" rx="6" class="dev"/>
+<text x="640.0" y="337.0" class="n" text-anchor="middle">DC-SW1~4-L3 (Arista, VRRP)</text>
+<rect x="510" y="358" width="260" height="34" rx="6" class="dev"/>
+<text x="640.0" y="379.0" class="n" text-anchor="middle">DC-SW1·2-L2 · DC-DNS-1·2 (VLAN 50)</text>
+<rect x="350" y="422" width="580" height="120" rx="10" class="site"/>
+<text x="640.0" y="444" class="h" text-anchor="middle">BR1 · AS 65003 · 10.3.0.0/16 · OSPF 12 / Area 2</text>
+<rect x="362" y="462" width="96" height="34" rx="6" class="dev1"/>
+<text x="410.0" y="483.0" class="n" text-anchor="middle">BR1-R1</text>
+<text x="410" y="512" class="tag" text-anchor="middle">DMVPN Spoke</text>
+<rect x="822" y="462" width="96" height="34" rx="6" class="dev2"/>
+<text x="870.0" y="483.0" class="n" text-anchor="middle">BR1-R2</text>
+<rect x="510" y="458" width="260" height="44" rx="6" class="dev"/>
+<text x="640.0" y="478.0" class="n" text-anchor="middle">BR1-SW1·2-L3 (VRRP)</text>
+<text x="640.0" y="491.0" class="s" text-anchor="middle">BR1-SW3-L3 (access) · PC1 · PC2</text>
+<rect x="350" y="560" width="580" height="120" rx="10" class="site"/>
+<text x="640.0" y="582" class="h" text-anchor="middle">BR2 · AS 65004 · 10.4.0.0/16 · OSPF 13 / Area 3</text>
+<rect x="362" y="600" width="96" height="34" rx="6" class="dev1"/>
+<text x="410.0" y="621.0" class="n" text-anchor="middle">BR2-R1</text>
+<rect x="822" y="600" width="96" height="34" rx="6" class="dev2"/>
+<text x="870.0" y="621.0" class="n" text-anchor="middle">BR2-R2</text>
+<text x="870" y="650" class="tag" text-anchor="middle">DMVPN Spoke</text>
+<rect x="510" y="596" width="260" height="44" rx="6" class="dev"/>
+<text x="640.0" y="616.0" class="n" text-anchor="middle">BR2-SW1·2-L3 (VRRP)</text>
+<text x="640.0" y="629.0" class="s" text-anchor="middle">BR2-SW3-L2 (access) · PC1 · PC2</text>
+<line x1="220" y1="215" x2="362" y2="129" class="l1"/>
+<line x1="220" y1="215" x2="362" y2="317" class="l1"/>
+<line x1="220" y1="550" x2="362" y2="479" class="l1"/>
+<line x1="220" y1="550" x2="362" y2="617" class="l1"/>
+<line x1="1005" y1="215" x2="918" y2="129" class="l2"/>
+<line x1="1005" y1="215" x2="918" y2="317" class="l2"/>
+<line x1="1005" y1="550" x2="918" y2="479" class="l2"/>
+<line x1="1005" y1="550" x2="918" y2="617" class="l2"/>
+<text x="290" y="160" class="s" text-anchor="middle">eBGP</text>
+<text x="990" y="160" class="s" text-anchor="middle">eBGP</text>
+<rect x="20" y="712" width="290" height="318" rx="12" class="panel"/>
+<text x="165" y="738" class="h" text-anchor="middle">범례</text>
+<line x1="36" y1="772" x2="76" y2="772" class="l1"/>
+<text x="88" y="776" class="s" text-anchor="start">사이트 엣지 eBGP: ISP-1 (사이트 AS ↔ 65100)</text>
+<line x1="36" y1="808" x2="76" y2="808" class="l2"/>
+<text x="88" y="812" class="s" text-anchor="start">사이트 엣지 eBGP: ISP-2 (사이트 AS ↔ 65200)</text>
+<line x1="36" y1="844" x2="76" y2="844" class="lc"/>
+<text x="88" y="848" class="s" text-anchor="start">ISP 내부: iBGP RR, OSPF 1, MPLS(LDP)</text>
+<line x1="36" y1="880" x2="76" y2="880" class="lp"/>
+<text x="88" y="884" class="s" text-anchor="start">Private Internet 언더레이(OSPF 2)</text>
+<line x1="36" y1="916" x2="76" y2="916" class="lt"/>
+<text x="88" y="920" class="s" text-anchor="start">DMVPN Phase 3 터널(172.16.0.0/24)</text>
+<text x="36" y="958" class="s" text-anchor="start">각 사이트는 ISP-1과 ISP-2에 서로 다른</text>
+<text x="36" y="974" class="s" text-anchor="start">라우터로 연결(R1은 ISP-1, R2는 ISP-2).</text>
+<text x="36" y="990" class="s" text-anchor="start">장비 이름이 같은 색의 선과 외곽선으로 연결.</text>
+<rect x="330" y="712" width="620" height="318" rx="12" class="panel"/>
+<text x="640" y="738" class="hp" text-anchor="middle">Private Internet · 203.0.113.0/24</text>
+<ellipse cx="640" cy="790" rx="170" ry="34" class="devp"/>
+<text x="640" y="788" class="n" text-anchor="middle">Private-net</text>
+<text x="640" y="803" class="s" text-anchor="middle">OSPF 2 / Area 100 · ACL 화이트리스트</text>
+<line x1="395" y1="860" x2="578.75" y2="822" class="lp"/>
+<rect x="345" y="860" width="100" height="40" rx="6" class="devp"/>
+<text x="395.0" y="884.0" class="n" text-anchor="middle">DC-R1</text>
+<line x1="515" y1="860" x2="608.75" y2="822" class="lp"/>
+<rect x="465" y="860" width="100" height="40" rx="6" class="devp"/>
+<text x="515.0" y="878.0" class="n" text-anchor="middle">DC-R2</text>
+<text x="515.0" y="891.0" class="s" text-anchor="middle">DMVPN Hub</text>
+<line x1="635" y1="860" x2="638.75" y2="822" class="lp"/>
+<rect x="585" y="860" width="100" height="40" rx="6" class="devp"/>
+<text x="635.0" y="878.0" class="n" text-anchor="middle">HQ-R2</text>
+<text x="635.0" y="891.0" class="s" text-anchor="middle">DMVPN Spoke</text>
+<line x1="755" y1="860" x2="668.75" y2="822" class="lp"/>
+<rect x="705" y="860" width="100" height="40" rx="6" class="devp"/>
+<text x="755.0" y="878.0" class="n" text-anchor="middle">BR1-R1</text>
+<text x="755.0" y="891.0" class="s" text-anchor="middle">DMVPN Spoke</text>
+<line x1="875" y1="860" x2="698.75" y2="822" class="lp"/>
+<rect x="825" y="860" width="100" height="40" rx="6" class="devp"/>
+<text x="875.0" y="878.0" class="n" text-anchor="middle">BR2-R2</text>
+<text x="875.0" y="891.0" class="s" text-anchor="middle">DMVPN Spoke</text>
+<path d="M515,900 C515,946 635,946 635,900" class="lt"/>
+<path d="M515,900 C515,964 755,964 755,900" class="lt"/>
+<path d="M515,900 C515,982 875,982 875,900" class="lt"/>
+<text x="640" y="1014" class="s" text-anchor="middle">DMVPN Phase 3(mGRE over IPsec): Hub DC-R2 ↔ Spoke HQ-R2 · BR1-R1 · BR2-R2, Spoke 간 shortcut</text>
+<rect x="970" y="712" width="290" height="318" rx="12" class="panel"/>
+<text x="1115" y="738" class="h" text-anchor="middle">라우팅 요약</text>
+<text x="986" y="768" class="s" text-anchor="start">사이트 내부: OSPF</text>
+<text x="986" y="790" class="s" text-anchor="start">  (DC 0, HQ 1, BR1 2, BR2 3)</text>
+<text x="986" y="812" class="s" text-anchor="start">사이트 → ISP: 사이트 /16만 광고</text>
+<text x="986" y="834" class="s" text-anchor="start">  (route-map, prefix-list)</text>
+<text x="986" y="856" class="s" text-anchor="start">ISP → 사이트: 기본 경로만 전달</text>
+<text x="986" y="878" class="s" text-anchor="start">  (default-originate)</text>
+<text x="986" y="900" class="s" text-anchor="start">장애 전환: BGP hold 9초 후</text>
+<text x="986" y="922" class="s" text-anchor="start">  OSPF 기본 경로 metric 100→200</text>
+<text x="986" y="944" class="s" text-anchor="start">ISP-1, ISP-2 사이 연결 없음</text>
+<text x="986" y="966" class="s" text-anchor="start">게이트웨이 VRRP, STP는 MSTP</text>
+<text x="986" y="988" class="s" text-anchor="start">DC만 Arista cEOS, 나머지 Cisco</text>
+</svg>
