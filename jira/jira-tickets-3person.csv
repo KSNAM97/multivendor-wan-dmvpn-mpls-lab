@@ -15,7 +15,7 @@ Summary,Issue Type,Label,Priority,Description,Due Date
 [3주] PE 정책(prefix-list)·VRF 경유 사이트 간 도달,Task,net-cloud,High,"PE 입력 prefix-list, vpnv4 사이트 /16 전달, 사이트 간 ISP 경유 도달 / 일정: 3주 목(10/29)",2026-10-29
 "[2주] 사이트 엣지 eBGP(8세션, PE VRF corp) + route-map/prefix-list",Task,net-cloud;policy,High,"사이트 라우터 eBGP, PE VRF corp 안의 eBGP·default-originate, route-map·prefix-list, OSPF default-information originate / 일정: 2주 월(10/19)",2026-10-19
 [2주] Private Internet ACL 화이트리스트,Task,net-cloud,High,"5개 링크, OSPF/GRE/ESP/UDP500만 허용 / 일정: 2주 화(10/20)",2026-10-20
-[2주] Private Internet OSPF(프로세스2) 구성,Task,net-cloud,High,"Area100, 언더레이 전용 / 일정: 2주 월(10/19), NBMA 주소 상호도달 확인 포함",2026-10-19
+[2주] Private Internet OSPF(프로세스2) 구성,Task,net-cloud,High,"Area100, 언더레이 전용 / 일정: 주말(10/17), NBMA 주소 상호도달 확인 포함",2026-10-17
 [2주] DMVPN Hub 구성(DC-R2),Task,net-cloud,High,"mGRE, NHRP, IPsec profile / 일정: 2주 화(10/20)",2026-10-20
 [2주] DMVPN Spoke 구성(BR1-R1),Task,policy;vlan-br1-public,High,"Phase3 shortcut / 일정: 2주 수(10/21), Phase3 shortcut 검증은 2주 목(10/22)",2026-10-21
 [2주] DMVPN Spoke 구성(BR2-R2),Task,policy;vlan-br2-public,High,"Phase3 shortcut / 일정: 2주 수(10/21), Phase3 shortcut 검증은 2주 목(10/22)",2026-10-21

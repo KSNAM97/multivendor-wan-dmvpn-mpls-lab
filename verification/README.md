@@ -70,7 +70,7 @@ verification/
 | KAN-34 | 주말(10/17~10/18) | ISP MPLS 코어(LDP) | `isp*/core/mpls.md` 1절 | 서식 준비 |
 | KAN-35 | 주말(10/17~10/18) | PE VRF corp, vpnv4 | `isp*/core/mpls.md` 2절 | 서식 준비 |
 | KAN-18 | 2주 월 | 사이트 엣지 eBGP + route-map | `*/core/isp-link.md`, `isp*/core/bgp.md` 2절 | 서식 준비 |
-| KAN-20 | 2주 월 | Private Internet OSPF | `private-internet/core/ospf.md` | 서식 준비 |
+| KAN-20 | 주말(10/17) | Private Internet OSPF | `private-internet/core/ospf.md` | 서식 준비 |
 | KAN-19 | 2주 화 | Private Internet ACL | `private-internet/core/acl.md` | 서식 준비 |
 | KAN-21 | 2주 화 | DMVPN Hub | `dc/core/dmvpn.md` | 서식 준비 |
 | KAN-22, 23, 33 | 2주 수 | DMVPN Spoke(BR1, BR2, HQ) | `br1/core/dmvpn.md`, `br2/core/dmvpn.md`, `hq/core/dmvpn.md` | 서식 준비 |

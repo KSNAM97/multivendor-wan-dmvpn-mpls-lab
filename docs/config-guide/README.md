@@ -55,9 +55,10 @@
 | 1 | 1주 월~화 | 전 장비 | 호스트네임, lo0, 인터페이스 설명·IP, 콘솔 설정 | port-mapping, ip-mapping, ospf-design |
 | 2 | 1주 수~목 | 스위치 | VLAN, 트렁크, EtherChannel, MSTP, SVI, VRRP | vlan-design |
 | 3 | 1주 금 | 사이트 장비 | 사이트 내부 OSPF, 사용자 VLAN DHCP | ospf-design, dhcp-dns-design |
-| 3-1 | 주말(10/17~10/18) | ISP 장비 | MPLS 코어(LDP), PE VRF `corp`, vpnv4(RR) | mpls-design |
+| 3-1 | 주말(10/17) | Private-net, PI 연결 라우터 | 언더레이 OSPF(프로세스 2) | ospf-design 5절, dmvpn-design 5절 |
+| 3-2 | 주말(10/17~10/18) | ISP 장비 | MPLS 코어(LDP), PE VRF `corp`, vpnv4(RR) | mpls-design |
 | 4 | 2주 월 | 사이트 ISP 연결 라우터, ISP PE | 사이트 엣지 eBGP(route-map, prefix-list), PE 사이트 세션(VRF `corp` 안)과 `default-originate`, OSPF 기본 경로 광고 | bgp-design 5~6절, mpls-design 3절, ospf-design 6절 |
-| 5 | 2주 월~화 | Private-net, PI 연결 라우터 | 언더레이 OSPF(프로세스 2), PI ACL | ospf-design 5절, dmvpn-design 5절 |
+| 5 | 2주 화 | Private-net | PI ACL(언더레이 OSPF는 3-1에서 선행) | ospf-design 5절, dmvpn-design 5절 |
 | 6 | 2주 화~수 | DC-R2, HQ-R2, BR1-R1, BR2-R2 | IPsec, Tunnel0, NHRP, 터널 OSPF | dmvpn-design |
 | 7 | 2주 목 | DC-DNS-1, DC-DNS-2 | dnsmasq, 레코드 | dhcp-dns-design |
 | 8 | 2주 금 | DC 게이트웨이 | 서버 VLAN ACL | dhcp-dns-design 5절 |

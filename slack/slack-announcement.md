@@ -14,8 +14,8 @@ DC 서버 VLAN(50)은 DC-DNS-1(주)과 DC-DNS-2(백업) 두 대로 구성합니�
 
 ■ 일정 (3.5주, 10/12~11/4)
 - 1주: 설계·환경, VLAN/트렁크/EtherChannel/VRRP/MSTP, 금요일에 사이트 내부 OSPF + 사이트 DHCP
-- 주말(10/17~10/18): ISP MPLS 코어(LDP), PE VRF, vpnv4 선행 작업
-- 2주: 월 사이트 엣지 eBGP, PI OSPF / 화 PI ACL, DMVPN Hub / 수 DMVPN Spoke / 목 DNS 서버, Phase3 검증 / 금 서버 VLAN ACL, 전 사이트 상호도달
+- 주말(10/17~10/18): Private Internet OSPF 선행, ISP MPLS 코어(LDP), PE VRF, vpnv4 선행 작업
+- 2주: 월 사이트 엣지 eBGP / 화 PI ACL, DMVPN Hub / 수 DMVPN Spoke / 목 DNS 서버, Phase3 검증 / 금 서버 VLAN ACL, 전 사이트 상호도달
 - 3주: 월 VRRP·EtherChannel 장애 실측 / 화 DMVPN Hub 장애 / 수 ISP 내부 iBGP RR / 목 PE 광고, ISP-1 장애 전환 / 금 QoS, 트러블슈팅 로그
 - 3.5주: PPT, 리허설
 - BGP와 QoS는 후반에 배치하고 OSPF, DHCP는 1주차로 앞당겼습니다. 상세는 docs/schedule.md 참고.
