@@ -65,3 +65,12 @@ router bgp 65200
  neighbor 200.200.200.3 timers 3 9
  neighbor 200.200.200.3 next-hop-self
 !
+mpls label protocol ldp
+mpls ldp router-id loopback 0
+mpls label range 24000 24999
+!
+int gi0/0
+ mpls ip
+int gi1/0
+ mpls ip
+!

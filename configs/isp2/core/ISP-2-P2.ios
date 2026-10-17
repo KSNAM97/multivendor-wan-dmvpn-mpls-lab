@@ -68,3 +68,14 @@ router bgp 65200
  neighbor 200.200.200.2 update-source lo0
  neighbor 200.200.200.2 timers 3 9
 !
+mpls label protocol ldp
+mpls ldp router-id loopback 0
+mpls label range 23000 23999
+!
+int gi0/0
+ mpls ip
+int gi1/0
+ mpls ip
+int gi2/0
+ mpls ip
+!

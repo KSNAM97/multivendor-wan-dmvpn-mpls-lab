@@ -12,7 +12,8 @@ ISP-1, ISP-2 코어에 MPLS L3VPN을 적용하는 구성을 정리한 문서. IS
 
 - ISP 내부 링크(링크 # 71~75, 76~80)에서만 MPLS 활성화. 사이트 방향 링크는 VRF 인터페이스이므로 `mpls ip` 사용 안 함.
 - LDP Router ID는 Loopback0(`mpls ldp router-id lo0 force`). Loopback0 `/32`는 ISP 내부 OSPF로 도달(`docs/ospf-design.md`).
-- `mpls label protocol ldp`, 인터페이스에 `mpls ip`. 타이머와 인증은 기본값.
+- `force`는 LDP가 이미 다른 Router ID로 동작 중일 때 즉시 바꾸는 옵션(세션이 재시작됨). 구성 순서를 `mpls ldp router-id` 먼저, 인터페이스 `mpls ip` 나중으로 하면 필요 없고, 이미 `mpls ip`를 켠 뒤 Loopback0으로 바꿔야 할 때만 사용.
+- `mpls label protocol ldp`(표준 LDP), `mpls label range <시작> <끝>`(장비마다 레이블 구간을 나눔), 인터페이스에 `mpls ip`. 타이머와 인증은 기본값.
 
 | 장비 | `mpls ip` 인터페이스 | 링크 # (ISP-1 / ISP-2) |
 |---|---|---|
@@ -21,15 +22,24 @@ ISP-1, ISP-2 코어에 MPLS L3VPN을 적용하는 구성을 정리한 문서. IS
 | P2 | Gi0/0, Gi1/0, Gi2/0 | 72, 74, 75 / 77, 79, 80 |
 | PE-B | Gi0/0, Gi1/0 | 73, 74 / 78, 79 |
 
+레이블 구간(`mpls label range <시작> <끝>`). 첫째 자리는 ISP, 둘째 자리는 장비 순서(PE-A 1, P1 2, P2 3, PE-B 4, Loopback0 마지막 자리와 같음)이며 구간이 겹치지 않아 `show mpls forwarding-table`의 레이블 숫자로 붙인 장비를 알 수 있음. 레이블 16 미만은 예약.
+
+| 장비 | ISP-1 | ISP-2 |
+|---|---|---|
+| PE-A | 11000 11999 | 21000 21999 |
+| P1 | 12000 12999 | 22000 22999 |
+| P2 | 13000 13999 | 23000 23999 |
+| PE-B | 14000 14999 | 24000 24999 |
+
 ## 3. VRF
 
 - ISP마다 VRF 하나(`corp`)로 네 사이트를 같은 VPN에 연결. VRF는 PE-A, PE-B에만 존재하고 P1, P2에는 없음.
 - RD와 RT는 ISP의 AS 번호 기준. RT export와 import를 같은 값으로 두어 사이트끼리 전부 도달.
 
-| ISP | VRF | RD | route-target export / import |
-|---|---|---|---|
-| ISP-1 | corp | 65100:1 | 65100:1 / 65100:1 |
-| ISP-2 | corp | 65200:1 | 65200:1 / 65200:1 |
+| ISP   | VRF  | RD      | route-target export / import |
+| ----- | ---- | ------- | ---------------------------- |
+| ISP-1 | corp | 65100:1 | 65100:1 / 65100:1            |
+| ISP-2 | corp | 65200:1 | 65200:1 / 65200:1            |
 
 - 사이트 방향 포트를 VRF 인터페이스로 지정(`ip vrf forwarding corp`). 이 명령을 넣으면 기존 IP가 지워지므로 `ip addr`를 다시 입력.
 
