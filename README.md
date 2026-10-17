@@ -179,6 +179,10 @@ network-project/
 
 > 브랜치 전략, 커밋 규칙, Jira 연동 → [`CONTRIBUTING.md`](./CONTRIBUTING.md)
 
+## 참고 자료
+
+- 토폴로지 구성 참고: 591Lab, CCIE Enterprise Infrastructure 토폴로지 다이어그램. 사이트(DC, HQ, Branch)와 ISP, DMVPN 배치를 참고해 본 프로젝트 요구에 맞게 직접 설계·작성했으며 원본 이미지는 이 저장소에 포함하지 않음.
+
 ## 라이선스
 
 MIT License. 자세한 내용은 [`LICENSE`](./LICENSE) 참고.
