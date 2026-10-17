@@ -17,6 +17,7 @@ VLAN, 게이트웨이 이중화, EtherChannel, 트렁크, STP(MSTP), DHCP 배치
 | 전 사이트 | 999 | NATIVE | 없음 | `vlan-native` | - |
 
 - 모든 트렁크의 native VLAN은 999.
+- BR1 스위치는 Aruba CX(AOS-CX). 트렁크는 `vlan trunk native 999`, `vlan trunk allowed 10,20,100`, 액세스 포트는 `vlan access <번호>`, EtherChannel은 LAG(`interface lag 1`, `lacp mode active`)로 설정(`docs/config-guide/aruba-switch.md`).
 - MGMT VLAN 100은 스위치마다 SVI를 두며 주소는 `10.<사이트>.100.<장비 번호>/24`. 장비 번호는 이름 끝이 `-L2`인 스위치는 이름의 번호에 20을 더한 값, 그 외 스위치는 10을 더한 값(예: `HQ-SW-2` → `10.1.100.12`, `DC-SW3-L3` → `10.2.100.13`, `DC-SW1-L2` → `10.2.100.21`). 단, L2 구간이 없는 L3 전용 스위치(`DC-SW1-L3`, `DC-SW2-L3`)는 MGMT SVI를 두지 않고 콘솔로 관리.
 - MGMT VLAN 100은 사이트 내부 관리용이며 게이트웨이와 OSPF 광고를 두지 않음.
 
@@ -37,7 +38,7 @@ VLAN, 게이트웨이 이중화, EtherChannel, 트렁크, STP(MSTP), DHCP 배치
 
 ## 3. STP(MSTP)
 
-- 전 사이트 MSTP(IEEE 802.1s)로 통일: Cisco `spanning-tree mode mst`, Arista `spanning-tree mode mstp`.
+- 전 사이트 MSTP(IEEE 802.1s)로 통일: Cisco `spanning-tree mode mst`, Arista `spanning-tree mode mstp`, Aruba `spanning-tree mode mstp`.
 - 사이트마다 region 하나를 두며 region 이름은 사이트 이름(소문자), revision은 1. 사용자 또는 서버 VLAN과 MGMT VLAN 100은 instance 1에 매핑하고 native VLAN 999는 기본 instance 0에 둠. 사이트 안의 모든 스위치(L2 포함)는 같은 MST 설정 사용.
 - 루트 브리지는 게이트웨이 Active 장비로 고정(`spanning-tree mst 1 priority 4096`, Standby는 8192).
 
@@ -65,7 +66,7 @@ VLAN, 게이트웨이 이중화, EtherChannel, 트렁크, STP(MSTP), DHCP 배치
 | HQ | Po2 | HQ-SW-1 | Gi1/2, Gi1/3 | HQ-SW-3 | Gi0/0, Gi0/1 | 10,20,100 |
 | HQ | Po3 | HQ-SW-2 | Gi0/2, Gi0/3 | HQ-SW-3 | Gi0/2, Gi0/3 | 10,20,100 |
 | DC | Po1 | DC-SW3-L3 | Et5, Et6 | DC-SW4-L3 | Et5, Et6 | 50,100 |
-| BR1 | Po1 | BR1-SW1-L3 | Gi1/0, Gi1/1 | BR1-SW2-L3 | Gi1/0, Gi1/1 | 10,20,100 |
+| BR1 | LAG 1 | BR1-SW1-L3 | 1/1/3, 1/1/4 | BR1-SW2-L3 | 1/1/3, 1/1/4 | 10,20,100 |
 | BR2 | Po1 | BR2-SW1-L3 | Gi1/0, Gi1/1 | BR2-SW2-L3 | Gi1/0, Gi1/1 | 10,20,100 |
 
 ## 5. 트렁크
@@ -78,8 +79,8 @@ VLAN, 게이트웨이 이중화, EtherChannel, 트렁크, STP(MSTP), DHCP 배치
 | DC | DC-SW3-L3 | Et8 | DC-SW2-L2 | Et1 | 50,100 |
 | DC | DC-SW4-L3 | Et7 | DC-SW1-L2 | Et2 | 50,100 |
 | DC | DC-SW4-L3 | Et8 | DC-SW2-L2 | Et2 | 50,100 |
-| BR1 | BR1-SW1-L3 | Gi2/0 | BR1-SW3-L3 | Gi0/0 | 10,20,100 |
-| BR1 | BR1-SW2-L3 | Gi2/0 | BR1-SW3-L3 | Gi0/1 | 10,20,100 |
+| BR1 | BR1-SW1-L3 | 1/1/5 | BR1-SW3-L3 | 1/1/1 | 10,20,100 |
+| BR1 | BR1-SW2-L3 | 1/1/5 | BR1-SW3-L3 | 1/1/2 | 10,20,100 |
 | BR2 | BR2-SW1-L3 | Gi2/0 | BR2-SW3-L2 | Gi0/0 | 10,20,100 |
 | BR2 | BR2-SW2-L3 | Gi2/0 | BR2-SW3-L2 | Gi0/1 | 10,20,100 |
 
@@ -91,8 +92,8 @@ VLAN, 게이트웨이 이중화, EtherChannel, 트렁크, STP(MSTP), DHCP 배치
 | HQ-SW-1 | Gi3/1 | HQ-PC2 | eth0 | 20 |
 | DC-SW1-L2 | Et12 | DC-DNS-1 | eth0 | 50 |
 | DC-SW2-L2 | Et12 | DC-DNS-2 | eth0 | 50 |
-| BR1-SW3-L3 | Gi3/0 | BR1-PC1 | eth0 | 10 |
-| BR1-SW3-L3 | Gi3/1 | BR1-PC2 | eth0 | 20 |
+| BR1-SW3-L3 | 1/1/6 | BR1-PC1 | eth0 | 10 |
+| BR1-SW3-L3 | 1/1/7 | BR1-PC2 | eth0 | 20 |
 | BR2-SW3-L2 | Gi3/0 | BR2-PC1 | eth0 | 10 |
 | BR2-SW3-L2 | Gi3/1 | BR2-PC2 | eth0 | 20 |
 

@@ -5,8 +5,8 @@
 ## 1. 적용 기준
 
 - 게이트웨이 이중화는 전 사이트 **VRRP**(RFC 5798), 스패닝 트리는 전 사이트 **MSTP**(IEEE 802.1s)로 통일.
-- 두 프로토콜 모두 표준이라 Cisco(IOS), Arista(EOS) 장비에서 같은 개념으로 동작. 한 벤더 전용인 HSRP, VARP, PVST는 사용하지 않음.
-- 한 VRRP 그룹과 한 MST region 안에는 같은 벤더 장비만 배치(HQ, BR1, BR2는 Cisco, DC는 Arista).
+- 두 프로토콜 모두 표준이라 Cisco(IOS), Arista(EOS), Aruba(AOS-CX) 장비에서 같은 개념으로 동작. 한 벤더 전용인 HSRP, VARP, PVST는 사용하지 않음.
+- 한 VRRP 그룹과 한 MST region 안에는 같은 벤더 장비만 배치(HQ와 BR2는 Cisco, DC는 Arista, BR1은 Aruba).
 - 문서의 Active, Standby는 VRRP의 Master, Backup, MST의 루트, 보조 루트와 같은 장비를 가리킴.
 
 ## 2. VRRP
@@ -40,6 +40,16 @@
 | 확인 | `show vrrp brief` | `show vrrp brief` |
 
 - Arista의 `vrrp 50 ?` 출력에서 `ipv4`, `priority-level`, `preempt`, `timers`, `bfd`가 제공됨을 확인.
+
+### 2.3 Aruba(AOS-CX) 명령
+
+| 항목 | Aruba(AOS-CX) |
+|---|---|
+| VIP | 전역 `router vrrp enable` 필수(없으면 `VRRP is not enabled`, 상태 INIT). SVI 아래 `vrrp 10 address-family ipv4`, `address 10.3.10.1 primary` |
+| 우선순위 | `priority 110` |
+| 활성화 | VRRP 설정 안에서 `no shutdown` |
+| 위치 | SVI(`interface vlan 10`) |
+| 확인 | `show vrrp` |
 
 ## 3. MSTP
 
@@ -76,6 +86,15 @@
 | region 설정 | `spanning-tree mst configuration` 아래 `name`, `revision`, `instance` | 같은 형식(1칸 들여쓰기) |
 | 우선순위 | `spanning-tree mst 1 priority 4096` | `spanning-tree mst 1 priority 4096` |
 | 확인 | `show spanning-tree mst` | `show spanning-tree mst` |
+
+### 3.4 Aruba(AOS-CX) 모드 명령
+
+| 항목 | Aruba(AOS-CX) |
+|---|---|
+| 모드 | `spanning-tree mode mstp`, `spanning-tree` |
+| region 설정 | `spanning-tree config-name br1`, `spanning-tree config-revision 1`, `spanning-tree instance 1 vlan 10,20,100` |
+| 우선순위 | `spanning-tree instance 1 priority 1`(4096 단위, `1` = 4096, `2` = 8192) |
+| 확인 | `show spanning-tree mst`, `show spanning-tree mst-config` |
 
 ## 4. 설정 예시
 
@@ -124,6 +143,29 @@ int vlan50
 
 - `DC-SW4-L3`은 SVI 주소 `.3`, `vrrp 50 priority-level 90`, `spanning-tree mst 1 priority 8192`.
 - `DC-SW1-L2`, `DC-SW2-L2`는 MST 설정만 같게 입력.
+
+### 4.3 Aruba 루트(BR1-SW1-L3)
+
+```
+spanning-tree mode mstp
+spanning-tree
+spanning-tree config-name br1
+spanning-tree config-revision 1
+spanning-tree instance 1 vlan 10,20,100
+spanning-tree instance 1 priority 1
+!
+router vrrp enable
+!
+interface vlan 10
+ ip address 10.3.10.2/24
+ vrrp 10 address-family ipv4
+  address 10.3.10.1 primary
+  priority 110
+  no shutdown
+```
+
+- `BR1-SW2-L3`은 SVI 주소 `.3`, `priority 90`, `spanning-tree instance 1 priority 2`. `BR1-SW3-L3`은 MST 설정만 같게 입력하고 priority와 VRRP는 없음.
+- VLAN 20은 `interface vlan 20`, 주소 `10.3.20.2`(SW2는 `.3`), 그룹 `20`.
 
 ## 5. 검증
 

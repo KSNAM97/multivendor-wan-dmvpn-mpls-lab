@@ -103,7 +103,7 @@ text{font-family:"Noto Sans KR","Malgun Gothic","Apple SD Gothic Neo","Segoe UI"
 <text x="553.0" y="493.0" class="n" text-anchor="middle">BR1-R2</text>
 <rect x="300" y="458" width="200" height="60" rx="7" class="dev"/>
 <text x="400" y="482" class="n" text-anchor="middle">L3 스위치 VRRP</text>
-<text x="400" y="503" class="s" text-anchor="middle">BR1-SW1~3 · PC</text>
+<text x="400" y="503" class="s" text-anchor="middle">Aruba · BR1-SW1~3</text>
 <rect x="196" y="546" width="408" height="128" rx="10" class="site"/>
 <text x="400.0" y="574" class="h" text-anchor="middle">BR2 · AS 65004</text>
 <text x="400.0" y="595" class="s" text-anchor="middle">10.4.0.0/16 · OSPF 13 / Area 3</text>

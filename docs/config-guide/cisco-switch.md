@@ -1,8 +1,8 @@
 # Cisco 스위치 설정 (vIOS L3·L2)
 
-> 설정 가이드 목차: [README.md](./README.md) | [Cisco 라우터](./cisco-router.md) | [Cisco 스위치](./cisco-switch.md) | [Arista 스위치](./arista-switch.md) | [알파인](./alpine.md)
+> 설정 가이드 목차: [README.md](./README.md) | [Cisco 라우터](./cisco-router.md) | [Cisco 스위치](./cisco-switch.md) | [Arista 스위치](./arista-switch.md) | [Aruba 스위치](./aruba-switch.md) | [알파인](./alpine.md)
 
-대상: `HQ-SW-*`, `BR1-SW*-L3`, `BR2-SW1-L3`, `BR2-SW2-L3`(L3), `BR2-SW3-L2`(L2). 인터페이스 이름은 `gi<슬롯>/<번호>`.
+대상: `HQ-SW-*`, `BR2-SW1-L3`, `BR2-SW2-L3`(L3), `BR2-SW3-L2`(L2). 인터페이스 이름은 `gi<슬롯>/<번호>`. BR1 스위치는 Aruba CX라서 [aruba-switch.md](./aruba-switch.md) 참고.
 
 ### 4.1 L2 기능
 

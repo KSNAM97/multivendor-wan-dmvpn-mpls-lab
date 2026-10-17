@@ -34,6 +34,7 @@
 | Cisco 라우터(7200) | [config-guide/cisco-router.md](./config-guide/cisco-router.md) |
 | Cisco 스위치(vIOS) | [config-guide/cisco-switch.md](./config-guide/cisco-switch.md) |
 | Arista 스위치(cEOS) | [config-guide/arista-switch.md](./config-guide/arista-switch.md) |
+| Aruba 스위치(CX, BR1) | [config-guide/aruba-switch.md](./config-guide/aruba-switch.md) |
 | 알파인 노드 | [config-guide/alpine.md](./config-guide/alpine.md) |
 
 ## 4. 컨피그 작성 흐름

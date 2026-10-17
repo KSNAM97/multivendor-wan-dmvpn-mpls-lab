@@ -1,6 +1,6 @@
 # Cisco 라우터 설정 (7200)
 
-> 설정 가이드 목차: [README.md](./README.md) | [Cisco 라우터](./cisco-router.md) | [Cisco 스위치](./cisco-switch.md) | [Arista 스위치](./arista-switch.md) | [알파인](./alpine.md)
+> 설정 가이드 목차: [README.md](./README.md) | [Cisco 라우터](./cisco-router.md) | [Cisco 스위치](./cisco-switch.md) | [Arista 스위치](./arista-switch.md) | [Aruba 스위치](./aruba-switch.md) | [알파인](./alpine.md)
 
 대상: `HQ-R*`, `DC-R*`, `BR*-R*`, `ISP-*`, `Private-net`. 인터페이스 이름은 `gi<슬롯>/0`.
 

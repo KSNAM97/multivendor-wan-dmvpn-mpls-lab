@@ -62,6 +62,7 @@
 - 모든 /30 링크는 `ip ospf network point-to-point`로 DR 선출 없이 구성.
 - 사용자 VLAN과 서버 VLAN(`10.2.50.0/24`)의 SVI는 해당 사이트 Area에 포함하고 `passive-interface` 처리.
 - 타이머는 기본값, 인증은 미적용(실습 환경).
+- BR1 스위치(Aruba CX)는 Area를 `0.0.0.2` 형식으로 선언하고(`router ospf 12`에 `router-id`와 `area 0.0.0.2`), passive는 `passive-interface default` 대신 SVI 인터페이스에 `ip ospf passive`로 설정(Loopback0은 `ip ospf passive`가 지원되지 않아 설정하지 않음).
 
 | 장비          | 인터페이스   | IP              | 프로세스 | Area | 네트워크 타입                      | 링크 # |
 | ----------- | ------- | --------------- | ---- | ---- | ---------------------------- | ---- |
@@ -116,10 +117,10 @@
 | BR1-R2      | Gi0/0   | 10.3.0.6/30     | 12   | 2    | point-to-point               | 44   |
 | BR1-R2      | Gi1/0   | 10.3.0.13/30    | 12   | 2    | point-to-point               | 46   |
 | BR1-R2      | Gi2/0   | 10.3.0.18/30    | 12   | 2    | point-to-point               | 47   |
-| BR1-SW1-L3  | Gi0/0   | 10.3.0.2/30     | 12   | 2    | point-to-point               | 43   |
-| BR1-SW1-L3  | Gi0/1   | 10.3.0.5/30     | 12   | 2    | point-to-point               | 44   |
-| BR1-SW2-L3  | Gi0/0   | 10.3.0.10/30    | 12   | 2    | point-to-point               | 45   |
-| BR1-SW2-L3  | Gi0/1   | 10.3.0.14/30    | 12   | 2    | point-to-point               | 46   |
+| BR1-SW1-L3  | 1/1/1   | 10.3.0.2/30     | 12   | 2    | point-to-point               | 43   |
+| BR1-SW1-L3  | 1/1/2   | 10.3.0.5/30     | 12   | 2    | point-to-point               | 44   |
+| BR1-SW2-L3  | 1/1/1   | 10.3.0.10/30    | 12   | 2    | point-to-point               | 45   |
+| BR1-SW2-L3  | 1/1/2   | 10.3.0.14/30    | 12   | 2    | point-to-point               | 46   |
 | BR2-R1      | Gi0/0   | 10.4.0.1/30     | 13   | 3    | point-to-point               | 57   |
 | BR2-R1      | Gi1/0   | 10.4.0.9/30     | 13   | 3    | point-to-point               | 59   |
 | BR2-R1      | Gi2/0   | 10.4.0.17/30    | 13   | 3    | point-to-point               | 61   |

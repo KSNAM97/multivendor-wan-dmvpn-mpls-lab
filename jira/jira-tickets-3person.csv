@@ -31,3 +31,4 @@ Summary,Issue Type,Label,Priority,Description,Due Date
 [2주] DMVPN Spoke 구성(HQ-R2),Task,policy,High,"Phase3 shortcut / 일정: 2주 수(10/21), Phase3 shortcut 검증은 2주 목(10/22)",2026-10-21
 "[2주] ISP MPLS 코어(LDP, 내부 링크 mpls ip)",Task,net-cloud,High,"ISP-1, ISP-2 PE·P 8대, LDP 이웃·레이블 확인 / 일정: 주말(10/18)",2026-10-18
 [2주] PE VRF corp + MP-BGP vpnv4(RR),Task,net-cloud,High,"PE 4대 VRF·RD/RT, 10세션 vpnv4, RR route-reflector-client / 일정: 주말(10/18)",2026-10-18
+[2주] BR1 스위치 Aruba CX 교체(3대) + 재검증,Task,policy,High,"BR1-SW1·2·3-L3를 Aruba CX로 교체: 컨피그 전환(VLAN, LAG, MSTP, VRRP, OSPF, DHCP), 포트 매핑, BR1 재검증 / 일정: 주말(10/18)",2026-10-18

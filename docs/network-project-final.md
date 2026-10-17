@@ -20,7 +20,7 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ HQ
 - ISP 코어: MPLS L3VPN(내부 링크 LDP, PE의 VRF `corp`, vpnv4는 iBGP RR 경유, `docs/mpls-design.md`)
 - 사이트 ↔ ISP: 사이트 엣지 eBGP(사이트 AS ↔ ISP AS), PE가 기본 경로 전달, 사이트 /16 광고(route-map, prefix-list), 사이트 OSPF에 기본 경로 광고
 - Private Internet(DMVPN 언더레이): 별도 OSPF 프로세스(2), ACL 화이트리스트
-- DC만 Arista cEOS, 나머지 전부 Cisco (7200 / IOU)
+- DC 스위치는 Arista cEOS, BR1 스위치는 Aruba AOS-CX, 나머지 전부 Cisco (7200 / IOU)
 
 ## 2. 사이트 · AS
 
@@ -71,7 +71,7 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ HQ
 | ISP-1 | ISP-1-PE-A / ISP-1-P1 / ISP-1-P2 / ISP-1-PE-B | PE-A / P1 / P2 / PE-B | iBGP RR | |
 | ISP-2 | ISP-2-PE-A / ISP-2-P1 / ISP-2-P2 / ISP-2-PE-B | PE-A / P1 / P2 / PE-B | iBGP RR | |
 | BR1 | BR1-R1 / BR1-R2 | R1 / R2 | 라우터(R1이 DMVPN Spoke) | |
-| BR1 | BR1-SW1-L3 / BR1-SW2-L3 / BR1-SW3-L3 | SW1 / SW2 / SW3 | 스위치(SW3은 호스트 연결) | |
+| BR1 | BR1-SW1-L3 / BR1-SW2-L3 / BR1-SW3-L3 | SW1 / SW2 / SW3 | 스위치(Aruba CX, SW3은 호스트 연결) | |
 | BR1 | BR1-PC1 / BR1-PC2 | H1 / H2 | 호스트(Alpine Linux, docker) | |
 | BR2 | BR2-R1 / BR2-R2 | R1 / R2 | 라우터(R2가 DMVPN Spoke) | |
 | BR2 | BR2-SW1-L3 / BR2-SW2-L3 | SW1 / SW2 | L3 스위치 | |
@@ -137,20 +137,20 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ HQ
 ### BR1 (BR2는 10.3→10.4, 장비명 BR2-*, ISP 링크 하단 표 참고)
 | A | B | 서브넷/용도 |
 |---|---|---|
-| BR1-SW1-L3 Gi0/0 | BR1-R1 Gi0/0 | 10.3.0.0/30 |
-| BR1-SW1-L3 Gi0/1 | BR1-R2 Gi0/0 | 10.3.0.4/30 |
-| BR1-SW2-L3 Gi0/0 | BR1-R1 Gi1/0 | 10.3.0.8/30 |
-| BR1-SW2-L3 Gi0/1 | BR1-R2 Gi1/0 | 10.3.0.12/30 |
+| BR1-SW1-L3 1/1/1 | BR1-R1 Gi0/0 | 10.3.0.0/30 |
+| BR1-SW1-L3 1/1/2 | BR1-R2 Gi0/0 | 10.3.0.4/30 |
+| BR1-SW2-L3 1/1/1 | BR1-R1 Gi1/0 | 10.3.0.8/30 |
+| BR1-SW2-L3 1/1/2 | BR1-R2 Gi1/0 | 10.3.0.12/30 |
 | BR1-R1 Gi2/0 | BR1-R2 Gi2/0 | 10.3.0.16/30 |
 | BR1-R1 Gi3/0 | ISP-1-PE-B Gi2/0 | 100.1.31.0/30 |
 | BR1-R2 Gi3/0 | ISP-2-PE-B Gi2/0 | 100.2.32.0/30 |
 | BR1-R1 Gi4/0 | Private-net Gi3/0 | 203.0.113.12/30 (Tunnel0 source, DMVPN Spoke) |
-| BR1-SW1-L3 Gi1/0 | BR1-SW2-L3 Gi1/0 | Po1 (VLAN10/20/100) |
-| BR1-SW1-L3 Gi1/1 | BR1-SW2-L3 Gi1/1 | Po1 |
-| BR1-SW1-L3 Gi2/0 | BR1-SW3-L3 Gi0/0 | 트렁크 (연결 확인됨) |
-| BR1-SW2-L3 Gi2/0 | BR1-SW3-L3 Gi0/1 | 트렁크 (연결 확인됨) |
-| BR1-PC1 eth0 | BR1-SW3-L3 Gi3/0 | VLAN10 access |
-| BR1-PC2 eth0 | BR1-SW3-L3 Gi3/1 | VLAN20 access |
+| BR1-SW1-L3 1/1/3 | BR1-SW2-L3 1/1/3 | LAG 1 (VLAN10/20/100) |
+| BR1-SW1-L3 1/1/4 | BR1-SW2-L3 1/1/4 | LAG 1 |
+| BR1-SW1-L3 1/1/5 | BR1-SW3-L3 1/1/1 | 트렁크 (연결 확인됨) |
+| BR1-SW2-L3 1/1/5 | BR1-SW3-L3 1/1/2 | 트렁크 (연결 확인됨) |
+| BR1-PC1 eth0 | BR1-SW3-L3 1/1/6 | VLAN10 access |
+| BR1-PC2 eth0 | BR1-SW3-L3 1/1/7 | VLAN20 access |
 | **QoS 대상** | BR1-R1 Gi0/0,Gi1/0 / BR1-R2 Gi0/0,Gi1/0 |
 
 ### BR2 (BR1과 동일 패턴, 장비명 BR2-*, 스포크는 BR2-R2)

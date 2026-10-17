@@ -5,7 +5,7 @@
 ISP-1(AS 65100) · ISP-2(AS 65200)는 iBGP Route Reflector 구성 (P1/P2 RR, PE-A/PE-B Client, ISP 내부 OSPF, ISP 코어 MPLS L3VPN).
 사이트↔ISP는 엣지 eBGP(PE가 기본 경로 전달, 사이트 /16 광고, route-map/prefix-list)+OSPF 기본 경로 광고, DC↔HQ/BR1/BR2는 DMVPN Phase3(mGRE over IPsec)으로
 Private Internet(203.0.113.0/24) 경유. Private Internet에는 화이트리스트 ACL 적용.
-DC 내부 스위치 6대(L3 4대 + 서버용 L2 2대)만 Arista cEOS, 나머지는 전부 Cisco.
+DC 내부 스위치 6대(L3 4대 + 서버용 L2 2대)는 Arista cEOS, BR1 스위치 3대는 Aruba CX, 나머지는 전부 Cisco.
 게이트웨이 이중화는 VRRP, 스패닝 트리는 MSTP로 전 사이트 통일합니다.
 DC 서버 VLAN(50)은 DC-DNS-1(주)과 DC-DNS-2(백업) 두 대로 구성합니다 (DHCP는 사이트 게이트웨이에서 제공, DNS는 `DNS` 템플릿의 `dnsmasq`, 주소 10.2.50.10, 10.2.50.11).
 

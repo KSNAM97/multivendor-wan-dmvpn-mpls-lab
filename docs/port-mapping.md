@@ -74,20 +74,20 @@
 
 | # | A 장비 | A 포트 | B 장비 | B 포트 | 서브넷 | 비고 |
 |---|---|---|---|---|---|---|
-| 43 | BR1-SW1-L3 | Gi0/0 | BR1-R1 | Gi0/0 | 10.3.0.0/30 | L3 링크 |
-| 44 | BR1-SW1-L3 | Gi0/1 | BR1-R2 | Gi0/0 | 10.3.0.4/30 | L3 링크 |
-| 45 | BR1-SW2-L3 | Gi0/0 | BR1-R1 | Gi1/0 | 10.3.0.8/30 | L3 링크 |
-| 46 | BR1-SW2-L3 | Gi0/1 | BR1-R2 | Gi1/0 | 10.3.0.12/30 | L3 링크 |
+| 43 | BR1-SW1-L3 | 1/1/1 | BR1-R1 | Gi0/0 | 10.3.0.0/30 | L3 링크 |
+| 44 | BR1-SW1-L3 | 1/1/2 | BR1-R2 | Gi0/0 | 10.3.0.4/30 | L3 링크 |
+| 45 | BR1-SW2-L3 | 1/1/1 | BR1-R1 | Gi1/0 | 10.3.0.8/30 | L3 링크 |
+| 46 | BR1-SW2-L3 | 1/1/2 | BR1-R2 | Gi1/0 | 10.3.0.12/30 | L3 링크 |
 | 47 | BR1-R1 | Gi2/0 | BR1-R2 | Gi2/0 | 10.3.0.16/30 | - |
 | 48 | BR1-R1 | Gi3/0 | ISP-1-PE-B | Gi2/0 | 100.1.31.0/30 | ISP-1 연결 |
 | 49 | BR1-R2 | Gi3/0 | ISP-2-PE-B | Gi2/0 | 100.2.32.0/30 | ISP-2 연결 |
 | 50 | BR1-R1 | Gi4/0 | Private-net | Gi3/0 | 203.0.113.12/30 | PI 연결, DMVPN Spoke Tunnel0 source |
-| 51 | BR1-SW1-L3 | Gi1/0 | BR1-SW2-L3 | Gi1/0 | - | Po1 (VLAN 10/20/100) |
-| 52 | BR1-SW1-L3 | Gi1/1 | BR1-SW2-L3 | Gi1/1 | - | Po1 |
-| 53 | BR1-SW1-L3 | Gi2/0 | BR1-SW3-L3 | Gi0/0 | - | 트렁크 (연결 확인됨) |
-| 54 | BR1-SW2-L3 | Gi2/0 | BR1-SW3-L3 | Gi0/1 | - | 트렁크 (연결 확인됨) |
-| 55 | BR1-PC1 | eth0 | BR1-SW3-L3 | Gi3/0 | - | VLAN 10 access, BR1-PUBLIC (Alpine Linux, 연결 확인됨) |
-| 56 | BR1-PC2 | eth0 | BR1-SW3-L3 | Gi3/1 | - | VLAN 20 access, BR1-PRIVATE (Alpine Linux, 연결 확인됨) |
+| 51 | BR1-SW1-L3 | 1/1/3 | BR1-SW2-L3 | 1/1/3 | - | LAG 1 (VLAN 10/20/100) |
+| 52 | BR1-SW1-L3 | 1/1/4 | BR1-SW2-L3 | 1/1/4 | - | LAG 1 |
+| 53 | BR1-SW1-L3 | 1/1/5 | BR1-SW3-L3 | 1/1/1 | - | 트렁크 (연결 확인됨) |
+| 54 | BR1-SW2-L3 | 1/1/5 | BR1-SW3-L3 | 1/1/2 | - | 트렁크 (연결 확인됨) |
+| 55 | BR1-PC1 | eth0 | BR1-SW3-L3 | 1/1/6 | - | VLAN 10 access, BR1-PUBLIC (Alpine Linux, 연결 확인됨) |
+| 56 | BR1-PC2 | eth0 | BR1-SW3-L3 | 1/1/7 | - | VLAN 20 access, BR1-PRIVATE (Alpine Linux, 연결 확인됨) |
 
 ### BR2 (BR1과 같은 패턴)
 
@@ -135,9 +135,9 @@
 | Private-net | Gi0/0, Gi1/0, Gi2/0, Gi3/0, Gi4/0 | 5 |
 | BR1-R1 | Gi0/0, Gi1/0, Gi2/0, Gi3/0, Gi4/0 | 5 |
 | BR1-R2 | Gi0/0, Gi1/0, Gi2/0, Gi3/0 | 4 |
-| BR1-SW1-L3 | Gi0/0, Gi0/1, Gi1/0, Gi1/1, Gi2/0 | 5 |
-| BR1-SW2-L3 | Gi0/0, Gi0/1, Gi1/0, Gi1/1, Gi2/0 | 5 |
-| BR1-SW3-L3 | Gi0/0, Gi0/1, Gi3/0, Gi3/1 | 4 |
+| BR1-SW1-L3 | 1/1/1, 1/1/2, 1/1/3, 1/1/4, 1/1/5 | 5 |
+| BR1-SW2-L3 | 1/1/1, 1/1/2, 1/1/3, 1/1/4, 1/1/5 | 5 |
+| BR1-SW3-L3 | 1/1/1, 1/1/2, 1/1/6, 1/1/7 | 4 |
 | BR2-R1 | Gi0/0, Gi1/0, Gi2/0, Gi3/0 | 4 |
 | BR2-R2 | Gi0/0, Gi1/0, Gi2/0, Gi3/0, Gi4/0 | 5 |
 | BR2-SW1-L3 | Gi0/0, Gi0/1, Gi1/0, Gi1/1, Gi2/0 | 5 |

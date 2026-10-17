@@ -13,7 +13,7 @@ vlan 999
  name native
 !
 int lo0
- ip add 10.10.10.13 255.255.255.255
+ ip add 10.10.10.13/32
 !
 int range et 5-6
  desc to dc-sw4-l3 po1
@@ -38,32 +38,32 @@ int et8
 int et1
  desc to dc-sw1-l3 et4
  no switchport
- ip add 10.2.0.22 255.255.255.252
+ ip add 10.2.0.22/30
 !
 int et2
  desc to dc-sw2-l3 et4
  no switchport
- ip add 10.2.0.30 255.255.255.252
+ ip add 10.2.0.30/30
 !
 int et3
  desc to dc-r3 gi0/0
  no switchport
- ip add 10.2.0.38 255.255.255.252
+ ip add 10.2.0.38/30
 !
 int et4
  desc to dc-r4 gi0/0
  no switchport
- ip add 10.2.0.41 255.255.255.252
+ ip add 10.2.0.41/30
 !
 ip routing
 !
 int vlan100
  desc mgmt vlan for dc-sw3-l3
- ip add 10.2.100.13 255.255.255.0
+ ip add 10.2.100.13/24
 !
 int vlan50
  desc vrrp master for dc-sw4-l3 vlan50
- ip add 10.2.50.2 255.255.255.0
+ ip add 10.2.50.2/24
  vrrp 50 ipv4 10.2.50.1
  vrrp 50 priority-level 110
 ! stp mst

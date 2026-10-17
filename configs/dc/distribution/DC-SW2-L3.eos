@@ -8,32 +8,32 @@ username admin privilege 15 role network-admin secret admin1234
 ip routing
 !
 int lo0
- ip add 10.10.10.12 255.255.255.255
+ ip add 10.10.10.12/32
 !
 int et1
  desc to dc-r1 gi1/0
  no switchport
- ip add 10.2.0.6 255.255.255.252
+ ip add 10.2.0.6/30
 !
 int et2
  desc to dc-r2 gi1/0
  no switchport
- ip add 10.2.0.14 255.255.255.252
+ ip add 10.2.0.14/30
 !
 int et3
  desc to dc-sw1-l3 et3
  no switchport
- ip add 10.2.0.18 255.255.255.252
+ ip add 10.2.0.18/30
 !
 int et4
  desc to dc-sw3-l3 et2
  no switchport
- ip add 10.2.0.29 255.255.255.252
+ ip add 10.2.0.29/30
 !
 int et5
  desc to dc-sw4-l3 et2
  no switchport
- ip add 10.2.0.33 255.255.255.252
+ ip add 10.2.0.33/30
 !
 router ospf 10
  router-id 10.10.10.12

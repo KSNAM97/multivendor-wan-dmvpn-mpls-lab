@@ -127,6 +127,30 @@ ip dhcp pool hq-public
 - Standby 장비(`HQ-SW-3`)는 풀 설정이 같고 제외 구간만 `10.1.10.1 10.1.10.163`, `10.1.10.228 10.1.10.254`로 설정.
 - 다른 VLAN(HQ VLAN 20, BR1·BR2 VLAN 10과 20)도 같은 형식으로 서브넷과 풀 이름만 변경.
 
+### 3.2 설정 예시(BR1-SW1-L3, Aruba CX)
+
+```
+dhcp-server vrf default
+ pool br1-public
+  range 10.3.10.100 10.3.10.163 prefix-len 24
+  default-router 10.3.10.1
+  dns-server 10.2.50.10 10.2.50.11
+  domain-name lab.local
+  lease 01:00:00
+ exit
+ pool br1-private
+  range 10.3.20.100 10.3.20.163 prefix-len 24
+  default-router 10.3.20.1
+  dns-server 10.2.50.10 10.2.50.11
+  domain-name lab.local
+  lease 01:00:00
+ exit
+ enable
+```
+
+- Aruba(AOS-CX)는 제외 구간 대신 `range`로 할당 범위를 직접 지정. Active `BR1-SW1-L3`은 `.100` – `.163`, Standby `BR1-SW2-L3`은 `.164` – `.227`.
+- 풀 이름, 옵션 값은 3절 표와 같고 명령 문법은 AOS-CX 10.07 가상 장비에서 확인함. 풀 사이에 `exit` 필요, `enable`은 풀 밖(`dhcp-server` 레벨)에서 입력. `lease`는 `DD:HH:MM` 두 자리 형식(`01:00:00` = 1일, 기본값은 `00:01:00`)이며 서버가 켜진 상태에서는 변경 불가(`disable` 후 변경, 다시 `enable`).
+
 ## 4. 클라이언트(알파인 호스트)
 
 - 주소 설정: `/etc/network/interfaces`에 `iface eth0 inet dhcp`, 또는 수동 실행 `udhcpc -i eth0`.

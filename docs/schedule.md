@@ -31,7 +31,7 @@
 |  | 수 | DC VLAN/트렁크(Arista), DC VRRP / BR1 VLAN/트렁크, VRRP |
 |  | 목 | HQ VLAN/트렁크, VRRP, Po1-3 / BR2 VLAN/트렁크, VRRP |
 |  | 금 | 사이트 내부 OSPF, 사이트 DHCP(HQ), DC/HQ 내부통신 검증 / 사이트 내부 OSPF, 사이트 DHCP(BR1, BR2), BR1/BR2 내부통신 검증 |
-| 주말 (10/17~10/18) | 토~일 | Private Internet 기본 연결+OSPF(프로세스2) 선행, ISP MPLS 코어(LDP), PE VRF `corp`, MP-BGP vpnv4(사이트 CE 없이 `show` 확인), QoS 정책 사전 작업 |
+| 주말 (10/17~10/18) | 토~일 | Private Internet 기본 연결+OSPF(프로세스2) 선행, ISP MPLS 코어(LDP), PE VRF `corp`, MP-BGP vpnv4(사이트 CE 없이 `show` 확인), QoS 정책 사전 작업, BR1 스위치 Aruba CX 교체(컨피그 전환, 재검증) |
 | 2주 (10/19~10/23) | 월 | DC/HQ↔ISP 사이트 엣지 eBGP(PE VRF 안)+OSPF 기본 경로 광고 / BR1/BR2↔ISP 사이트 엣지 eBGP |
 |  | 화 | PI ACL 화이트리스트, DMVPN Hub(DC-R2) crypto / DMVPN Spoke 사전 준비 |
 |  | 수 | DMVPN Spoke(HQ) / DMVPN Spoke(BR1, BR2) |

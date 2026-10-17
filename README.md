@@ -2,10 +2,11 @@
 
 [![Cisco](https://img.shields.io/badge/Cisco-IOS-blue?logo=cisco)](https://github.com/KSNAM97)
 [![Arista](https://img.shields.io/badge/Arista-cEOS-orange)](https://github.com/KSNAM97)
+[![Aruba](https://img.shields.io/badge/Aruba-AOS--CX-ff8300)](https://github.com/KSNAM97)
 [![GNS3](https://img.shields.io/badge/GNS3-Topology-green)](https://github.com/KSNAM97)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 
-**ISP 이중화 사이트 엣지 eBGP + iBGP Route Reflector + MPLS L3VPN · DMVPN Phase3 (mGRE over IPsec) · OSPF · VRRP · MSTP · QoS · 화이트리스트 ACL — Cisco + Arista 멀티벤더 4개 사이트 WAN 종합 구축**
+**ISP 이중화 사이트 엣지 eBGP + iBGP Route Reflector + MPLS L3VPN · DMVPN Phase3 (mGRE over IPsec) · OSPF · VRRP · MSTP · QoS · 화이트리스트 ACL — Cisco + Arista + Aruba 멀티벤더 4개 사이트 WAN 종합 구축**
 
 ---
 
@@ -14,9 +15,9 @@
 | 항목 | 내용 |
 | --- | --- |
 | 주제 | HQ / DC / BR1 / BR2 4개 사이트를 ISP 이중화와 DMVPN으로 연결하는 멀티벤더 하이브리드 네트워크 |
-| 장비 구성 | HQ (HQ-R1·HQ-R2, HQ-SW-1 – HQ-SW-3), DC (DC-R1 – DC-R4, DC-SW1 – DC-SW4-L3, DC-SW1·2-L2, DC-DNS-1·DC-DNS-2), BR1 (BR1-R1·R2, BR1-SW1 ~ SW3-L3), BR2 (BR2-R1·R2, BR2-SW1·SW2-L3, BR2-SW3-L2), 호스트 H1·H2, ISP-1·ISP-2 (ISP-n-PE-A·P1·P2·PE-B 각 4대), Private Internet (Private-net) |
+| 장비 구성 | HQ (HQ-R1·HQ-R2, HQ-SW-1 – HQ-SW-3), DC (DC-R1 – DC-R4, DC-SW1 – DC-SW4-L3, DC-SW1·2-L2, DC-DNS-1·DC-DNS-2), BR1 (BR1-R1·R2, BR1-SW1 ~ SW3-L3, Aruba CX), BR2 (BR2-R1·R2, BR2-SW1·SW2-L3, BR2-SW3-L2), 호스트 H1·H2, ISP-1·ISP-2 (ISP-n-PE-A·P1·P2·PE-B 각 4대), Private Internet (Private-net) |
 | 핵심 기술 | 사이트 OSPF, ISP iBGP Route Reflector(ISP-1 AS 65100, ISP-2 AS 65200), ISP 코어 MPLS L3VPN(LDP, VRF, vpnv4), 사이트 엣지 eBGP(route-map, prefix-list) + OSPF 기본 경로 광고, DMVPN Phase3, IPsec, VRRP, MSTP, EtherChannel, QoS, ACL 화이트리스트 |
-| 시뮬레이터 | GNS3 (Cisco 7200 / IOU, Arista cEOS) |
+| 시뮬레이터 | GNS3 (Cisco 7200 / IOU, Arista cEOS, Aruba AOS-CX) |
 | 일정 | 3.5주(2026-10-12 ~ 11-04), 1인 체제 (남기석) |
 | 검증 | 이중화 장애 실측 (FHRP, EtherChannel, ISP 장애, DMVPN Hub 장애), 트러블슈팅 로그 |
 
@@ -55,7 +56,7 @@ network-project/
 │   │   ├── distribution/     HQ-SW-2.ios, HQ-SW-3.ios
 │   │   └── access/           HQ-SW-1.ios
 │   ├── dc/                   core, distribution, access (Arista는 .eos)
-│   ├── br1/                  core, distribution, access
+│   ├── br1/                  core, distribution, access (스위치는 Aruba .aos)
 │   ├── br2/                  core, distribution, access
 │   ├── isp1/core/
 │   ├── isp2/core/
@@ -92,7 +93,7 @@ network-project/
 
 | 폴더 | 내용 |
 | --- | --- |
-| `configs/` | 사이트별 장비 컨피그 (`configs/<사이트>/<계층>/<장비명>.<확장자>`(Cisco `.ios`, Arista `.eos`, 호스트 `.alp`, DNS 서버 `.sh`)) |
+| `configs/` | 사이트별 장비 컨피그 (`configs/<사이트>/<계층>/<장비명>.<확장자>`(Cisco `.ios`, Arista `.eos`, Aruba `.aos`, 호스트 `.alp`, DNS 서버 `.sh`)) |
 | `docs/` | 전체 설계(아키텍처, AS / VLAN / IP, 인터페이스 매핑, 정책, 빌드 순서), 프로토콜별 상세 설계(OSPF, BGP, MPLS, VLAN, DMVPN, DHCP·DNS), 장비 설정 가이드, 일정 |
 | `jira/` | Jira 티켓 목록과 마감일 (현재 Jira 이슈 기준 CSV) |
 | `slack/` | 팀 공지 초안 |
@@ -136,7 +137,7 @@ network-project/
 - ISP 코어: MPLS L3VPN(내부 링크 LDP, PE의 VRF `corp`, vpnv4는 iBGP RR 경유, `docs/mpls-design.md`)
 - 사이트 ↔ ISP: 사이트 엣지 eBGP(사이트 AS 65001~65004 ↔ ISP AS 65100, 65200), PE가 기본 경로를 내려주고 사이트는 /16만 광고(route-map, prefix-list), 사이트 OSPF에 기본 경로 광고
 - Private Internet: 별도 OSPF 프로세스, ACL 화이트리스트로 언더레이 트래픽만 허용
-- DC 내부 스위치만 Arista cEOS, 나머지는 Cisco (7200 / IOU)
+- DC 내부 스위치는 Arista cEOS, BR1 스위치는 Aruba AOS-CX, 나머지는 Cisco (7200 / IOU)
 
 ### DMVPN Phase 3
 
