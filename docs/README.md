@@ -8,6 +8,7 @@
 |---|---|---|
 | 프로젝트 전체 구조 파악 | [network-project-final.md](./network-project-final.md) | - |
 | 일정, 오늘 할 일 확인 | [schedule.md](./schedule.md) | Jira(KAN) |
+| Jira, Slack 운영과 진행 현황 | [project-management.md](./project-management.md) | Jira(KAN), Slack |
 | 장비 포트와 연결 확인 | [port-mapping.md](./port-mapping.md) | - |
 | 장비 IP, DHCP 풀 확인 | [ip-mapping.md](./ip-mapping.md) | - |
 | 컨피그 작성 방법 | [config-guide/README.md](./config-guide/README.md) | 아래 3절의 장비별 가이드 |

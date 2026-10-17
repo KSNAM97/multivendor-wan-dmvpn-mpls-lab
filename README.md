@@ -179,6 +179,12 @@ network-project/
 
 > 브랜치 전략, 커밋 규칙, Jira 연동 → [`CONTRIBUTING.md`](./CONTRIBUTING.md)
 
+## 프로젝트 관리
+
+- Jira 이슈 33개와 Slack 알림으로 일정과 진행을 관리하며 화면 기록은 [`docs/project-management.md`](./docs/project-management.md)에 정리.
+
+![Jira 이슈 목록](./docs/images/project-management/jira-list-1.webp)
+
 ## 참고 자료
 
 - 토폴로지 구성 참고: 591Lab, CCIE Enterprise Infrastructure 토폴로지 다이어그램. 사이트(DC, HQ, Branch)와 ISP, DMVPN 배치를 참고해 본 프로젝트 요구에 맞게 직접 설계·작성했으며 원본 이미지는 이 저장소에 포함하지 않음.
