@@ -64,10 +64,10 @@ ISP-2-P2 BGP neighbors hold
 | 장비 | 명령 | 기대 결과 | 실제 결과 | 판정 |
 |---|---|---|---|---|
 | ISP-2-PE-A | `show ip bgp vpnv4 vrf corp summary` | HQ-R2(100.2.12.1), DC-R4(100.2.22.1)와 eBGP Established | HQ-R2(100.2.12.1, AS 65001) Up/Down 00:37:31, DC-R4(100.2.22.1, AS 65002) Up/Down 00:06:47 모두 Established, PfxRcd 각 1 | 통과 |
-| ISP-2-PE-B | `show ip bgp vpnv4 vrf corp summary` | BR1-R2(100.2.32.1), BR2-R2(100.2.42.1)와 eBGP Established | - | 미확인 |
-| ISP-2-PE-A, PE-B | `show ip bgp vpnv4 vrf corp neighbors <사이트 주소> advertised-routes` | 사이트에는 기본 경로만 전달(`default-originate`, `pl-deny-all`) | PE-A는 HQ-R2, DC-R4 모두 `Originating default network 0.0.0.0`만 전송(일반 prefix 0개). PE-B는 BR 구성 후 | PE-A 통과, PE-B 미확인 |
-| ISP-2-PE-A, PE-B | `show ip bgp vpnv4 vrf corp neighbors <사이트 주소> routes` | 해당 사이트 /16만 수신(`pl-<사이트>-in`) | PE-A는 HQ-R2 이웃에서 `10.1.0.0/16`(Path 65001 i), DC-R4 이웃에서 `10.2.0.0/16`(Path 65002 i) 각 1개만 수신, RD 65200:1. PE-B는 BR 구성 후 | PE-A 통과, PE-B 미확인 |
-| ISP-2-PE-A, PE-B | `show ip bgp vpnv4 vrf corp neighbors <사이트 주소> \| include hold` | eBGP 세션 timers 3/9 | PE-A는 HQ-R2, DC-R4 이웃 모두 hold time 9, keepalive 3초(Configured도 동일). PE-B는 BR 구성 후 | PE-A 통과, PE-B 미확인 |
+| ISP-2-PE-B | `show ip bgp vpnv4 vrf corp summary` | BR1-R2(100.2.32.1), BR2-R2(100.2.42.1)와 eBGP Established | BR1-R2(100.2.32.1, AS 65003) Up/Down 00:00:32, BR2-R2(100.2.42.1, AS 65004) Up/Down 00:00:24 모두 Established, PfxRcd 각 1 | 통과 |
+| ISP-2-PE-A, PE-B | `show ip bgp vpnv4 vrf corp neighbors <사이트 주소> advertised-routes` | 사이트에는 기본 경로만 전달(`default-originate`, `pl-deny-all`) | PE-A는 HQ-R2, DC-R4 모두 `Originating default network 0.0.0.0`만 전송(일반 prefix 0개). PE-B는 BR1-R2, BR2-R2 모두 `Originating default network 0.0.0.0`만 전송(일반 prefix 0개) | 통과 |
+| ISP-2-PE-A, PE-B | `show ip bgp vpnv4 vrf corp neighbors <사이트 주소> routes` | 해당 사이트 /16만 수신(`pl-<사이트>-in`) | PE-A는 HQ-R2 이웃에서 `10.1.0.0/16`(Path 65001 i), DC-R4 이웃에서 `10.2.0.0/16`(Path 65002 i) 각 1개만 수신, RD 65200:1. PE-B는 BR1-R2 이웃에서 `10.3.0.0/16`(Path 65003 i), BR2-R2 이웃에서 `10.4.0.0/16`(Path 65004 i) 각 1개만 수신, RD 65200:1 | 통과 |
+| ISP-2-PE-A, PE-B | `show ip bgp vpnv4 vrf corp neighbors <사이트 주소> \| include hold` | eBGP 세션 timers 3/9 | PE-A는 HQ-R2, DC-R4 이웃 모두 hold time 9, keepalive 3초(Configured도 동일). PE-B는 BR1-R2, BR2-R2 이웃 모두 hold time 9, keepalive 3초(Configured도 동일) | 통과 |
 
 ISP-2-PE-A VRF summary
 ![ISP-2-PE-A VRF summary](images/site-ebgp-pe-a-summary.webp)
@@ -89,6 +89,27 @@ ISP-2-PE-A DC-R4 advertised-routes
 
 ISP-2-PE-A DC-R4 hold
 ![ISP-2-PE-A DC-R4 hold](images/site-ebgp-pe-a-dc-hold.webp)
+
+ISP-2-PE-B VRF summary
+![ISP-2-PE-B VRF summary](images/site-ebgp-pe-b-summary.webp)
+
+ISP-2-PE-B BR1-R2 routes
+![ISP-2-PE-B BR1-R2 routes](images/site-ebgp-pe-b-br1-routes.webp)
+
+ISP-2-PE-B BR1-R2 advertised-routes
+![ISP-2-PE-B BR1-R2 advertised-routes](images/site-ebgp-pe-b-br1-advertised.webp)
+
+ISP-2-PE-B BR1-R2 hold
+![ISP-2-PE-B BR1-R2 hold](images/site-ebgp-pe-b-br1-hold.webp)
+
+ISP-2-PE-B BR2-R2 routes
+![ISP-2-PE-B BR2-R2 routes](images/site-ebgp-pe-b-br2-routes.webp)
+
+ISP-2-PE-B BR2-R2 advertised-routes
+![ISP-2-PE-B BR2-R2 advertised-routes](images/site-ebgp-pe-b-br2-advertised.webp)
+
+ISP-2-PE-B BR2-R2 hold
+![ISP-2-PE-B BR2-R2 hold](images/site-ebgp-pe-b-br2-hold.webp)
 
 ## 3. PE 정책과 사이트 간 경로 (KAN-17, 3주 목)
 

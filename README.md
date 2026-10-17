@@ -27,6 +27,10 @@
 
 ![Topology](./topology/topology-draft.png)
 
+GNS3 실제 구성 화면
+
+![GNS3 캡처](./topology/network-project-topology-gns3-capture.png)
+
 ### 개요도
 
 ![Overview](./docs/images/topology.svg)
@@ -86,7 +90,8 @@ network-project/
 │   └── slack-announcement.md
 ├── topology/
 │   ├── topology-draft.drawio
-│   └── topology-draft.png
+│   ├── topology-draft.png
+│   └── network-project-topology-gns3-capture.png
 ├── CONTRIBUTING.md
 └── README.md
 ```
