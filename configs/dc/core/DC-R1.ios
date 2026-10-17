@@ -47,3 +47,12 @@ int gi1/0
  ip ospf 10 area 0
  ip ospf network point-to-point
 !
+router ospf 2
+ router-id 10.10.10.1
+ passive-interface default
+ no passive-interface gi2/0
+!
+int gi2/0
+ ip ospf 2 area 100
+ ip ospf network point-to-point
+!

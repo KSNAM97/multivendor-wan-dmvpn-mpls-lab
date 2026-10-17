@@ -22,7 +22,7 @@
 - 형식: `<프로세스>.<프로세스>.<프로세스>.<장비 번호>/32`. DC `10.10.10.x`, HQ `11.11.11.x`, BR1 `12.12.12.x`, BR2 `13.13.13.x`. 끝자리는 라우터가 이름의 번호(`R1` → `.1`), L3 스위치가 이름의 번호에 10을 더한 값(`SW1` → `.11`).
 - 같은 OSPF 도메인 안에서 Router ID는 장비마다 고유해야 하므로 사이트 내 장비는 끝자리로 구분.
 - Loopback0은 해당 사이트 Area에 포함하고 `passive-interface` 처리. 이 값을 `router-id`로 사용.
-- `Private-net`의 Router ID는 `203.0.113.254`(Loopback0, `/32`).
+- `Private-net`의 Router ID는 `2.2.2.2`(Loopback0, `/32`).
 - ISP 장비의 Router ID는 `bgp router-id`와 같은 Loopback0 값(ISP-1 `100.100.100.<n>`, ISP-2 `200.200.200.<n>`, PE-A 1, P1 2, P2 3, PE-B 4). Loopback0은 Area 0에 포함하고 `passive-interface` 처리.
 
 | 장비          | Loopback0      | 프로세스 | Area |
