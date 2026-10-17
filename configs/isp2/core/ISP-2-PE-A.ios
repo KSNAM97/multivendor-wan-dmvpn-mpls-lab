@@ -74,3 +74,15 @@ int gi0/0
 int gi1/0
  mpls ip
 !
+ip vrf corp
+ rd 65200:1
+ route-target export 65200:1
+ route-target import 65200:1
+!
+int gi2/0
+ ip vrf forwarding corp
+ ip addr 100.2.12.2 255.255.255.252
+int gi3/0
+ ip vrf forwarding corp
+ ip addr 100.2.22.2 255.255.255.252
+!
