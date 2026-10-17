@@ -1,7 +1,7 @@
 ! aruba
 !
 hostname br1-sw1-l3
-user admin group administrators plaintext password admin1234
+user admin group administrators password plaintext admin1234
 !
 vlan 10
  name br1-public

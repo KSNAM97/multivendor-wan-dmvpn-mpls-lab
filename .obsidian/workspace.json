@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "docs/bgp-design.md",
+                "file": "verification/br1/access/vlan-trunk.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "bgp-design"
+              "title": "vlan-trunk"
             }
           }
         ]
@@ -190,12 +190,21 @@
   },
   "active": "d976c2d18d080041",
   "lastOpenFiles": [
+    "docs/sedS1Gxpc",
+    "docs/config-guide/sed3T385G",
+    "verification/br1/access/stp.md",
+    "docs/ip-mapping.md",
+    "docs/config-guide/sedpscusz",
+    "docs/sed2EI5En",
+    "docs/config-guide/sedy4uxdK",
+    "docs/config-guide/sed8HylDA",
+    "docs/config-guide/sedoKJkCT",
+    "docs/bgp-design.md",
     "verification/dc/distribution/images/dc-sw2-l3-vlan100-removed.png",
     "verification/dc/distribution/images/dc-sw1-l3-vlan100-removed.png",
     "verification/isp1/core/bgp.md",
     "verification/dc/distribution/ospf.md",
     "verification/dc/core/ospf.md",
-    "docs/bgp-design.md",
     "verification/isp2/core/images/isp-2-pe-b-bgp-ospf.png",
     "verification/isp2/core/images/isp-2-p2-bgp-ospf.png",
     "verification/isp2/core/images/isp-2-p1-bgp-ospf.png",
@@ -203,22 +212,14 @@
     "verification/isp2/core/images",
     "docs/ospf-design.md",
     "docs/bgp-design.md.tmp.18372.f5ac18a6f755",
-    "docs/ip-mapping.md",
     "verification/dc/host/dns.md",
     "verification/dc/host/images/Pasted image 20261013210246.png",
     "Pasted image 20261013210246.png",
     "verification/dc/host/images/Pasted image 20261013205826.png",
     "verification/dc/host/images/Pasted image 20261013205338.png",
-    "verification/dc/host/images/Pasted image 20261013205309.png",
     "verification/dc/host/images",
     "CONTRIBUTING.md",
     "configs/dc/host/sedIOAvmi",
-    "configs/dc/host/sedKfFFea",
-    "configs/dc/host/DC-DNS-2.sh",
-    "configs/dc/host/DC-DNS-1.sh",
-    "configs/dc/host/DC-DNS-2.alp",
-    "configs/dc/host/DC-DNS-1.alp",
-    "configs/dc/host",
     "docs/port-mapping.md",
     "verification/br2/distribution/dhcp.md",
     "verification/br1/distribution/dhcp.md",
@@ -234,7 +235,6 @@
     "verification/br2/distribution/stp.md",
     "verification/br2/distribution/vlan-trunk.md",
     "verification/br1/distribution/vrrp.md",
-    "verification/br2/distribution/ospf.md",
-    "verification/br2/access/vlan-trunk.md"
+    "verification/br2/distribution/ospf.md"
   ]
 }

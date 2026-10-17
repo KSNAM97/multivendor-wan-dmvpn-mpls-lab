@@ -67,6 +67,7 @@ verification/
 | KAN-12 | 1주 수 | BR1 VLAN/트렁크/VRRP | `br1/*/` | 서식 준비 |
 | KAN-13 | 1주 목 | BR2 VLAN/트렁크/VRRP | `br2/*/` | 서식 준비 |
 | KAN-14 | 1주 금 | 사이트 내부 OSPF + 사이트 DHCP | `*/core/ospf.md`, `*/distribution/ospf.md`, `*/distribution/dhcp.md` | 서식 준비 |
+| KAN-36 | 주말(10/18) | BR1 스위치 Aruba CX 교체 | `br1/*/` | 재확인 |
 | KAN-34 | 주말(10/17~10/18) | ISP MPLS 코어(LDP) | `isp*/core/mpls.md` 1절 | 서식 준비 |
 | KAN-35 | 주말(10/17~10/18) | PE VRF corp, vpnv4 | `isp*/core/mpls.md` 2절 | 서식 준비 |
 | KAN-18 | 2주 월 | 사이트 엣지 eBGP + route-map | `*/core/isp-link.md`, `isp*/core/bgp.md` 2절 | 서식 준비 |
