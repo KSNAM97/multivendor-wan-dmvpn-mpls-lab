@@ -86,3 +86,11 @@ int gi3/0
  ip vrf forwarding corp
  ip addr 100.1.21.2 255.255.255.252
 !
+router bgp 65100
+ address-family vpnv4
+  neighbor 100.100.100.2 activate
+  neighbor 100.100.100.2 send-community extended
+  neighbor 100.100.100.3 activate
+  neighbor 100.100.100.3 send-community extended
+ exit-address-family
+!

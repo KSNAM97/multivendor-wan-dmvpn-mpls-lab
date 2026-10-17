@@ -52,18 +52,30 @@ ISP-2-PE-B MPLS forwarding-table
 
 ## 2. VRF와 vpnv4 (KAN-35)
 
-| 장비               | 명령                              | 기대 결과                                     | 실제 결과 | 판정  |
-| ---------------- | ------------------------------- | ----------------------------------------- | ----- | --- |
-| ISP-2-PE-A, PE-B | `show ip vrf` | `corp`, RD 65200:1 | PE-A, PE-B 모두 VRF `corp`, Default RD 65200:1 | 통과 |
-| ISP-2-PE-A, PE-B | `show ip vrf interfaces` | 사이트 방향 포트 Gi2/0, Gi3/0이 `corp` 소속 | PE-A는 Gi2/0(100.2.12.2), Gi3/0(100.2.22.2), PE-B는 Gi2/0(100.2.32.2), Gi3/0(100.2.42.2)이 `corp` 소속, Protocol up, IP 유지 | 통과 |
-| ISP-2-P1, P2     | `show ip bgp vpnv4 all summary` | PE-A, PE-B, 상대 RR과 vpnv4 Established(3세션) | -     | 미확인 |
-| ISP-2-PE-A, PE-B | `show ip bgp vpnv4 all summary` | P1, P2와 vpnv4 Established(2세션)            | -     | 미확인 |
+| 장비               | 명령                              | 기대 결과                                     | 실제 결과                                                                                                                 | 판정  |
+| ---------------- | ------------------------------- | ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | --- |
+| ISP-2-PE-A, PE-B | `show ip vrf`                   | `corp`, RD 65200:1                        | PE-A, PE-B 모두 VRF `corp`, Default RD 65200:1                                                                          | 통과  |
+| ISP-2-PE-A, PE-B | `show ip vrf interfaces`        | 사이트 방향 포트 Gi2/0, Gi3/0이 `corp` 소속         | PE-A는 Gi2/0(100.2.12.2), Gi3/0(100.2.22.2), PE-B는 Gi2/0(100.2.32.2), Gi3/0(100.2.42.2)이 `corp` 소속, Protocol up, IP 유지 | 통과  |
+| ISP-2-P1, P2 | `show ip bgp vpnv4 all summary` | PE-A, PE-B, 상대 RR과 vpnv4 Established(3세션) | P1(router-id 200.200.200.2)은 PE-A(200.200.200.1), P2(200.200.200.3), PE-B(200.200.200.4), P2(router-id 200.200.200.3)는 PE-A(.1), P1(.2), PE-B(.4) 각 3개 vpnv4 이웃이 Established(AS 65200, State/PfxRcd 0). Up/Down이 23~41초로 vpnv4 추가 직후 재수립된 상태 | 통과 |
+| ISP-2-PE-A, PE-B | `show ip bgp vpnv4 all summary` | P1, P2와 vpnv4 Established(2세션) | PE-A(router-id 200.200.200.1)와 PE-B(200.200.200.4) 모두 P1(200.200.200.2), P2(200.200.200.3) 2개 vpnv4 이웃 Established(State/PfxRcd 0, 사이트 경로는 KAN-18 이후) | 통과 |
 
 ISP-2-PE-A VRF
 ![ISP-2-PE-A VRF](images/Pasted%20image%2020261017213956.png)
 
 ISP-2-PE-B VRF
 ![ISP-2-PE-B VRF](images/Pasted%20image%2020261017214004.png)
+
+ISP-2-P1 VPNv4 summary
+![ISP-2-P1 VPNv4 summary](images/Pasted%20image%2020261017215433.png)
+
+ISP-2-P2 VPNv4 summary
+![ISP-2-P2 VPNv4 summary](images/Pasted%20image%2020261017215443.png)
+
+ISP-2-PE-A VPNv4 summary
+![ISP-2-PE-A VPNv4 summary](images/Pasted%20image%2020261017215453.png)
+
+ISP-2-PE-B VPNv4 summary
+![ISP-2-PE-B VPNv4 summary](images/Pasted%20image%2020261017215503.png)
 
 ## 3. 사이트 경로와 레이블 경로 (사이트 eBGP 이후)
 
