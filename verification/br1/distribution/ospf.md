@@ -3,19 +3,21 @@
 - Jira: KAN-14
 - 대상 장비: BR1-SW1-L3(12.12.12.11), BR1-SW2-L3(12.12.12.12)
 - 기준 문서: [ospf-design.md](../../../docs/ospf-design.md) 2~4절
-- 검증일: 2026-10-12
-- Aruba CX 교체: BR1 스위치를 Aruba CX로 교체해 명령은 AOS-CX 기준이며, 이전 결과는 Cisco 구성 기록이라 교체 후 재확인 필요
+- 검증일: 2026-10-17
+- Aruba CX 교체: BR1 스위치를 Aruba CX(ArubaOS-CX Virtual 10.07)로 교체하고 AOS-CX 명령 기준으로 재검증
 
-| 장비                                               | 명령                             | 기대 결과                                                | 실제 결과 | 판정  |
-| ------------------------------------------------ | ------------------------------ | ---------------------------------------------------- | ----- | --- |
-| BR1-SW1-L3(12.12.12.11), BR1-SW2-L3(12.12.12.12) | `show ip ospf neighbors` | 모든 이웃 FULL | (Cisco 구성 기록) BR1-SW1-L3, SW2-L3 각 2개(BR1-R1, BR1-R2) 모두 FULL, 스위치 간 이웃 없음(Po1은 L2) | 재확인 |
-| BR1-SW1-L3(12.12.12.11), BR1-SW2-L3(12.12.12.12) | `show ip route ospf` | 다른 장비 `lo0`와 반대편 서브넷 학습 | (Cisco 구성 기록) 내부 /30 링크, 라우터·상대 스위치 lo0(12.12.12.1, .2, 상대 스위치) 학습, 13개 서브넷. 타 사이트 경로 없음 | 재확인 |
-| BR1-SW1-L3(12.12.12.11), BR1-SW2-L3(12.12.12.12) | `show ip ospf interface brief` | 사용자 VLAN SVI와 `lo0`는 passive, 라우티드 포트 point-to-point | (Cisco 구성 기록) Lo0 LOOP, Vl10, Vl20 DR Nbrs 0/0(passive), Gi0/0, Gi0/1 P2P 1/1, 전체 Area 2 | 재확인 |
+| 장비 | 명령 | 기대 결과 | 실제 결과 | 판정 |
+|---|---|---|---|---|
+| BR1-SW1-L3(12.12.12.11) | `show ip ospf neighbors` | 모든 이웃 FULL | 이웃 2개 모두 FULL: 12.12.12.1(BR1-R1, 10.3.0.1, 1/1/1), 12.12.12.2(BR1-R2, 10.3.0.6, 1/1/2). 스위치 간 이웃 없음(lag1은 L2) | 통과 |
+| BR1-SW2-L3(12.12.12.12) | `show ip ospf neighbors` | 모든 이웃 FULL | 이웃 2개 모두 FULL: 12.12.12.1(BR1-R1, 10.3.0.9, 1/1/1), 12.12.12.2(BR1-R2, 10.3.0.13, 1/1/2). 스위치 간 이웃 없음 | 통과 |
+| BR1-SW1-L3(12.12.12.11) | `show ip route ospf` | 다른 장비 `lo0`와 반대편 서브넷 학습 | 6개: 10.3.0.8/30, 10.3.0.12/30, 10.3.0.16/30, 12.12.12.1/32, 12.12.12.2/32, 12.12.12.12/32(R1, R2 경유 2경로), 전부 [110/101]. 타 사이트 경로 없음 | 통과 |
+| BR1-SW2-L3(12.12.12.12) | `show ip route ospf` | 다른 장비 `lo0`와 반대편 서브넷 학습 | 6개: 10.3.0.0/30, 10.3.0.4/30, 10.3.0.16/30, 12.12.12.1/32, 12.12.12.2/32, 12.12.12.11/32(R1, R2 경유 2경로), 전부 [110/101]. 타 사이트 경로 없음 | 통과 |
+| BR1-SW1-L3, BR1-SW2-L3 | `show ip ospf interface brief` | 라우티드 포트 point-to-point, `lo0`와 SVI 포함, 전체 Area 0.0.0.2 | Interfaces 5개 모두 up, Area 0.0.0.2: 1/1/1, 1/1/2 Point-to-point cost 100, loopback0 Loopback cost 0, vlan10과 vlan20 DR-other cost 100(이웃 없음). passive 여부는 이 출력에서 구분되지 않음 | 통과 |
 
-프로세스 12, Area 2.
+프로세스 12, Area 0.0.0.2(Area 2).
 
 BR1-SW1-L3 OSPF
-![BR1-SW1-L3 OSPF](images/Pasted%20image%2020261012203146.png)
+![BR1-SW1-L3 OSPF](images/Pasted%20image%2020261017185252.png)
 
 BR1-SW2-L3 OSPF
-![BR1-SW2-L3 OSPF](images/Pasted%20image%2020261012203158.png)
+![BR1-SW2-L3 OSPF](images/Pasted%20image%2020261017185313.png)
