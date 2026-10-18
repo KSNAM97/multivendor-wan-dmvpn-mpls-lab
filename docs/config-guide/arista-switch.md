@@ -102,3 +102,69 @@ username admin privilege 15 role network-admin secret admin1234
 
 - cEOS는 인터페이스 ACL(`ip access-group`)을 지원하지 않음. SVI 출력, 라우티드 포트 입력 모두 `% Unavailable command (not supported on this hardware platform)`로 거부되어 `DC-SW3-L3`, `DC-SW4-L3`에는 적용하지 않음.
 - 서버 VLAN DNS ACL은 DC 라우터에 적용([cisco-router.md](./cisco-router.md) 3.8절, `docs/dhcp-dns-design.md` 5절).
+
+### 5.4 MLAG(DC-SW3-L3, DC-SW4-L3, DC-SW1-L2, DC-SW2-L2)
+
+`DC-SW3-L3` 예시. `DC-SW4-L3`은 `vlan4094` 주소와 `peer-address`만 반대로 입력(아래 설명).
+
+```
+vlan 4094
+ name mlag-peer
+ trunk group MLAGPEER
+no spanning-tree vlan-id 4094
+!
+int po1
+ switchport trunk allowed vlan 50,100,4094
+ switchport trunk group MLAGPEER
+!
+int vlan4094
+ desc mlag peer
+ ip add 10.2.254.1/30
+ no autostate
+!
+mlag configuration
+ domain-id dc-mlag
+ local-interface vlan4094
+ peer-address 10.2.254.2
+ peer-link port-channel 1
+!
+default int et7
+default int et8
+int et7
+ desc to dc-sw1-l2 et1
+ channel-group 10 mode active
+int et8
+ desc to dc-sw2-l2 et1
+ channel-group 20 mode active
+!
+int po10
+ desc to dc-sw1-l2 po10
+ switchport mode trunk
+ switchport trunk native vlan 999
+ switchport trunk allowed vlan 50,100
+ mlag 10
+int po20
+ desc to dc-sw2-l2 po20
+ switchport mode trunk
+ switchport trunk native vlan 999
+ switchport trunk allowed vlan 50,100
+ mlag 20
+```
+
+L2 스위치 쪽(`DC-SW1-L2` 예시, `DC-SW2-L2`는 `po20`):
+
+```
+default int et1
+default int et2
+int range et1-2
+ channel-group 10 mode active
+int po10
+ desc to dc-sw3-l3, dc-sw4-l3 mlag
+ switchport mode trunk
+ switchport trunk native vlan 999
+ switchport trunk allowed vlan 50,100
+```
+
+- `DC-SW4-L3`: `int vlan4094`의 주소는 `10.2.254.2/30`, `peer-address`는 `10.2.254.1`, `et7`, `et8`의 `desc`는 `to dc-sw1-l2 et2`, `to dc-sw2-l2 et2`.
+- 피어 링크는 기존 `Po1`(Et5, Et6)을 재사용하고 VLAN 4094(`trunk group MLAGPEER`)만 추가. 값과 적용 순서는 `docs/mlag-design.md`.
+- 한 L2 스위치씩 순서대로 전환하고 단계마다 `write memory`. cEOS의 MLAG 지원 여부는 `show mlag`로 먼저 확인.

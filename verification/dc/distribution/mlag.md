@@ -1,6 +1,6 @@
 # MLAG 검증 (DC / distribution)
 
-- Jira: -
+- Jira: KAN-37
 - 대상 장비: DC-SW3-L3, DC-SW4-L3, DC-SW1-L2, DC-SW2-L2
 - 기준 문서: [mlag-design.md](../../../docs/mlag-design.md)
 - 검증일: -

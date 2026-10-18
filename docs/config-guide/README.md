@@ -8,7 +8,7 @@
 |---|---|---|
 | Cisco 라우터(7200) | [cisco-router.md](./cisco-router.md) | 기본, OSPF, 사이트 엣지 eBGP, iBGP RR, MPLS L3VPN, DMVPN, PI ACL, QoS |
 | Cisco 스위치(vIOS) | [cisco-switch.md](./cisco-switch.md) | L2·L3 기능, VRRP, MSTP, OSPF, MGMT SVI, DHCP |
-| Arista 스위치(cEOS) | [arista-switch.md](./arista-switch.md) | DC L3·L2 스위치, 접속 설정 |
+| Arista 스위치(cEOS) | [arista-switch.md](./arista-switch.md) | DC L3·L2 스위치, 접속 설정, MLAG |
 | Aruba 스위치(CX) | [aruba-switch.md](./aruba-switch.md) | BR1 분배 L3(SW1, SW2)와 액세스(SW3), LAG, MSTP, VRRP, OSPF, DHCP |
 | 알파인 노드, DNS 템플릿 | [alpine.md](./alpine.md) | 호스트 DHCP 클라이언트(알파인), DNS 서버(DNS 템플릿) |
 
@@ -22,6 +22,7 @@
 | BGP(ISP) | `docs/bgp-design.md` |
 | MPLS(ISP 코어) | `docs/mpls-design.md` |
 | VLAN, VRRP, MSTP, EtherChannel | `docs/vlan-design.md` |
+| MLAG(DC) | `docs/mlag-design.md` |
 | DMVPN, IPsec | `docs/dmvpn-design.md` |
 | DHCP, DNS | `docs/dhcp-dns-design.md` |
 
@@ -64,6 +65,7 @@
 | 6 | 2주 화~수 | DC-R2, HQ-R2, BR1-R1, BR2-R2 | IPsec, Tunnel0, NHRP, 터널 OSPF | dmvpn-design |
 | 7 | 2주 목 | DC-DNS-1, DC-DNS-2 | dnsmasq, 레코드 | dhcp-dns-design |
 | 8 | 2주 금 | DC-R1 ~ DC-R4 | 서버 VLAN DNS ACL | dhcp-dns-design 5절, [cisco-router.md](./cisco-router.md) 3.8절 |
+| 8-1 | 선택(10/19~10/21) | DC-SW3-L3, DC-SW4-L3, DC-SW1-L2, DC-SW2-L2 | MLAG 피어, MLAG 포트채널 | mlag-design, [arista-switch.md](./arista-switch.md) 5.4절 |
 | 9 | 3주 수~목 | ISP 장비 | ISP OSPF, iBGP RR, PE `next-hop-self` | bgp-design 1~4절 |
 | 10 | 3주 금 | 라우터 | QoS | [cisco-router.md](./cisco-router.md) 3.7절 |
 
@@ -88,6 +90,7 @@
 | route-map, prefix-list | `show route-map`, `show ip prefix-list` | - |
 | MPLS, VRF | `show mpls ldp neighbor`, `show ip vrf`, `show ip bgp vpnv4 all summary` | - |
 | ACL | `show ip access-lists` | `show ip access-lists` |
+| MLAG | - | `show mlag`, `show mlag detail`, `show port-channel summary` |
 | QoS | `show policy-map interface gi0/0` | - |
 
 ### 8-1. Arista 설정 필터 (running-config)

@@ -1,6 +1,6 @@
 # MLAG 설계 (DC)
 
-DC 게이트웨이 스위치 한 쌍을 MLAG로 묶어 L2 스위치 업링크를 하나의 포트채널로 쓰는 구성을 정리한 문서. 적용 전 설계이며, 구성 후 장비 확인 결과에 따라 값을 갱신. VLAN, 트렁크, 포트는 `docs/vlan-design.md`, `docs/port-mapping.md` 기준.
+DC 게이트웨이 스위치 한 쌍을 MLAG로 묶어 L2 스위치 업링크를 하나의 포트채널로 쓰는 구성을 정리한 문서. 적용 전 설계이며(Jira KAN-37), 구성 후 장비 확인 결과에 따라 값을 갱신. VLAN, 트렁크, 포트는 `docs/vlan-design.md`, `docs/port-mapping.md` 기준.
 
 ## 1. 구성 개요
 

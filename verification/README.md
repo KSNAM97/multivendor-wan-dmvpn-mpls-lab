@@ -79,7 +79,7 @@ verification/
 | KAN-26 | 2주 금 | DNS 서버 VLAN ACL | `dc/core/acl.md` | 검증 완료 |
 | KAN-27 | 3주 월 | VRRP 장애 전환 | `scenarios/vrrp-failover.md` | 서식 준비(HQ, DC 전환 동작은 확인) |
 | KAN-28 | 3주 월 | EtherChannel 멤버 다운 | `scenarios/etherchannel-link-down.md` | 서식 준비 |
-| - | 3주 | DC MLAG(선택) | `dc/distribution/mlag.md` | 서식 준비 |
+| KAN-37 | 선택(10/19~10/21) | DC MLAG | `dc/distribution/mlag.md` | 서식 준비 |
 | KAN-30 | 3주 화 | DMVPN Hub 장애 | `scenarios/dmvpn-hub-failure.md` | 서식 준비 |
 | KAN-15, 16 | 3주 수 | ISP 내부 OSPF, iBGP RR | `isp1/core/bgp.md`, `isp2/core/bgp.md` | 서식 준비 |
 | KAN-17 | 3주 목 | PE 정책(prefix-list, next-hop-self) | `isp*/core/bgp.md` | 서식 준비 |
