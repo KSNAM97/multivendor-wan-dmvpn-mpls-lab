@@ -5,6 +5,12 @@
 - 기준 문서: [mlag-design.md](../../../docs/mlag-design.md)
 - 검증일: 2026-10-18
 
+## 장애 지점
+
+빨간 선: DC-SW3-L3 Et7과 DC-SW1-L2 Et1 사이 링크(MLAG Po10 멤버). DC-SW3-L3 Et7 shutdown 후 복구.
+
+![MLAG 링크 다운 지점](images/fail-mlag.png)
+
 | 장비 | 명령 | 기대 결과 | 실제 결과 | 판정 |
 |---|---|---|---|---|
 | DC-SW3-L3, DC-SW4-L3 | `show mlag` | State Active, Negotiation Connected, peer-link `Po1` Up | 두 스위치 모두 domain-id `dc-mlag`, local-interface `Vlan4094`, peer-link `Port-Channel1`, state Active, negotiation status Connected, peer-link status Up, local-int status Up, peer-config consistent, system-id `0e:06:2e:cc:02:b8`. DC-SW3-L3 peer-address `10.2.254.2`, DC-SW4-L3 peer-address `10.2.254.1`. MLAG Ports는 Active-full 2(Po10, Po20), Inactive 0 | 통과 |

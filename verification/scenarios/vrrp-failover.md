@@ -5,6 +5,19 @@
 - 기준 문서: [vrrp-mstp-design.md](../../docs/vrrp-mstp-design.md) 2절
 - 검증일: 2026-10-18(HQ, DC, BR1)
 
+## 장애 지점
+
+빨간 선은 VRRP 광고가 지나는 스위치 간 링크이며 각 사이트에서 SVI를 shutdown.
+
+HQ(Cisco): HQ-SW-2 ↔ HQ-SW-3 Gi0/2, Vl10 shutdown
+![HQ VRRP 장애 지점](images/fail-vrrp-hq.png)
+
+DC(Arista): DC-SW3-L3 ↔ DC-SW4-L3 Eth6, Vl50 shutdown
+![DC VRRP 장애 지점](images/fail-vrrp-dc.png)
+
+BR1(Aruba): BR1-SW1-L3 ↔ BR1-SW2-L3 1/1/4, vlan10 shutdown
+![BR1 VRRP 장애 지점](images/fail-vrrp-br1.png)
+
 | 순서 | 동작 | 기대 결과 | 측정값 | 판정 |
 |---|---|---|---|---|
 | 1 | 호스트에서 VIP로 연속 `ping` 시작 | 응답 정상 | HQ: HQ-PC1에서 `ping 10.1.10.1` 시작, 응답 정상. 시험 전 HQ-SW-2 Master(우선순위 110), HQ-SW-3 Backup(우선순위 90, Master addr `10.1.10.2`) | 통과(HQ, DC, BR1) |

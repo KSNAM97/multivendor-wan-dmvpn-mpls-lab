@@ -5,6 +5,12 @@
 - 기준 문서: [bgp-design.md](../../docs/bgp-design.md), [ospf-design.md](../../docs/ospf-design.md) 6절
 - 검증일: 2026-10-18
 
+## 장애 지점
+
+빨간 선: HQ-R1 g3/0과 ISP-1-PE-A g2/0 사이 링크(링크 6). ISP-1 PE 쪽 인터페이스를 shutdown.
+
+![ISP-1 장애 지점](images/fail-isp1.png)
+
 | 순서 | 동작 | 기대 결과 | 측정값 | 판정 |
 |---|---|---|---|---|
 | 1 | ISP-1 장애 유발(링크 `shutdown` 또는 PE-A 중지) | BGP hold-time(9초) 이내에 세션 다운 감지 | ISP-1 PE 쪽 인터페이스 `shutdown`(PE-A `Gi2/0` 등). Wireshark(HQ-R1 `Gi3/0` ↔ ISP-1-PE-A `Gi2/0`, `bgp`)에서 시험 전 Keepalive는 양쪽 약 3초 간격. PE-A(`100.1.11.2`)의 마지막 Keepalive 464.93초, HQ-R1(`100.1.11.1`)의 `NOTIFICATION` 474.61초로 약 9.7초 뒤 세션 종료(패킷 바이트상 오류 코드 4, Hold Timer Expired) | 통과 |

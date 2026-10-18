@@ -5,6 +5,12 @@
 - 기준 문서: [dmvpn-design.md](../../docs/dmvpn-design.md)
 - 검증일: 2026-10-18
 
+## 장애 지점
+
+빨간 선: DC-R2(Hub)와 Private-net 사이 링크, DC-R2 `interface tunnel 0` shutdown(언더레이 유지).
+
+![DMVPN Hub 장애 지점](images/fail-hub.png)
+
 | 순서 | 동작 | 기대 결과 | 측정값 | 판정 |
 |---|---|---|---|---|
 | 1 | Hub(DC-R2) 중지 또는 Tunnel0 `shutdown` | Spoke의 NHRP 등록 끊김 | DC-R2 `interface tunnel 0` `shutdown` 후 `show ip interface tunnel 0`이 `administratively down`. DC-R2 `show dmvpn` 목록 비어 있음, `show ip ospf neighbor`에서 Tunnel0 이웃 3개 소실. HQ-R2 `show ip ospf neighbor`에서 Hub(`10.10.10.2`) 이웃 소실(`Dead timer expired`). Wireshark(HQ-R2 `Gi4/0` ↔ Private-net)에서 Hub(`203.0.113.5`) ESP 마지막 64.04초, 직후 64.35초 ISAKMP `Informational` | 통과 |
