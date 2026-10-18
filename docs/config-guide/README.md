@@ -25,6 +25,7 @@
 | MLAG(DC) | `docs/mlag-design.md` |
 | DMVPN, IPsec | `docs/dmvpn-design.md` |
 | DHCP, DNS | `docs/dhcp-dns-design.md` |
+| QoS | `docs/qos-design.md` |
 
 ## 1-1. 컨피그 표기 규칙
 
@@ -67,7 +68,7 @@
 | 8 | 2주 금 | DC-R1 ~ DC-R4 | 서버 VLAN DNS ACL | dhcp-dns-design 5절, [cisco-router.md](./cisco-router.md) 3.8절 |
 | 8-1 | 선택(10/19~10/21) | DC-SW3-L3, DC-SW4-L3, DC-SW1-L2, DC-SW2-L2 | MLAG 피어, MLAG 포트채널 | mlag-design, [arista-switch.md](./arista-switch.md) 5.4절 |
 | 9 | 3주 수~목 | ISP 장비 | ISP OSPF, iBGP RR, PE `next-hop-self` | bgp-design 1~4절 |
-| 10 | 3주 금 | 라우터 | QoS | [cisco-router.md](./cisco-router.md) 3.7절 |
+| 10 | 3주 금 | 라우터 | QoS | qos-design, [cisco-router.md](./cisco-router.md) 3.7절 |
 
 ## 7. 저장과 백업
 

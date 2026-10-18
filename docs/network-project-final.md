@@ -186,7 +186,7 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ HQ
 ### QoS (사이트↔스위치 라우터 인터페이스, 총 20포트)
 - 위치: HQ-R1/HQ-R2, DC-R1~DC-R4, BR1-R1/BR1-R2, BR2-R1/BR2-R2 — 각 Gi0/0, Gi1/0
 - 제외: 라우터간 링크, ISP 방향, PI 방향, Tunnel0
-- 클래스: CONTROL(DSCP CS6, 10%) / BUSINESS(DNS 53→AF31, 30%) / class-default(fair-queue)
+- 클래스: CONTROL(DSCP CS6, 10%) / BUSINESS(DNS 53을 ACL로 분류, AF31 표시, 30%) / class-default(fair-queue). 상세는 `docs/qos-design.md`
 - 부모 정책: shape average (병목 검증용 예시값, 실측 시 조정)
 
 ### 접근 통제

@@ -278,16 +278,23 @@ ip access-list extended pi-whitelist
 ### 3.7 QoS
 
 ```
+ip access-list extended acl-qos-dns
+ permit udp any any eq 53
+ permit udp any eq 53 any
+ permit tcp any any eq 53
+ permit tcp any eq 53 any
+!
 class-map match-any cm-control
  match dscp cs6
 class-map match-any cm-business
- match dscp af31
+ match access-group name acl-qos-dns
 !
 policy-map pm-lan-out-child
  class cm-control
   bandwidth percent 10
  class cm-business
   bandwidth percent 30
+  set dscp af31
  class class-default
   fair-queue
 policy-map pm-lan-out
@@ -297,10 +304,12 @@ policy-map pm-lan-out
 !
 int gi0/0
  service-policy output pm-lan-out
+int gi1/0
+ service-policy output pm-lan-out
 ```
 
-- 적용 대상은 사이트 스위치와 연결된 라우터 인터페이스(`Gi0/0`, `Gi1/0`) 20포트(`docs/network-project-final.md` 5절). 제외: 라우터 간 링크, ISP 방향, PI 방향, Tunnel0.
-- `shape average` 값은 병목 검증용이며 DNS(53) 트래픽은 `match access-group`으로 `cm-business`에 분류하고 `set dscp af31`로 표시. 스위치 QoS는 적용하지 않음.
+- 적용 대상은 사이트 스위치와 연결된 라우터 인터페이스(`Gi0/0`, `Gi1/0`) 20포트(`docs/qos-design.md` 1절). 제외: 라우터 간 링크, ISP 방향, PI 방향, Tunnel0.
+- DNS(53) 트래픽은 DSCP가 아니라 `match access-group`으로 `cm-business`에 분류하고 `set dscp af31`로 표시. `shape average` 값은 병목 검증용. 스위치 QoS는 적용하지 않음.
 
 ### 3.8 DC 서버 VLAN DNS ACL(DC-R1 ~ DC-R4)
 

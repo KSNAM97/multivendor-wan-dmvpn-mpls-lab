@@ -27,6 +27,7 @@
 | DC L2 이중화 | [mlag-design.md](./mlag-design.md) | DC MLAG 피어, MLAG 포트채널, 적용 순서, 검증 항목 |
 | 사이트 간 터널 | [dmvpn-design.md](./dmvpn-design.md) | DMVPN Phase 3, IPsec, NHRP, PI 언더레이 |
 | DHCP, DNS | [dhcp-dns-design.md](./dhcp-dns-design.md) | 풀, DNS 서버, 접근 통제 |
+| QoS | [qos-design.md](./qos-design.md) | 적용 대상 20포트, 클래스와 대역, 정책 구조, 검증 항목 |
 
 ## 3. 장비별 설정 가이드
 
