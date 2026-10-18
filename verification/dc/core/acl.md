@@ -14,9 +14,9 @@
 | 호스트 | `nslookup dc-r1.lab.local 10.2.50.10` | 10.10.10.1 응답 | `Server: 10.2.50.10`, `Name: dc-r1.lab.local`, `Address: 10.10.10.1`(Non-authoritative answer) | 통과 |
 | 호스트 | `nc -zv -w 2 10.2.50.10 22` | DNS 외 포트 차단 | `nc: 10.2.50.10 (10.2.50.10:22): Host is unreachable` | 통과 |
 | 호스트 | `ping -c 2 10.2.50.10` | ICMP 차단(ACL 적용 후 정상) | 2 packets transmitted, 0 packets received, 100% packet loss | 통과 |
-| 호스트 경로상 DC 라우터 | `show ip access-lists dns-only` (시험 후) | 허용 항목과 `deny` 항목 매치 카운트 증가 | - | 미확인 |
+| DC-R2 | `deny` 로그(`%SEC-6-IPACCESSLOGP`) | 허용 목록 밖 트래픽에 대해 `deny` 로그 기록 | DC-R2에서 BR1 호스트(10.3.10.217) 발 `icmp -> 10.2.50.10 (8/0)`과 `tcp 41679 -> 10.2.50.10(22)`가 `list dns-only denied`로 기록(1 packet씩). BR1 호스트의 서버 VLAN 접근이 DMVPN을 거쳐 DC-R2에서 차단됨 | 통과 |
 
-시험 후 라우터 ACL 매치 카운트와 `deny` 로그(`%SEC-6-IPACCESSLOGP`) 캡처는 보충 예정.
+ACL 항목별 매치 카운트(`show ip access-lists dns-only`의 `(N matches)`)는 캡처하지 못했고, `deny` 동작은 로그로 확인함.
 
 DC-SW3-L3 ip access-group out 거부
 ![DC-SW3-L3 ip access-group out 거부](images/acl-ceos-svi-out.png)
@@ -38,3 +38,6 @@ DC-R4 dns-only
 
 호스트 nslookup, ping, nc 시험
 ![호스트 nslookup, ping, nc 시험](images/acl-host-test.webp)
+
+DC-R2 deny 로그
+![DC-R2 deny 로그](images/acl-dc-r2-deny-log.webp)
