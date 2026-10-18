@@ -11,3 +11,5 @@
 | 2 | 채널 멤버 포트 하나 `shutdown` | 채널 유지(남은 멤버 `P`), 패킷 손실 최소 | - | 미확인 |
 | 3 | 나머지 멤버도 `shutdown` | 채널 다운, STP 재계산으로 대체 경로 사용 | - | 미확인 |
 | 4 | 멤버 복구 | 채널 정상 복귀 | - | 미확인 |
+
+- DC MLAG 포트(`DC-SW3-L3` Et7 다운)에서의 결과는 [dc/distribution/mlag.md](../dc/distribution/mlag.md) 참조(연속 ping 1개 손실, 복구 후 Active-full 2).

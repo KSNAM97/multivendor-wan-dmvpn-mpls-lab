@@ -75,6 +75,8 @@
 |---|---|---|---|
 | HQ | HQ-SW-2 | HQ-SW-3 | HQ-SW-1 |
 | DC | DC-SW3-L3 | DC-SW4-L3 | DC-SW1-L2, DC-SW2-L2 |
+
+- DC는 MLAG 적용(`docs/mlag-design.md`)으로 `DC-SW1-L2`, `DC-SW2-L2` 업링크가 MLAG 포트채널이라 STP 차단 링크가 없음. 루트(`DC-SW3-L3`)와 VRRP Active는 그대로 유지.
 | BR1 | BR1-SW1-L3 | BR1-SW2-L3 | BR1-SW3-L3 |
 | BR2 | BR2-SW1-L3 | BR2-SW2-L3 | BR2-SW3-L2 |
 

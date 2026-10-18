@@ -100,7 +100,7 @@ username admin privilege 15 role network-admin secret admin1234
 
 ### 5.3 서버 VLAN ACL
 
-- cEOS는 인터페이스 ACL(`ip access-group`)을 지원하지 않음. SVI 출력, 라우티드 포트 입력 모두 `% Unavailable command (not supported on this hardware platform)`로 거부되어 `DC-SW3-L3`, `DC-SW4-L3`에는 적용하지 않음.
+- vEOS-lab는 인터페이스 ACL(`ip access-group`)을 지원하지 않음. SVI 출력, 라우티드 포트 입력 모두 `% Unavailable command (not supported on this hardware platform)`로 거부되어 `DC-SW3-L3`, `DC-SW4-L3`에는 적용하지 않음.
 - 서버 VLAN DNS ACL은 DC 라우터에 적용([cisco-router.md](./cisco-router.md) 3.8절, `docs/dhcp-dns-design.md` 5절).
 
 ### 5.4 MLAG(DC-SW3-L3, DC-SW4-L3, DC-SW1-L2, DC-SW2-L2)
@@ -167,4 +167,4 @@ int po10
 
 - `DC-SW4-L3`: `int vlan4094`의 주소는 `10.2.254.2/30`, `peer-address`는 `10.2.254.1`, `et7`, `et8`의 `desc`는 `to dc-sw1-l2 et2`, `to dc-sw2-l2 et2`.
 - 피어 링크는 기존 `Po1`(Et5, Et6)을 재사용하고 VLAN 4094(`trunk group MLAGPEER`)만 추가. 값과 적용 순서는 `docs/mlag-design.md`.
-- 한 L2 스위치씩 순서대로 전환하고 단계마다 `write memory`. cEOS의 MLAG 지원 여부는 `show mlag`로 먼저 확인.
+- 한 L2 스위치씩 순서대로 전환하고 단계마다 `write memory`. vEOS-lab의 MLAG 지원 여부는 `show mlag`로 먼저 확인.

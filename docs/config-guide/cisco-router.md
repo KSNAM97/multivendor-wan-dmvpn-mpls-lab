@@ -320,4 +320,4 @@ int gi1/0
 ```
 
 - 서버 VLAN(`10.2.50.0/24`)으로는 DNS(UDP/TCP 53)만 허용하고 나머지 트래픽은 통과(`permit ip any any`). 순서와 값은 `docs/dhcp-dns-design.md` 5절 표.
-- 라우터가 직접 만드는 OSPF 등 제어 트래픽은 출력 ACL의 영향을 받지 않음. 스위치(cEOS)가 ACL을 지원하지 않아 이 위치에 적용([arista-switch.md](./arista-switch.md) 5.3절).
+- 라우터가 직접 만드는 OSPF 등 제어 트래픽은 출력 ACL의 영향을 받지 않음. 스위치(vEOS-lab)가 ACL을 지원하지 않아 이 위치에 적용([arista-switch.md](./arista-switch.md) 5.3절).

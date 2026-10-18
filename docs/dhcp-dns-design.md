@@ -160,7 +160,7 @@ dhcp-server vrf default
 
 - 외부(각 사이트, ISP)에서 서버 VLAN(`10.2.50.0/24`)으로 들어오는 트래픽은 UDP/TCP 53만 허용하고 그 외 차단. 서버 VLAN은 DHCP를 사용하지 않으므로 UDP 67/68은 허용 대상이 아님.
 - 적용 위치: DC 라우터(`DC-R1` ~ `DC-R4`)의 스위치 방향 인터페이스(`Gi0/0`, `Gi1/0`) 출력 방향. DC 외부에서 서버 VLAN으로 가는 트래픽은 모두 이 라우터들을 거침. 서버가 보내는 응답 트래픽은 필터링하지 않음.
-- Arista cEOS는 인터페이스 ACL을 지원하지 않아 스위치(`DC-SW3-L3`, `DC-SW4-L3`)에는 적용하지 않음. `ip access-group`이 SVI 출력, 라우티드 포트 입력 모두 `Unavailable command (not supported on this hardware platform)`로 거부됨(`verification/dc/core/acl.md`).
+- Arista vEOS-lab는 인터페이스 ACL을 지원하지 않아 스위치(`DC-SW3-L3`, `DC-SW4-L3`)에는 적용하지 않음. `ip access-group`이 SVI 출력, 라우티드 포트 입력 모두 `Unavailable command (not supported on this hardware platform)`로 거부됨(`verification/dc/core/acl.md`).
 - 한계: DC 내부 VLAN 간 라우팅(예: VLAN 100에서 VLAN 50)은 스위치 안에서 처리되어 이 ACL을 거치지 않음.
 - ICMP는 허용 대상이 아니므로 ACL 적용 후 서버 응답 확인은 `ping`이 아니라 `nslookup` 또는 `dig` 사용.
 

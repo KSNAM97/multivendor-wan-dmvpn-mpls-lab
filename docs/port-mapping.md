@@ -61,12 +61,12 @@
 | 32 | DC-R2 | Gi2/0 | Private-net | Gi1/0 | 203.0.113.4/30 | PI 연결, DMVPN Hub Tunnel0 source |
 | 33 | DC-R3 | Gi3/0 | ISP-1-PE-A | Gi3/0 | 100.1.21.0/30 | ISP-1 연결 |
 | 34 | DC-R4 | Gi3/0 | ISP-2-PE-A | Gi3/0 | 100.2.22.0/30 | ISP-2 연결 |
-| 35 | DC-SW3-L3 | Et5 | DC-SW4-L3 | Et5 | - | Po1 (VLAN 50/100) |
-| 36 | DC-SW3-L3 | Et6 | DC-SW4-L3 | Et6 | - | Po1 |
-| 37 | DC-SW3-L3 | Et7 | DC-SW1-L2 | Et1 | - | 트렁크 (연결 확인됨) |
-| 38 | DC-SW3-L3 | Et8 | DC-SW2-L2 | Et1 | - | 트렁크 (연결 확인됨) |
-| 39 | DC-SW4-L3 | Et7 | DC-SW1-L2 | Et2 | - | 트렁크 (연결 확인됨) |
-| 40 | DC-SW4-L3 | Et8 | DC-SW2-L2 | Et2 | - | 트렁크 (연결 확인됨) |
+| 35 | DC-SW3-L3 | Et5 | DC-SW4-L3 | Et5 | - | Po1 (VLAN 50/100, MLAG peer-link) |
+| 36 | DC-SW3-L3 | Et6 | DC-SW4-L3 | Et6 | - | Po1 (MLAG peer-link) |
+| 37 | DC-SW3-L3 | Et7 | DC-SW1-L2 | Et1 | - | MLAG 포트채널 Po10(mlag 10) 멤버 |
+| 38 | DC-SW3-L3 | Et8 | DC-SW2-L2 | Et1 | - | MLAG 포트채널 Po20(mlag 20) 멤버 |
+| 39 | DC-SW4-L3 | Et7 | DC-SW1-L2 | Et2 | - | MLAG 포트채널 Po10(mlag 10) 멤버 |
+| 40 | DC-SW4-L3 | Et8 | DC-SW2-L2 | Et2 | - | MLAG 포트채널 Po20(mlag 20) 멤버 |
 | 41 | DC-SW1-L2 | Et12 | DC-DNS-1 | eth0 | - | VLAN 50 access (주 DNS, DNS 템플릿, 연결 확인됨) |
 | 42 | DC-SW2-L2 | Et12 | DC-DNS-2 | eth0 | - | VLAN 50 access (백업 DNS, DNS 템플릿, 연결 확인됨) |
 

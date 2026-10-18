@@ -41,3 +41,13 @@ int vlan100
  desc mgmt vlan for dc-sw2-l2
  ip add 10.2.100.22/24
 !
+default int et1
+default int et2
+int range et1-2
+ channel-group 20 mode active
+int po20
+ desc to dc-sw3-l3, dc-sw4-l3 mlag
+ switchport mode trunk
+ switchport trunk native vlan 999
+ switchport trunk allowed vlan 50,100
+!

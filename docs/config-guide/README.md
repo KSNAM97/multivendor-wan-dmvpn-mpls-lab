@@ -90,7 +90,7 @@
 | route-map, prefix-list | `show route-map`, `show ip prefix-list` | - |
 | MPLS, VRF | `show mpls ldp neighbor`, `show ip vrf`, `show ip bgp vpnv4 all summary` | - |
 | ACL | `show ip access-lists` | `show ip access-lists` |
-| MLAG | - | `show mlag`, `show mlag detail`, `show port-channel summary` |
+| MLAG | - | `show mlag`, `show mlag detail`, `show port-channel dense` |
 | QoS | `show policy-map interface gi0/0` | - |
 
 ### 8-1. Arista 설정 필터 (running-config)

@@ -59,13 +59,16 @@ VLAN, 게이트웨이 이중화, EtherChannel, 트렁크, STP(MSTP), DHCP 배치
 ## 4. EtherChannel
 
 - 모든 채널은 LACP(`channel-group <번호> mode active`) 사용.
+- DC는 `DC-SW3-L3`, `DC-SW4-L3`를 MLAG 피어로 묶고 `DC-SW1-L2`, `DC-SW2-L2` 업링크를 MLAG 포트채널(`Po10`, `Po20`)로 사용(`docs/mlag-design.md`). 그래서 5절 트렁크 표에서 DC 구간은 제외.
 
 | 사이트 | Po | 장비 A | A 포트 | 장비 B | B 포트 | 허용 VLAN |
 |---|---|---|---|---|---|---|
 | HQ | Po1 | HQ-SW-1 | Gi1/0, Gi1/1 | HQ-SW-2 | Gi0/0, Gi0/1 | 10,20,100 |
 | HQ | Po2 | HQ-SW-1 | Gi1/2, Gi1/3 | HQ-SW-3 | Gi0/0, Gi0/1 | 10,20,100 |
 | HQ | Po3 | HQ-SW-2 | Gi0/2, Gi0/3 | HQ-SW-3 | Gi0/2, Gi0/3 | 10,20,100 |
-| DC | Po1 | DC-SW3-L3 | Et5, Et6 | DC-SW4-L3 | Et5, Et6 | 50,100 |
+| DC | Po1 (MLAG peer-link) | DC-SW3-L3 | Et5, Et6 | DC-SW4-L3 | Et5, Et6 | 50,100,4094 |
+| DC | Po10 (MLAG 10) | DC-SW1-L2 | Et1, Et2 | DC-SW3-L3 / DC-SW4-L3 | Et7 / Et7 | 50,100 |
+| DC | Po20 (MLAG 20) | DC-SW2-L2 | Et1, Et2 | DC-SW3-L3 / DC-SW4-L3 | Et8 / Et8 | 50,100 |
 | BR1 | LAG 1 | BR1-SW1-L3 | 1/1/3, 1/1/4 | BR1-SW2-L3 | 1/1/3, 1/1/4 | 10,20,100 |
 | BR2 | Po1 | BR2-SW1-L3 | Gi1/0, Gi1/1 | BR2-SW2-L3 | Gi1/0, Gi1/1 | 10,20,100 |
 
@@ -75,10 +78,6 @@ VLAN, 게이트웨이 이중화, EtherChannel, 트렁크, STP(MSTP), DHCP 배치
 
 | 사이트 | 장비 A | A 포트 | 장비 B | B 포트 | 허용 VLAN |
 |---|---|---|---|---|---|
-| DC | DC-SW3-L3 | Et7 | DC-SW1-L2 | Et1 | 50,100 |
-| DC | DC-SW3-L3 | Et8 | DC-SW2-L2 | Et1 | 50,100 |
-| DC | DC-SW4-L3 | Et7 | DC-SW1-L2 | Et2 | 50,100 |
-| DC | DC-SW4-L3 | Et8 | DC-SW2-L2 | Et2 | 50,100 |
 | BR1 | BR1-SW1-L3 | 1/1/5 | BR1-SW3-L3 | 1/1/1 | 10,20,100 |
 | BR1 | BR1-SW2-L3 | 1/1/5 | BR1-SW3-L3 | 1/1/2 | 10,20,100 |
 | BR2 | BR2-SW1-L3 | Gi2/0 | BR2-SW3-L2 | Gi0/0 | 10,20,100 |
