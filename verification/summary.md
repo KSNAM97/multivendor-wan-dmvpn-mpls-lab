@@ -1,0 +1,28 @@
+# 검증 결과 요약
+
+장애 시험과 주요 프로토콜 검증의 핵심 수치를 한 곳에 모은 문서. 상세 증거는 각 문서 링크에서 확인. 사이트별 토폴로지와 문서 목록은 [HQ](hq/README.md), [DC](dc/README.md), [BR1](br1/README.md), [BR2](br2/README.md), [ISP-1](isp1/README.md), [ISP-2](isp2/README.md), [Private Internet](private-internet/README.md).
+
+## 이중화 장애 시험
+
+| 시험 | 대상 | 핵심 결과 | 문서 |
+|---|---|---|---|
+| VRRP 전환 | HQ(Cisco) | 약 1초, `ping` 손실 1개 | [vrrp-failover](scenarios/vrrp-failover.md) |
+| VRRP 전환 | DC(Arista) | Wireshark 광고 공백 약 3.2초, `ping` 손실 5개 | [vrrp-failover](scenarios/vrrp-failover.md) |
+| VRRP 전환 | BR1(Aruba) | Wireshark 광고 공백 약 4.0초 | [vrrp-failover](scenarios/vrrp-failover.md) |
+| EtherChannel 링크 다운 | HQ Po1 | 손실 1개(약 1초) | [etherchannel-link-down](scenarios/etherchannel-link-down.md) |
+| EtherChannel 링크 다운 | BR1 LAG 1(Aruba) | 손실 5개, 최대 응답 5015 ms | [etherchannel-link-down](scenarios/etherchannel-link-down.md) |
+| MLAG 링크 다운 | DC | 손실 1개, 복구 후 Active-full 2 | [etherchannel-link-down](scenarios/etherchannel-link-down.md), [mlag](dc/distribution/mlag.md) |
+| ISP-1 장애 | HQ-R1 ↔ ISP-1-PE-A | BGP hold-time 9초, 마지막 Keepalive 후 약 9.7초에 `NOTIFICATION`. 기본 경로는 ISP-2 쪽 OSPF E1 metric 201로 전환, 복구 후 세션 수립 약 1.6초 | [isp1-failure](scenarios/isp1-failure.md) |
+| DMVPN Hub 장애 | DC-R2 `tunnel 0` | Hub 중단 약 105초. shortcut ESP는 약 44초 유지 뒤 ISP(MPLS) 경로로 우회(TTL 60 → 57). `ping` 294개 모두 응답 | [dmvpn-hub-failure](scenarios/dmvpn-hub-failure.md) |
+
+## 서비스 품질과 서비스 동작
+
+| 시험 | 핵심 결과 | 문서 |
+|---|---|---|
+| QoS | DNS를 ACL로 분류해 `cm-business`에 af31 표시. 병목 시 `class-default`만 drop(578 → 1333), `cm-business` drop 0 | [qos-verification](scenarios/qos-verification.md) |
+| DHCP(BR2, Cisco) | DORA 4단계 확인, 두 서버 중 먼저 응답한 서버가 임대 | [dhcp](br2/distribution/dhcp.md) |
+| MPLS 레이블 | Hub 장애로 ISP 경유 시 `12004`(LDP) + `14007`(VPN) 두 레이블, PHP로 마지막 홉 전 바깥 레이블 제거 | [mpls-label-path](scenarios/mpls-label-path.md) |
+
+## 트러블슈팅
+
+구성과 검증 중 설계와 달랐던 10건(vEOS-lab ACL 미지원, router-id 충돌, QoS 분류, BR1 L2 루프 등)의 증상, 원인, 조치는 [troubleshooting-log](troubleshooting-log.md) 참조.
