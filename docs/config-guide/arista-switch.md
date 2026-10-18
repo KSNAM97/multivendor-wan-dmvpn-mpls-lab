@@ -1,4 +1,4 @@
-# Arista 스위치 설정 (cEOS)
+# Arista 스위치 설정 (vEOS-lab)
 
 > 설정 가이드 목차: [README.md](./README.md) | [Cisco 라우터](./cisco-router.md) | [Cisco 스위치](./cisco-switch.md) | [Arista 스위치](./arista-switch.md) | [Aruba 스위치](./aruba-switch.md) | [알파인](./alpine.md)
 

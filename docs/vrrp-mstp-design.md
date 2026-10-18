@@ -32,7 +32,7 @@
 
 ### 2.2 명령 비교
 
-| 항목 | Cisco(vIOS) | Arista(cEOS) |
+| 항목 | Cisco(vIOS) | Arista(vEOS-lab) |
 |---|---|---|
 | VIP | `vrrp 10 ip 10.1.10.1` | `vrrp 50 ipv4 10.2.50.1` |
 | 우선순위 | `vrrp 10 priority 110` | `vrrp 50 priority-level 110` |

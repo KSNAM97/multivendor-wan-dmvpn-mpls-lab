@@ -12,6 +12,16 @@ Jira 목록 화면. 이슈 번호, 제목, 우선순위, 상태, 마감일, 갱�
 
 ![Jira 이슈 목록 2(2026-10-17)](images/project-management/jira-list-2.webp)
 
+## 1.1 Jira 진행 현황(2026-10-19)
+
+KAN-4 ~ KAN-37 전체 34개 이슈 중 33개가 완료이고, KAN-32(PPT 슬라이드 작성 및 리허설, 기한 2026-11-04)만 "해야 할 일"로 남음.
+
+![Jira 이슈 목록 1(2026-10-19)](images/project-management/jira-list-1019-1.webp)
+
+![Jira 이슈 목록 2(2026-10-19)](images/project-management/jira-list-1019-2.webp)
+
+![Jira 이슈 목록 3(2026-10-19)](images/project-management/jira-list-1019-3.webp)
+
 ## 2. Slack
 
 Jira 이슈의 생성과 상태 전환이 Slack 채널에 알림으로 전달됨. 아래는 2026-10-17의 전환 알림(KAN-20, KAN-15, KAN-16, KAN-34, KAN-35).

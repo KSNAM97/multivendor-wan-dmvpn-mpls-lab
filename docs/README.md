@@ -36,7 +36,7 @@
 | 공통 규칙, 작성 순서, 저장, 확인 명령 | [config-guide/README.md](./config-guide/README.md) |
 | Cisco 라우터(7200) | [config-guide/cisco-router.md](./config-guide/cisco-router.md) |
 | Cisco 스위치(vIOS) | [config-guide/cisco-switch.md](./config-guide/cisco-switch.md) |
-| Arista 스위치(cEOS) | [config-guide/arista-switch.md](./config-guide/arista-switch.md) |
+| Arista 스위치(vEOS-lab) | [config-guide/arista-switch.md](./config-guide/arista-switch.md) |
 | Aruba 스위치(CX, BR1) | [config-guide/aruba-switch.md](./config-guide/aruba-switch.md) |
 | 알파인 노드 | [config-guide/alpine.md](./config-guide/alpine.md) |
 

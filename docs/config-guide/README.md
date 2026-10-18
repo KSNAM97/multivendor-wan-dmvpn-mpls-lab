@@ -8,7 +8,7 @@
 |---|---|---|
 | Cisco 라우터(7200) | [cisco-router.md](./cisco-router.md) | 기본, OSPF, 사이트 엣지 eBGP, iBGP RR, MPLS L3VPN, DMVPN, PI ACL, QoS |
 | Cisco 스위치(vIOS) | [cisco-switch.md](./cisco-switch.md) | L2·L3 기능, VRRP, MSTP, OSPF, MGMT SVI, DHCP |
-| Arista 스위치(cEOS) | [arista-switch.md](./arista-switch.md) | DC L3·L2 스위치, 접속 설정, MLAG |
+| Arista 스위치(vEOS-lab) | [arista-switch.md](./arista-switch.md) | DC L3·L2 스위치, 접속 설정, MLAG |
 | Aruba 스위치(CX) | [aruba-switch.md](./aruba-switch.md) | BR1 분배 L3(SW1, SW2)와 액세스(SW3), LAG, MSTP, VRRP, OSPF, DHCP |
 | 알파인 노드, DNS 템플릿 | [alpine.md](./alpine.md) | 호스트 DHCP 클라이언트(알파인), DNS 서버(DNS 템플릿) |
 

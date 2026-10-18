@@ -9,7 +9,7 @@
 |---|---|---|
 | Cisco 7200 라우터 (`HQ-R*`, `DC-R*`, `BR*-R*`, `ISP-*`, `Private-net`) | `GigabitEthernet0/0` – `6/0` (`GiX/0`) | 7포트 |
 | Cisco IOU 스위치 L3·L2 (`HQ-SW-*`, `BR*-SW*-L3`, `BR2-SW3-L2`) | `Gi0/0` – `Gi3/3` | 16포트 |
-| Arista cEOS 스위치 L3·L2 (`DC-SW*-L3`, `DC-SW*-L2`) | `Management1`, `Ethernet1` – `Ethernet12` (`Et1` – `Et12`) | 12포트 + 관리 |
+| Arista vEOS-lab 스위치 L3·L2 (`DC-SW*-L3`, `DC-SW*-L2`) | `Management1`, `Ethernet1` – `Ethernet12` (`Et1` – `Et12`) | 12포트 + 관리 |
 
 - 이 표는 2026-10-11 저장된 GNS3 프로젝트의 연결과 대조 완료(연결 80개). `연결 확인됨`은 GNS3에 실제 연결된 값이며, 서브넷과 IP는 컨피그 작업 전이라 장비에 미적용.
 

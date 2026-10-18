@@ -1,7 +1,7 @@
 # 🏆 멀티벤더 하이브리드 네트워크 구축
 
 [![Cisco](https://img.shields.io/badge/Cisco-IOS-blue?logo=cisco)](https://github.com/KSNAM97)
-[![Arista](https://img.shields.io/badge/Arista-cEOS-orange)](https://github.com/KSNAM97)
+[![Arista](https://img.shields.io/badge/Arista-vEOS--lab-orange)](https://github.com/KSNAM97)
 [![Aruba](https://img.shields.io/badge/Aruba-AOS--CX-ff8300)](https://github.com/KSNAM97)
 [![GNS3](https://img.shields.io/badge/GNS3-Topology-green)](https://github.com/KSNAM97)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
@@ -17,7 +17,7 @@
 | 주제 | HQ / DC / BR1 / BR2 4개 사이트를 ISP 이중화와 DMVPN으로 연결하는 멀티벤더 하이브리드 네트워크 |
 | 장비 구성 | HQ (HQ-R1·HQ-R2, HQ-SW-1 – HQ-SW-3), DC (DC-R1 – DC-R4, DC-SW1 – DC-SW4-L3, DC-SW1·2-L2, DC-DNS-1·DC-DNS-2), BR1 (BR1-R1·R2, BR1-SW1 ~ SW3-L3, Aruba CX), BR2 (BR2-R1·R2, BR2-SW1·SW2-L3, BR2-SW3-L2), 호스트 H1·H2, ISP-1·ISP-2 (ISP-n-PE-A·P1·P2·PE-B 각 4대), Private Internet (Private-net) |
 | 핵심 기술 | 사이트 OSPF, ISP iBGP Route Reflector(ISP-1 AS 65100, ISP-2 AS 65200), ISP 코어 MPLS L3VPN(LDP, VRF, vpnv4), 사이트 엣지 eBGP(route-map, prefix-list) + OSPF 기본 경로 광고, DMVPN Phase3, IPsec, VRRP, MSTP, EtherChannel, QoS, ACL 화이트리스트 |
-| 시뮬레이터 | GNS3 (Cisco 7200 / IOU, Arista cEOS, Aruba AOS-CX) |
+| 시뮬레이터 | GNS3 (Cisco 7200 / IOU, Arista vEOS-lab, Aruba AOS-CX) |
 | 일정 | 3.5주(2026-10-12 ~ 11-04), 1인 체제 (남기석) |
 | 검증 | 이중화 장애 실측 (FHRP, EtherChannel, ISP 장애, DMVPN Hub 장애), 트러블슈팅 로그 |
 
@@ -83,7 +83,7 @@ network-project/
 │       ├── schedule-2person.md   (2인 체제 계획, 보관)
 │       └── schedule-3person.md   (3인 체제 계획, 보관)
 ├── jira/
-│   ├── jira-tickets-3person.csv   (현재 Jira KAN 이슈 29개의 등록 기준, 라벨 net-cloud / policy, 마감일 포함)
+│   ├── jira-tickets-3person.csv   (현재 Jira KAN 이슈 34개의 등록 기준, 라벨 net-cloud / policy, 마감일 포함)
 │   └── archive/
 │       └── jira-tickets-2person.csv   (2인 체제 참고안, 보관)
 ├── slack/
@@ -142,7 +142,7 @@ network-project/
 - ISP 코어: MPLS L3VPN(내부 링크 LDP, PE의 VRF `corp`, vpnv4는 iBGP RR 경유, `docs/mpls-design.md`)
 - 사이트 ↔ ISP: 사이트 엣지 eBGP(사이트 AS 65001~65004 ↔ ISP AS 65100, 65200), PE가 기본 경로를 내려주고 사이트는 /16만 광고(route-map, prefix-list), 사이트 OSPF에 기본 경로 광고
 - Private Internet: 별도 OSPF 프로세스, ACL 화이트리스트로 언더레이 트래픽만 허용
-- DC 내부 스위치는 Arista cEOS, BR1 스위치는 Aruba AOS-CX, 나머지는 Cisco (7200 / IOU)
+- DC 내부 스위치는 Arista vEOS-lab, BR1 스위치는 Aruba AOS-CX, 나머지는 Cisco (7200 / IOU)
 
 ### DMVPN Phase 3
 
@@ -176,7 +176,7 @@ network-project/
 
 - DC 서버 VLAN50: DC-DNS-1(주), DC-DNS-2(백업) 두 대, GNS3 `DNS` 템플릿(Debian 계열) 이미지, `dnsmasq`로 DNS 제공. 주소는 `10.2.50.10`, `10.2.50.11`.
 - DHCP: 사용자 VLAN 게이트웨이 스위치 두 대(IOS DHCP 서버)가 풀을 나눠 제공(앞 64개 Active, 뒤 64개 Standby). 풀은 `docs/ip-mapping.md` 5절, 구성은 `docs/dhcp-dns-design.md`.
-- QoS: 사이트 스위치와 연결된 라우터 인터페이스 20포트에 적용하며 스위치(IOU L2 / cEOS) QoS는 적용하지 않음.
+- QoS: 사이트 스위치와 연결된 라우터 인터페이스 20포트에 적용하며 스위치(IOU L2 / vEOS-lab) QoS는 적용하지 않음.
 
 문서 목차: [`docs/README.md`](./docs/README.md)
 
@@ -186,7 +186,7 @@ network-project/
 
 ## 프로젝트 관리
 
-- Jira 이슈 33개와 Slack 알림으로 일정과 진행을 관리하며 화면 기록은 [`docs/project-management.md`](./docs/project-management.md)에 정리.
+- Jira 이슈 34개와 Slack 알림으로 일정과 진행을 관리하며 화면 기록은 [`docs/project-management.md`](./docs/project-management.md)에 정리.
 
 ![Jira 이슈 목록](./docs/images/project-management/jira-list-1.webp)
 

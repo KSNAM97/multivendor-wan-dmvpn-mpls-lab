@@ -20,7 +20,7 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ HQ
 - ISP 코어: MPLS L3VPN(내부 링크 LDP, PE의 VRF `corp`, vpnv4는 iBGP RR 경유, `docs/mpls-design.md`)
 - 사이트 ↔ ISP: 사이트 엣지 eBGP(사이트 AS ↔ ISP AS), PE가 기본 경로 전달, 사이트 /16 광고(route-map, prefix-list), 사이트 OSPF에 기본 경로 광고
 - Private Internet(DMVPN 언더레이): 별도 OSPF 프로세스(2), ACL 화이트리스트
-- DC 스위치는 Arista cEOS, BR1 스위치는 Aruba AOS-CX, 나머지 전부 Cisco (7200 / IOU)
+- DC 스위치는 Arista vEOS-lab, BR1 스위치는 Aruba AOS-CX, 나머지 전부 Cisco (7200 / IOU)
 
 ## 2. 사이트 · AS
 
@@ -64,9 +64,9 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ HQ
 | HQ | HQ-PC1 / HQ-PC2 | - | 호스트(Alpine Linux, docker) | |
 | DC | DC-R1 / DC-R2 | R23 / R24 | 라우터(PI 연결) | R24가 DMVPN Hub |
 | DC | DC-R3 / DC-R4 | R21 / R22 | 라우터(ISP 연결) | |
-| DC | DC-SW1-L3 / DC-SW2-L3 | SW211 / SW212 | L3 스위치(Arista cEOS) | |
-| DC | DC-SW3-L3 / DC-SW4-L3 | SW201 / SW202 | L3 스위치(Arista cEOS, VRRP) | |
-| DC | DC-SW1-L2 / DC-SW2-L2 | SW-SVR1 / SW-SVR2 | 서버용 L2 스위치(Arista cEOS) | |
+| DC | DC-SW1-L3 / DC-SW2-L3 | SW211 / SW212 | L3 스위치(Arista vEOS-lab) | |
+| DC | DC-SW3-L3 / DC-SW4-L3 | SW201 / SW202 | L3 스위치(Arista vEOS-lab, VRRP) | |
+| DC | DC-SW1-L2 / DC-SW2-L2 | SW-SVR1 / SW-SVR2 | 서버용 L2 스위치(Arista vEOS-lab) | |
 | DC | DC-DNS-1 / DC-DNS-2 | DNS1(주) / DNS2(백업) | 서버(VLAN50, DNS 템플릿, docker) | |
 | ISP-1 | ISP-1-PE-A / ISP-1-P1 / ISP-1-P2 / ISP-1-PE-B | PE-A / P1 / P2 / PE-B | iBGP RR | |
 | ISP-2 | ISP-2-PE-A / ISP-2-P1 / ISP-2-P2 / ISP-2-PE-B | PE-A / P1 / P2 / PE-B | iBGP RR | |
@@ -75,7 +75,7 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ HQ
 | BR1 | BR1-PC1 / BR1-PC2 | H1 / H2 | 호스트(Alpine Linux, docker) | |
 | BR2 | BR2-R1 / BR2-R2 | R1 / R2 | 라우터(R2가 DMVPN Spoke) | |
 | BR2 | BR2-SW1-L3 / BR2-SW2-L3 | SW1 / SW2 | L3 스위치 | |
-| BR2 | BR2-SW3-L2 | SW3 | 호스트 연결 L2 스위치 | GNS3 장비명 변경 필요(현재 BR2-SW1-L2) |
+| BR2 | BR2-SW3-L2 | SW3 | 호스트 연결 L2 스위치 | |
 | BR2 | BR2-PC1 / BR2-PC2 | H1 / H2 | 호스트(Alpine Linux, docker) | |
 
 ## 4. 인터페이스 · 포트 매핑 (GNS3 연결 대조 완료 — 2026-10-11)
