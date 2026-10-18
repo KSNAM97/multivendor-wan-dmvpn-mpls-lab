@@ -115,5 +115,29 @@ ISP-2-PE-B BR2-R2 hold
 
 | 장비 | 명령 | 기대 결과 | 실제 결과 | 판정 |
 |---|---|---|---|---|
-| ISP-2-PE-A, PE-B | `show ip bgp vpnv4 all` | 사이트 /16을 eBGP로 수신하고 상대 PE의 사이트 /16을 RR 경유로 수신(next-hop은 상대 PE Loopback0, `next-hop-self`) | - | 미확인 |
-| ISP-2-P1, P2 | `show ip bgp vpnv4 all` | 모든 사이트 /16 반사, `Originator`, `Cluster list` 표시 | - | 미확인 |
+| ISP-2-PE-A, PE-B | `show ip bgp vpnv4 all` | 사이트 /16을 eBGP로 수신하고 상대 PE의 사이트 /16을 RR 경유로 수신(next-hop은 상대 PE Loopback0, `next-hop-self`) | PE-A는 HQ-R2(100.2.12.1)와 DC-R4(100.2.22.1)에서 eBGP로 `10.1.0.0/16`, `10.2.0.0/16`을 수신(`*>`, Path 65001, 65002). 상대 PE-B의 `10.3.0.0/16`, `10.4.0.0/16`은 iBGP로 수신(Next Hop 200.200.200.4, LocPrf 100, 2경로 중 `*>i` 선택). PE-B는 BR1-R2(100.2.32.1)와 BR2-R2(100.2.42.1)에서 eBGP로 `10.3.0.0/16`, `10.4.0.0/16`을 수신. 상대 PE-A의 `10.1.0.0/16`, `10.2.0.0/16`은 iBGP로 수신(Next Hop 200.200.200.1, LocPrf 100, 2경로 중 `*>i` 선택) | 통과 |
+| ISP-2-P1, P2 | `show ip bgp vpnv4 all` | 모든 사이트 /16 반사, `Originator`, `Cluster list` 표시 | P1(200.200.200.2)과 P2(200.200.200.3) 모두 `10.1.0.0/16`, `10.2.0.0/16`(Next Hop 200.200.200.1), `10.3.0.0/16`, `10.4.0.0/16`(Next Hop 200.200.200.4)을 모두 `*>i`로 보유, RD 65200:1. 상세(`show ip bgp vpnv4 all 10.1.0.0`)에서 P1, P2 모두 `Received from a RR-client`, Next Hop 200.200.200.1(metric 2), RT 65200:1, 레이블 in/out nolabel/21006. PE-B는 P1(200.200.200.2), P2(200.200.200.3) 양쪽에서 2경로를 수신(`best #2`), 두 경로 모두 `Originator: 200.200.200.1`, `Cluster list: 2.2.2.2`. PE-A는 eBGP 경로(`external`, table corp, 레이블 in/out 21006/nolabel) | 통과 |
+
+ISP-2-P1 vpnv4 all
+![ISP-2-P1 vpnv4 all](images/pe-policy-p1.png)
+
+ISP-2-P2 vpnv4 all
+![ISP-2-P2 vpnv4 all](images/pe-policy-p2.png)
+
+ISP-2-PE-A vpnv4 all
+![ISP-2-PE-A vpnv4 all](images/pe-policy-pe-a.png)
+
+ISP-2-PE-B vpnv4 all
+![ISP-2-PE-B vpnv4 all](images/pe-policy-pe-b.png)
+
+ISP-2-P1 vpnv4 all 10.1.0.0 상세
+![ISP-2-P1 vpnv4 all 10.1.0.0 상세](images/pe-policy-detail-p1.webp)
+
+ISP-2-P2 vpnv4 all 10.1.0.0 상세
+![ISP-2-P2 vpnv4 all 10.1.0.0 상세](images/pe-policy-detail-p2.png)
+
+ISP-2-PE-A vpnv4 all 10.1.0.0 상세
+![ISP-2-PE-A vpnv4 all 10.1.0.0 상세](images/pe-policy-detail-pe-a.png)
+
+ISP-2-PE-B vpnv4 all 10.1.0.0 상세
+![ISP-2-PE-B vpnv4 all 10.1.0.0 상세](images/pe-policy-detail-pe-b.webp)
