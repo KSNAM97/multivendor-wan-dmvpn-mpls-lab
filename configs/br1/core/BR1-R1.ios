@@ -131,3 +131,4 @@ int tunnel0
 !
 router ospf 12
  no passive-interface tunnel 0
+!
