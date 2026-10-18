@@ -98,19 +98,7 @@ username admin privilege 15 role network-admin secret admin1234
 
 - Cisco의 `enable secret`, `line vty`에 해당. 호스트네임과 접속 계정은 모든 Arista 장비에 같은 형식으로 적용.
 
-### 5.3 서버 VLAN ACL(DC-SW3-L3, DC-SW4-L3)
+### 5.3 서버 VLAN ACL
 
-```
-ip access-list dns-only
- 10 permit udp any host 10.2.50.10 eq 53
- 20 permit tcp any host 10.2.50.10 eq 53
- 30 permit udp any host 10.2.50.11 eq 53
- 40 permit tcp any host 10.2.50.11 eq 53
- 50 deny ip any any log
-!
-int vlan50
- ip access-group dns-only out
-```
-
-- 서버 VLAN으로는 DNS(UDP/TCP 53)만 허용. 순서와 값은 `docs/dhcp-dns-design.md` 5절 표.
-- cEOS에서 SVI 출력 방향 ACL의 지원 여부는 장비에서 입력해 확인(동작하지 않으면 입력 방향 또는 포트 적용으로 변경).
+- cEOS는 인터페이스 ACL(`ip access-group`)을 지원하지 않음. SVI 출력, 라우티드 포트 입력 모두 `% Unavailable command (not supported on this hardware platform)`로 거부되어 `DC-SW3-L3`, `DC-SW4-L3`에는 적용하지 않음.
+- 서버 VLAN DNS ACL은 DC 라우터에 적용([cisco-router.md](./cisco-router.md) 3.8절, `docs/dhcp-dns-design.md` 5절).

@@ -300,3 +300,23 @@ int gi0/0
 
 - 적용 대상은 사이트 스위치와 연결된 라우터 인터페이스(`Gi0/0`, `Gi1/0`) 20포트(`docs/network-project-final.md` 5절). 제외: 라우터 간 링크, ISP 방향, PI 방향, Tunnel0.
 - `shape average` 값은 병목 검증용이며 DNS(53) 트래픽은 `match access-group`으로 `cm-business`에 분류하고 `set dscp af31`로 표시. 스위치 QoS는 적용하지 않음.
+
+### 3.8 DC 서버 VLAN DNS ACL(DC-R1 ~ DC-R4)
+
+```
+ip access-list extended dns-only
+ permit udp any host 10.2.50.10 eq 53
+ permit tcp any host 10.2.50.10 eq 53
+ permit udp any host 10.2.50.11 eq 53
+ permit tcp any host 10.2.50.11 eq 53
+ deny ip any 10.2.50.0 0.0.0.255 log
+ permit ip any any
+!
+int gi0/0
+ ip access-group dns-only out
+int gi1/0
+ ip access-group dns-only out
+```
+
+- 서버 VLAN(`10.2.50.0/24`)으로는 DNS(UDP/TCP 53)만 허용하고 나머지 트래픽은 통과(`permit ip any any`). 순서와 값은 `docs/dhcp-dns-design.md` 5절 표.
+- 라우터가 직접 만드는 OSPF 등 제어 트래픽은 출력 ACL의 영향을 받지 않음. 스위치(cEOS)가 ACL을 지원하지 않아 이 위치에 적용([arista-switch.md](./arista-switch.md) 5.3절).

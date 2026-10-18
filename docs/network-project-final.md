@@ -190,7 +190,7 @@ DC ←── DMVPN Phase3(mGRE over IPsec, Private Internet 경유) ──→ HQ
 - 부모 정책: shape average (병목 검증용 예시값, 실측 시 조정)
 
 ### 접근 통제
-- DC VLAN50(DC-DNS-1, DC-DNS-2): 각 사이트 → UDP/TCP 53만 허용, 그 외 차단. DHCP는 각 사이트 게이트웨이에서 제공하므로 서버 VLAN으로 DHCP(UDP 67/68) 허용 없음.
+- DC VLAN50(DC-DNS-1, DC-DNS-2): 각 사이트 → UDP/TCP 53만 허용, 그 외 차단. 적용 위치는 DC-R1~R4의 Gi0/0, Gi1/0 출력 방향(cEOS는 인터페이스 ACL 미지원). DHCP는 각 사이트 게이트웨이에서 제공하므로 서버 VLAN으로 DHCP(UDP 67/68) 허용 없음.
 
 ## 6. 빌드 순서 (3.5주, 1인 체제)
 

@@ -80,3 +80,16 @@ router bgp 65002
 router ospf 10
  default-information originate metric 100 metric-type 1
 !
+ip access-list extended dns-only
+ permit udp any host 10.2.50.10 eq 53
+ permit tcp any host 10.2.50.10 eq 53
+ permit udp any host 10.2.50.11 eq 53
+ permit tcp any host 10.2.50.11 eq 53
+ deny ip any 10.2.50.0 0.0.0.255 log
+ permit ip any any
+!
+int gi0/0
+ ip access-group dns-only out
+int gi1/0
+ ip access-group dns-only out
+!

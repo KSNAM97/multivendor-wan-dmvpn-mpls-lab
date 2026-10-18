@@ -13,8 +13,8 @@ verification/
 │   ├── distribution/    l3-interface, vlan-trunk, po-channel, vrrp, stp, ospf, dhcp
 │   └── access/          l3-interface, vlan-trunk, po-channel, stp
 ├── dc/
-│   ├── core/            ospf, isp-link, dmvpn(Hub), qos
-│   ├── distribution/    vlan-trunk, po-channel, vrrp, stp, l3-interface, ospf, acl
+│   ├── core/            ospf, isp-link, dmvpn(Hub), qos, acl
+│   ├── distribution/    vlan-trunk, po-channel, vrrp, stp, l3-interface, ospf
 │   ├── access/          vlan-trunk, stp
 │   └── host/            dns
 ├── br1/, br2/
@@ -76,7 +76,7 @@ verification/
 | KAN-21 | 2주 화 | DMVPN Hub | `dc/core/dmvpn.md` | 서식 준비 |
 | KAN-22, 23, 33 | 2주 수 | DMVPN Spoke(BR1, BR2, HQ) | `br1/core/dmvpn.md`, `br2/core/dmvpn.md`, `hq/core/dmvpn.md` | 서식 준비 |
 | KAN-24 | 2주 목 | DNS 서버, 호스트 DHCP 할당 | `dc/host/dns.md` | 서식 준비 |
-| KAN-26 | 2주 금 | DNS 서버 VLAN ACL | `dc/distribution/acl.md` | 서식 준비 |
+| KAN-26 | 2주 금 | DNS 서버 VLAN ACL | `dc/core/acl.md` | 구성 검증 완료(ACL 카운트 보충) |
 | KAN-27 | 3주 월 | VRRP 장애 전환 | `scenarios/vrrp-failover.md` | 서식 준비(HQ, DC 전환 동작은 확인) |
 | KAN-28 | 3주 월 | EtherChannel 멤버 다운 | `scenarios/etherchannel-link-down.md` | 서식 준비 |
 | KAN-30 | 3주 화 | DMVPN Hub 장애 | `scenarios/dmvpn-hub-failure.md` | 서식 준비 |
