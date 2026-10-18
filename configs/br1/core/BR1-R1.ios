@@ -64,7 +64,7 @@ int gi2/0
  ip ospf network point-to-point
 !
 router ospf 2
- router-id 12.12.12.1
+ router-id 203.0.113.13
  passive-interface default
  no passive-interface gi4/0
 !

@@ -257,13 +257,14 @@ int tunnel0
 
 ```
 router ospf 2
- router-id 11.11.11.2
+ router-id 203.0.113.9
 int gi4/0
  ip ospf 2 area 100
  ip ospf network point-to-point
 !
 ip access-list extended pi-whitelist
- permit ospf any any
+ permit ospf any host 224.0.0.5
+ permit ospf any host 224.0.0.6
  permit gre 203.0.113.0 0.0.0.255 203.0.113.0 0.0.0.255
  permit esp 203.0.113.0 0.0.0.255 203.0.113.0 0.0.0.255
  permit udp 203.0.113.0 0.0.0.255 203.0.113.0 0.0.0.255 eq isakmp
@@ -272,7 +273,7 @@ ip access-list extended pi-whitelist
 ```
 
 - ACL은 `Private-net`의 5개 링크 인터페이스에 적용(`ip access-group pi-whitelist in`). `ICMP` 허용 줄은 임시이며 검증 후 제거.
-- 사이트 라우터는 사이트 프로세스와 같은 Router ID를 프로세스 2에도 사용. `Private-net`의 Router ID는 `2.2.2.2`.
+- 사이트 라우터의 프로세스 2 Router ID는 PI 연결 인터페이스 주소를 명시(예시는 `HQ-R2`의 `203.0.113.9`). 사이트 프로세스와 같은 값(Loopback0)을 쓰면 `router-id in use by ospf process`로 거부됨. `Private-net`의 Router ID는 `2.2.2.2`.
 
 ### 3.7 QoS
 

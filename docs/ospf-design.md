@@ -23,6 +23,7 @@
 - 같은 OSPF 도메인 안에서 Router ID는 장비마다 고유해야 하므로 사이트 내 장비는 끝자리로 구분.
 - Loopback0은 해당 사이트 Area에 포함하고 `passive-interface` 처리. 이 값을 `router-id`로 사용.
 - `Private-net`의 Router ID는 `2.2.2.2`(Loopback0, `/32`).
+- 사이트 라우터의 PI 프로세스(2)는 사이트 프로세스와 같은 Router ID를 쓸 수 없음. 같은 장비의 다른 OSPF 프로세스가 쓰는 값은 `OSPF: router-id <값> in use by ospf process <번호>`로 거부됨. 그래서 프로세스 2의 Router ID는 PI 연결 인터페이스 주소(`DC-R1` `203.0.113.1`, `DC-R2` `203.0.113.5`, `HQ-R2` `203.0.113.9`, `BR1-R1` `203.0.113.13`, `BR2-R2` `203.0.113.17`)를 명시해서 사용.
 - ISP 장비의 Router ID는 `bgp router-id`와 같은 Loopback0 값(ISP-1 `100.100.100.<n>`, ISP-2 `200.200.200.<n>`, PE-A 1, P1 2, P2 3, PE-B 4). Loopback0은 Area 0에 포함하고 `passive-interface` 처리.
 
 | 장비          | Loopback0      | 프로세스 | Area |

@@ -12,6 +12,7 @@
 | HQ-R2 | `show ip ospf neighbor` | Private-net과 FULL(프로세스 2) | 2.2.2.2(203.0.113.10, Gi4/0) FULL. 사이트 내부 이웃 11.11.11.1, .13, .12도 FULL | 통과 |
 | BR1-R1 | `show ip ospf neighbor` | Private-net과 FULL(프로세스 2) | 2.2.2.2(203.0.113.14, Gi4/0) FULL. 사이트 내부 이웃 12.12.12.2, .12, .11도 FULL | 통과 |
 | BR2-R2 | `show ip ospf neighbor` | Private-net과 FULL(프로세스 2) | 2.2.2.2(203.0.113.18, Gi4/0) FULL. 사이트 내부 이웃 13.13.13.1, .12, .11도 FULL | 통과 |
+| BR1-R1 | `router ospf 2`에서 `router-id 12.12.12.1`(Loopback0, 사이트 프로세스 12와 같은 값) 입력 후 `clear ip ospf 2 process`, `show ip ospf \| include with ID` | 프로세스 2 Router ID를 Loopback0으로 변경 | `OSPF: router-id 12.12.12.1 in use by ospf process 12`로 거부되어 변경되지 않음. `Routing Process "ospf 2" with ID 203.0.113.13`(PI 연결 인터페이스 주소), `"ospf 12" with ID 12.12.12.1`. 같은 장비의 OSPF 프로세스는 Router ID를 겹쳐 쓸 수 없으므로 프로세스 2는 PI 인터페이스 주소를 명시해 사용(`docs/ospf-design.md` 2절) | 설계 변경(링크 주소 사용)으로 통과 |
 | DC-R2 | `ping <상대 NBMA>` | DMVPN NBMA 주소(203.0.113.x) 간 도달 | 203.0.113.9(HQ-R2), 203.0.113.13(BR1-R1), 203.0.113.17(BR2-R2) 모두 5/5(100%), RTT 평균 82~92 ms | 통과 |
 
 Private-net OSPF neighbor
@@ -34,3 +35,6 @@ BR2-R2 OSPF neighbor
 
 DC-R2 NBMA ping(HQ-R2, BR1-R1, BR2-R2)
 ![DC-R2 NBMA ping(HQ-R2, BR1-R1, BR2-R2)](images/Pasted%20image%2020261017202629.png)
+
+BR1-R1 프로세스 2 Router ID 거부(in use by ospf process 12)
+![BR1-R1 프로세스 2 Router ID 거부](images/pi-router-id-conflict.webp)
