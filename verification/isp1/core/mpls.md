@@ -95,3 +95,39 @@ ISP-1-PE-B show ip cef vrf corp 10.1.0.0
 
 ISP-1-PE-B traceroute mpls ipv4 100.100.100.1
 ![ISP-1-PE-B traceroute mpls ipv4 100.100.100.1](images/mpls-label-stack-lsp-traceroute.webp)
+
+## Wireshark 확인(LDP 세션 수립)
+
+- 검증일: 2026-10-19
+- 캡처 링크: `ISP-1-PE-A Gi0/0 ↔ ISP-1-P1 Gi0/0`(링크 71), 필터 `ldp`
+- 트리거: `clear mpls ldp neighbor *`
+
+| 시각(초) | 패킷 | 내용 |
+|---|---|---|
+| 1.41 ~ 24.96 | Hello(76바이트) | UDP 646, 목적지 `224.0.0.2`. PE-A(`100.1.0.1`)와 P1(`100.1.0.2`)이 각각 약 5초 간격으로 전송 |
+| 29.84 | Initialization(90바이트) | TCP 세션. P1(`100.100.100.2`) → PE-A(`100.100.100.1`), LDP ID가 큰 쪽이 먼저 시작 |
+| 29.88 | Initialization + KeepAlive(98바이트) | PE-A 응답 |
+| 29.91 | Keep Alive(72바이트) | 세션 확립 |
+| 29.91, 29.96 | Address Message + Label Mapping Message(346, 368바이트) | 양쪽이 주소와 레이블 매핑 교환 |
+
+- Hello 이후 TCP 세션 수립과 레이블 매핑 교환까지 한 화면에서 확인.
+- 이웃 상태는 `show mpls ldp neighbor`(1절)와 같음. 매핑된 레이블 값(예: PE-B Loopback `12004`)은 이 화면에서 펼치지 않았음.
+
+Wireshark(`ldp`): Hello, Initialization, Label Mapping
+![LDP 세션 수립](images/mpls-wireshark-ldp-session.webp)
+
+### LDP Label Mapping 패킷 바이트 해석(프레임 83, P1 → PE-A)
+
+Address Message와 Label Mapping Message 여러 개가 한 TCP 세그먼트에 들어 있고, 패킷 바이트에서 직접 해석한 값.
+
+| 항목 | 해석한 내용 |
+|---|---|
+| Address Message | P1에 바인딩된 주소 `100.1.0.2`, `100.100.100.2`, `100.1.0.9`, `100.1.0.17`(`show mpls ldp neighbor`의 "Addresses bound to peer LDP Ident"와 일치) |
+| 직결·자기 prefix | `100.1.0.0/30`, `100.1.0.8/30`, `100.1.0.16/30`, `100.100.100.2/32`는 레이블 3(implicit-null, PHP) |
+| 다른 prefix | `100.100.100.3/32` → 12000, `100.100.100.1/32` → 12001, `100.1.0.12/30` → 12002, `100.1.0.4/30` → 12003, **`100.100.100.4/32`(PE-B Loopback) → 12004** |
+
+- P1이 PE-B Loopback에 대해 광고한 레이블 12004는 PE-A 전달 테이블의 `100.100.100.4/32` 나가는 레이블 12004(Gi0/0)와 일치하고, MPLS 시나리오에서 캡처한 바깥 레이블 12004의 출처임([mpls-label-path](../../scenarios/mpls-label-path.md)).
+- 레이블 값은 바이트(`2e e4` = 12004)에서 읽은 값.
+
+Wireshark 패킷 바이트(프레임 83): LDP Address, Label Mapping
+![LDP Label Mapping 패킷 바이트](images/mpls-wireshark-ldp-mapping-bytes.webp)

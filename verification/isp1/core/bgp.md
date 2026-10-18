@@ -163,3 +163,39 @@ ISP-1-PE-B vpnv4 all 10.1.0.0 상세
 
 Wireshark(`bgp`): KEEPALIVE 3초 간격, OPEN, UPDATE
 ![사이트 eBGP 세션 수립](images/bgp-wireshark-ebgp-session.webp)
+
+## Wireshark 확인(iBGP vpnv4, ISP-1-PE-A ↔ P1)
+
+- 검증일: 2026-10-19
+- 캡처 링크: `ISP-1-PE-A Gi0/0 ↔ ISP-1-P1 Gi0/0`(링크 71). iBGP는 Loopback0 주소(PE-A `100.100.100.1`, P1 `100.100.100.2`)로 맺음.
+- 트리거: PE-A에서 `clear ip bgp 100.100.100.2`(세션 초기화)
+
+| 시각(초) | 패킷 | 확인한 내용 |
+|---|---|---|
+| 100.25, 100.28 | OPEN(115바이트) 2개 | P1(`100.100.100.2`) → PE-A, PE-A → P1. 패킷 바이트에서 읽은 값: My AS `65100`(`fe 4c`), Hold Time `9`, BGP Identifier `100.100.100.1`(PE-A), Capability에 IPv4 unicast(AFI 1, SAFI 1)와 **vpnv4(AFI 1, SAFI 128)**, 4바이트 AS |
+| 101.38 | UPDATE 3개(301바이트) | PE-A → P1. `MP_REACH_NLRI`(AFI 1, SAFI 128), 다음 홉 `100.100.100.1`, RD `65100:1`, VPN 레이블 `0x02aff1`(= 11007). 패킷 바이트에서 읽은 값이며 PE-A 전달 테이블의 `10.1.0.0/16 [V]` 로컬 레이블 11007과 일치 |
+| 116.61 | UPDATE 4개(490바이트) | P1 → PE-A. RR가 다른 PE의 경로를 반사 |
+
+- OPEN의 Hold Time 9는 사이트 eBGP와 같은 값이며 iBGP도 ISP AS `65100` 하나(내부 세션)임을 보여 줌.
+- NLRI의 prefix 자체(`10.1.0.0/16`)는 패킷을 펼친 화면이 아니라 바이트로만 확인하여 펼친 화면이 있으면 보강.
+
+Wireshark(`bgp.type == 1`): iBGP OPEN
+![iBGP OPEN](images/bgp-wireshark-ibgp-open.webp)
+
+Wireshark(`bgp.type == 2`): vpnv4 UPDATE
+![iBGP vpnv4 UPDATE](images/bgp-wireshark-ibgp-vpnv4-update.webp)
+
+### iBGP UPDATE 패킷 바이트 해석(프레임 257, PE-A → P1)
+
+한 TCP 세그먼트에 UPDATE 3개가 들어 있고, 패킷 바이트(아래 화면)에서 직접 해석한 값.
+
+| UPDATE | 해석한 내용 |
+|---|---|
+| 1 | `MP_REACH_NLRI`(AFI 1, SAFI 128), 다음 홉 `100.100.100.1`, RD `65100:1`, VPN 레이블 11007(`02 af f1`), prefix `10.1.0.0/16`. AS_PATH `65001`(HQ), LOCAL_PREF 100, MED 0, Extended Community Route Target `65100:1` |
+| 2 | 같은 형식, VPN 레이블 11006(`02 af e1`), prefix `10.2.0.0/16`, AS_PATH `65002`(DC). PE-A 전달 테이블의 `10.2.0.0/16 [V]` 레이블 11006과 일치 |
+| 3 | `MP_UNREACH_NLRI`(AFI 1, SAFI 128)로 RD `65100:1`의 `10.3.0.0/16`, `10.4.0.0/16` 철회(세션 초기화 중 경로 재교환 과정) |
+
+- Wireshark 상세 트리를 펼친 화면이 아니라 바이트에서 읽은 값. 레이블 값은 20비트 레이블 필드 `0x02aff1`을 4비트 오른쪽으로 이동해 계산(= 11007).
+
+Wireshark 패킷 바이트(프레임 257): vpnv4 UPDATE
+![iBGP UPDATE 패킷 바이트](images/bgp-wireshark-ibgp-update-bytes.webp)
