@@ -73,6 +73,50 @@
 - 조치: SW-3 `1/1/1` `shutdown`으로 루프를 끊은 뒤 `no spanning-tree` 후 `spanning-tree`로 STP를 재시작. SW-3이 SW-1(우선순위 4096)을 루트로 인식하고 SW-3 `1/1/2`가 `Alternate/Blocking`이 되어 수렴. 이후 `1/1/1`을 복구하고 VRRP를 처음부터 재시험(`vrrp-failover.md`).
 - 교훈: L2 이중화 시험 전에 STP 루트와 Alternate 포트, 광고 간격(1초)을 먼저 확인. 폭주 중 얻은 시험값은 사용하지 않음.
 
+증거 캡처
+
+폭주 초기 Wireshark(`vrrp`): 5초 시점에 이미 광고가 밀리초 간격
+![폭주 초기 Wireshark(`vrrp`): 5초 시점에 이미 광고가 밀리초 간격](images/troubleshooting-br1-loop-storm-wireshark-1.webp)
+
+폭주 지속: 311초 시점 프레임 58,004번
+![폭주 지속: 311초 시점 프레임 58,004번](images/troubleshooting-br1-loop-storm-wireshark-2.webp)
+
+폭주 지속: 529초 시점 프레임 97,000번대
+![폭주 지속: 529초 시점 프레임 97,000번대](images/troubleshooting-br1-loop-storm-wireshark-3.webp)
+
+BR1-SW1-L3 `show spanning-tree`(자신이 루트)
+![BR1-SW1-L3 `show spanning-tree`(자신이 루트)](images/troubleshooting-br1-loop-stp-sw1-before.png)
+
+BR1-SW3-L3 `show spanning-tree`(자신이 루트, 모든 포트 Forwarding)
+![BR1-SW3-L3 `show spanning-tree`(자신이 루트, 모든 포트 Forwarding)](images/troubleshooting-br1-loop-stp-sw3-before.png)
+
+BR1-SW2-L3 `show spanning-tree`
+![BR1-SW2-L3 `show spanning-tree`](images/troubleshooting-br1-loop-stp-sw2-before.webp)
+
+BR1-SW3-L3 `show spanning-tree mst-config`(세 장비 동일)
+![BR1-SW3-L3 `show spanning-tree mst-config`(세 장비 동일)](images/troubleshooting-br1-loop-mst-config-sw3.png)
+
+BR1-SW3-L3 `1/1/1` Administratively down
+![BR1-SW3-L3 `1/1/1` Administratively down](images/troubleshooting-br1-loop-sw3-port-down.webp)
+
+STP 재시작 후 BR1-SW3-L3(Root가 SW-1로 변경)
+![STP 재시작 후 BR1-SW3-L3(Root가 SW-1로 변경)](images/troubleshooting-br1-loop-stp-sw3-restart.webp)
+
+`1/1/1` 복구 후 BR1-SW3-L3
+![`1/1/1` 복구 후 BR1-SW3-L3](images/troubleshooting-br1-loop-stp-sw3-after.webp)
+
+복구 후 BR1-SW2-L3(`1/1/5` Alternate/Blocking)
+![복구 후 BR1-SW2-L3(`1/1/5` Alternate/Blocking)](images/troubleshooting-br1-loop-stp-sw2-after.webp)
+
+복구 후 BR1-SW2-L3 `show spanning-tree mst`
+![복구 후 BR1-SW2-L3 `show spanning-tree mst`](images/troubleshooting-br1-loop-mst-sw2-after.webp)
+
+복구 후 BR1-SW3-L3 `show spanning-tree mst`
+![복구 후 BR1-SW3-L3 `show spanning-tree mst`](images/troubleshooting-br1-loop-mst-sw3-after.webp)
+
+폭주 해소 후 Wireshark(광고 1초 간격)
+![폭주 해소 후 Wireshark(광고 1초 간격)](images/troubleshooting-br1-loop-storm-ended.webp)
+
 ## 8. Hub 장애 후 shortcut이 설계 기대보다 일찍 끊김
 
 - 증상: 설계 문서의 기대는 "기존 shortcut은 유지"였으나, shortcut ESP(`203.0.113.9` ↔ `.13`)가 Hub 장애 후 약 44초(64.04 ~ 108.72초)만 유지되고 중단.
