@@ -21,3 +21,20 @@ HQ-R2 OSPF
 ![HQ-R2 OSPF](images/Pasted%20image%2020261012193941.png)
 
 ![route ospf](images/Pasted%20image%2020261012194355.png)
+
+## Wireshark 확인(Hello, LSA 교환)
+
+- 검증일: 2026-10-19
+- 캡처 링크: HQ-R1 ↔ HQ-R2 구간(`10.1.0.17`, `10.1.0.18`), 필터 `ospf`
+
+| 항목 | 기대 결과 | 캡처 결과 |
+|---|---|---|
+| Hello 간격 | 10초 | `10.1.0.17`의 Hello가 41.99, 51.75, 61.35, 70.88초(약 9.5~10초 간격), `10.1.0.18`의 Hello가 42.37, 52.07, 61.98초 |
+| 목적지 | 멀티캐스트 `224.0.0.5`(AllSPFRouters) | 모든 OSPF 패킷의 목적지가 `224.0.0.5` |
+| LSA 교환 | `LS Update`와 `LS Acknowledge`로 확인 응답 | 42.6~49.9초에 양쪽 `LS Update`(90, 170 바이트)와 `LS Acknowledge`(78 바이트)가 교환됨 |
+
+- 이 캡처에는 `DB Description`, `LS Request` 단계와 Hello 패킷 안의 값(Area, Dead 간격, DR)이 보이지 않아 추가 캡처가 필요함.
+
+HQ-R1 ↔ HQ-R2 Wireshark(`ospf`): Hello, LS Update, LS Acknowledge
+![HQ OSPF Hello, LSU](images/ospf-wireshark-hello-lsu.webp)
+
