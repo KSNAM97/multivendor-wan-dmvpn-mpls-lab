@@ -24,6 +24,7 @@
 | ISP 코어 MPLS | [mpls-design.md](./mpls-design.md) | LDP, VRF(corp), MP-BGP vpnv4, MTU, 검증 항목 |
 | VLAN, 채널, 트렁크 | [vlan-design.md](./vlan-design.md) | VLAN 정의, EtherChannel, 트렁크, 액세스 포트, DHCP 배치 |
 | 게이트웨이 이중화, STP | [vrrp-mstp-design.md](./vrrp-mstp-design.md) | VRRP 그룹과 우선순위, MST region과 루트 |
+| DC L2 이중화 | [mlag-design.md](./mlag-design.md) | DC MLAG 피어, MLAG 포트채널, 적용 순서, 검증 항목 |
 | 사이트 간 터널 | [dmvpn-design.md](./dmvpn-design.md) | DMVPN Phase 3, IPsec, NHRP, PI 언더레이 |
 | DHCP, DNS | [dhcp-dns-design.md](./dhcp-dns-design.md) | 풀, DNS 서버, 접근 통제 |
 
