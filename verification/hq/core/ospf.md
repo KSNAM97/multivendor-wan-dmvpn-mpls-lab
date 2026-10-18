@@ -22,19 +22,29 @@ HQ-R2 OSPF
 
 ![route ospf](images/Pasted%20image%2020261012194355.png)
 
-## Wireshark 확인(Hello, LSA 교환)
+## Wireshark 확인(이웃 수립 과정과 Hello)
 
 - 검증일: 2026-10-19
-- 캡처 링크: HQ-R1 ↔ HQ-R2 구간(`10.1.0.17`, `10.1.0.18`), 필터 `ospf`
+- 캡처 링크: `HQ-R1 Gi2/0 ↔ HQ-R2 Gi2/0`(`10.1.0.17` = HQ-R1, `10.1.0.18` = HQ-R2), 필터 `ospf`
+- 이웃 재수립 과정을 처음부터 캡처(트리거 명령은 기록하지 못함).
 
-| 항목 | 기대 결과 | 캡처 결과 |
+| 시각(초) | 패킷 | 내용 |
 |---|---|---|
-| Hello 간격 | 10초 | `10.1.0.17`의 Hello가 41.99, 51.75, 61.35, 70.88초(약 9.5~10초 간격), `10.1.0.18`의 Hello가 42.37, 52.07, 61.98초 |
-| 목적지 | 멀티캐스트 `224.0.0.5`(AllSPFRouters) | 모든 OSPF 패킷의 목적지가 `224.0.0.5` |
-| LSA 교환 | `LS Update`와 `LS Acknowledge`로 확인 응답 | 42.6~49.9초에 양쪽 `LS Update`(90, 170 바이트)와 `LS Acknowledge`(78 바이트)가 교환됨 |
+| 3.33, 5.22 | Hello(94바이트) | 양쪽 Hello, 목적지 멀티캐스트 `224.0.0.5` |
+| 6.85, 6.98 | Hello(90바이트) | 이웃 목록이 비어 있는 Hello(94바이트보다 4바이트 작음). 이웃 수립이 다시 시작된 것으로 보임 |
+| 6.94 ~ 6.97 | DB Description(78바이트) | 빈 DBD로 Master/Slave 협상 |
+| 16.09 ~ 16.12 | Hello, DB Description | 이웃 목록이 있는 Hello(94바이트) 후 DBD 교환 |
+| 16.12 ~ 16.14 | DB Description(218바이트) | LSA 헤더 목록 교환 |
+| 16.15, 16.18 | LS Request | 필요한 LSA 요청 |
+| 16.18 ~ 17.06 | LS Update(222, 194, 170바이트 등) | 요청한 LSA 전달 |
+| 18.70, 18.73 | LS Acknowledge(138, 158바이트) | LSA 확인 응답 |
+| 25.44, 25.56 | Hello(94바이트) | 수립 후 Hello 재개(이후 약 10초 간격) |
 
-- 이 캡처에는 `DB Description`, `LS Request` 단계와 Hello 패킷 안의 값(Area, Dead 간격, DR)이 보이지 않아 추가 캡처가 필요함.
+- Hello 간격: 이웃 수립 후 `10.1.0.17`의 Hello가 41.99, 51.75, 61.35, 70.88초(약 9.5~10초 간격), `10.1.0.18`이 42.37, 52.07, 61.98초로 설계의 10초와 일치(아래 첫 번째 캡처).
+- 이웃 상태 `FULL`은 패킷이 아니라 `show ip ospf neighbor` 출력(위 표)으로 확인. Hello 패킷 안의 Area, Dead 간격(40초), DR 값은 아직 펼친 화면이 없음.
 
-HQ-R1 ↔ HQ-R2 Wireshark(`ospf`): Hello, LS Update, LS Acknowledge
+Wireshark(`ospf`): 이웃 수립 과정(Hello → DBD → LSR → LSU → LSAck)
+![HQ OSPF 이웃 수립](images/ospf-wireshark-adjacency.webp)
+
+Wireshark(`ospf`): 수립 후 Hello 10초 간격, LS Update, LS Acknowledge
 ![HQ OSPF Hello, LSU](images/ospf-wireshark-hello-lsu.webp)
-
