@@ -64,3 +64,27 @@ int gi4/0
  ip ospf 2 area 100
  ip ospf network point-to-point
 !
+ip access-list extended pi-whitelist
+ permit ospf any host 224.0.0.5
+ permit ospf any host 224.0.0.6
+ permit gre 203.0.113.0 0.0.0.255 203.0.113.0 0.0.0.255
+ permit esp 203.0.113.0 0.0.0.255 203.0.113.0 0.0.0.255
+ permit udp 203.0.113.0 0.0.0.255 203.0.113.0 0.0.0.255 eq isakmp
+ permit icmp any any
+ deny ip any any log
+!
+int gi0/0
+ ip access-group pi-whitelist in
+!
+int gi1/0
+ ip access-group pi-whitelist in
+!
+int gi2/0
+ ip access-group pi-whitelist in
+!
+int gi3/0
+ ip access-group pi-whitelist in
+!
+int gi4/0
+ ip access-group pi-whitelist in
+!
