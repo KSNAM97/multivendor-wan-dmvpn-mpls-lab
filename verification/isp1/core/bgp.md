@@ -141,3 +141,25 @@ ISP-1-PE-A vpnv4 all 10.1.0.0 상세
 
 ISP-1-PE-B vpnv4 all 10.1.0.0 상세
 ![ISP-1-PE-B vpnv4 all 10.1.0.0 상세](images/pe-policy-detail-pe-b.webp)
+
+## Wireshark 확인(사이트 eBGP 세션 수립)
+
+- 검증일: 2026-10-19
+- 캡처 링크: `HQ-R1 Gi3/0 ↔ ISP-1-PE-A Gi2/0`(링크 6, HQ-R1 `100.1.11.1`, PE-A `100.1.11.2`), 필터 `bgp`
+- 트리거: 세션 초기화(`clear ip bgp` 계열, 정확한 명령은 기록하지 못함)
+
+| 시각(초) | 출발지 → 목적지 | 메시지 | 내용 |
+|---|---|---|---|
+| 0 ~ 18.43 | 양방향 | KEEPALIVE(73바이트) | 양쪽이 약 3초 간격(HQ-R1 2.39, 5.45, 8.51초 / PE-A 0, 3.06, 6.16초). Hold-time 9초의 1/3 |
+| 22.27 | `100.1.11.1` → `100.1.11.2` | OPEN(107바이트) | HQ-R1이 먼저 OPEN 전송 |
+| 22.31 | `100.1.11.2` → `100.1.11.1` | OPEN(107바이트) | PE-A 응답 OPEN |
+| 22.31 ~ 22.35 | 양방향 | KEEPALIVE | OPEN 확인 |
+| 22.34 | `100.1.11.1` → `100.1.11.2` | UPDATE(107바이트) | HQ-R1이 사이트 경로 광고 |
+| 23.55, 23.56 | `100.1.11.2` → `100.1.11.1` | UPDATE(105, 89바이트) | PE-A가 경로(기본 경로 포함) 전달, 이어서 KEEPALIVE |
+| 24.91 이후 | 양방향 | KEEPALIVE | 약 3초 간격 재개 |
+
+- OPEN 이후 UPDATE 교환 완료까지 약 1.3초(22.27 ~ 23.56초).
+- OPEN 안의 사이트 AS(`65001`), Hold Time(9), UPDATE의 NLRI(`10.1.0.0/16`, 기본 경로)는 패킷을 펼친 화면이 없어 아직 확인하지 못함. OPEN 이전 `NOTIFICATION`도 이 화면에는 없음.
+
+Wireshark(`bgp`): KEEPALIVE 3초 간격, OPEN, UPDATE
+![사이트 eBGP 세션 수립](images/bgp-wireshark-ebgp-session.webp)
