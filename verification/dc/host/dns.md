@@ -25,3 +25,28 @@ DC-DNS-1 DOWN시 DC-DNS-2 정상동작 확인
 
 DC-DNS-1 LOG
 ![DC-DNS-1 LOG](images/Pasted%20image%2020261013210246.png)
+
+## Wireshark 확인(DNS 질의와 응답)
+
+- 검증일: 2026-10-19
+- 캡처 링크: `DC-SW1-L2 Ethernet12 ↔ DC-DNS-1 eth0`(링크 41), 필터 `dns`
+- 트리거: BR1-PC1에서 `nslookup dc-r1.lab.local 10.2.50.10`
+- BR1-PC1은 DHCP로 `10.3.10.153`을 받았고, DNS 서버 주소(`10.2.50.10`, `.11`)는 DHCP 옵션 6으로 받은 값.
+
+| 시각(초) | 출발지 → 목적지 | 메시지 |
+|---|---|---|
+| 11.381 | `10.3.10.153` → `10.2.50.10` | Standard query `0x1af6` A `dc-r1.lab.local` |
+| 11.387 | `10.2.50.10` → `10.3.10.153` | Standard query response `0x1af6` A **`10.10.10.1`**(91바이트) |
+| 11.392 | `10.3.10.153` → `10.2.50.10` | Standard query `0x1af7` AAAA `dc-r1.lab.local` |
+| 11.392 | `10.2.50.10` → `10.3.10.153` | Standard query response `0x1af7` AAAA(75바이트, 응답 레코드 없음) |
+| 23.330 | 위 질의를 다시 실행 | 같은 A 질의(`0xd6b9`)에 0.3ms 만에 `10.10.10.1` 응답 |
+
+- 첫 번째 A 질의의 응답 시간은 약 5.9ms, 두 번째는 약 0.3ms. 서버가 캐시에서 응답한 것으로 추정하나 확인하지 못함.
+- `nslookup` 출력은 `Server: 10.2.50.10`, `Address: dc-r1.lab.local → 10.10.10.1`(Non-authoritative answer).
+- 질의 출발지가 DHCP로 받은 주소(`10.3.10.153`)라 DHCP(주소와 DNS 서버 알림) → DNS(이름 응답)의 흐름이 이어짐. 주소를 할당하는 것은 DHCP 서버이고 DNS 서버는 질의에 응답만 함.
+
+BR1-PC1 `nslookup`
+![nslookup](images/dns-nslookup-br1-pc1.webp)
+
+링크 41 Wireshark(`dns`)
+![DNS 질의와 응답](images/dns-wireshark-link41.webp)

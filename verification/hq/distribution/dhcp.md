@@ -32,3 +32,27 @@ HQ-PC2
 ![HQ](images/Pasted%20image%2020261013194442.png)
 
 ![HQ](images/Pasted%20image%2020261013195022.png)
+
+## Wireshark DORA 확인
+
+- 검증일: 2026-10-19
+- 캡처 링크: `HQ-PC1 eth0 ↔ HQ-SW-1 Gi3/0`, 필터 `dhcp`. HQ-PC1에서 `udhcpc -i eth0`.
+- 서버: HQ-SW-2(`10.1.10.2`, Active 풀), HQ-SW-3(`10.1.10.3`, Standby 풀)
+
+| 시각(초) | 출발지 → 목적지 | 메시지 | 내용 |
+|---|---|---|---|
+| 13.472 | `0.0.0.0` → `255.255.255.255` | Discover | 브로드캐스트, 트랜잭션 ID `0xcba82761` |
+| 13.497 | `10.1.10.2` → `10.1.10.100` | Offer | HQ-SW-2가 먼저 응답 |
+| 13.500 | `0.0.0.0` → `255.255.255.255` | Request | 서버 `10.1.10.2`의 제안 선택 |
+| 13.525 | `10.1.10.2` → `10.1.10.100` | ACK | `10.1.10.100` 임대 확정 |
+| 15.664 | `10.1.10.3` → `10.1.10.165` | Offer | HQ-SW-3의 Offer가 약 2.2초 뒤 도착, 사용되지 않음 |
+| 21.596 | `10.1.10.100` → `10.1.10.3` | ICMP Destination unreachable | 늦은 Offer에 대한 PC의 응답으로 보이며 원인은 확인하지 못함(BR2에서도 같은 현상) |
+
+- `udhcpc` 출력: `lease of 10.1.10.100 obtained from 10.1.10.2, lease time 86400`(설계의 `lease 1`, 1일과 일치).
+- Active 서버(HQ-SW-2)가 먼저 응답해 Active 풀 주소(`.100`)를 받음. Standby의 Offer는 늦게 도착(`.165`, Standby 풀).
+
+HQ-PC1 Wireshark(`dhcp`): Discover, Offer, Request, ACK
+![HQ-PC1 DHCP DORA](images/dhcp-wireshark-dora.webp)
+
+HQ-PC1 `udhcpc -i eth0`
+![HQ-PC1 udhcpc](images/dhcp-udhcpc-hq-pc1.webp)

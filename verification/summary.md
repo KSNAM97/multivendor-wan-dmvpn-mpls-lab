@@ -20,7 +20,8 @@
 | 시험 | 핵심 결과 | 문서 |
 |---|---|---|
 | QoS | DNS를 ACL로 분류해 `cm-business`에 af31 표시. 병목 시 `class-default`만 drop(578 → 1333), `cm-business` drop 0 | [qos-verification](scenarios/qos-verification.md) |
-| DHCP(BR2, Cisco) | DORA 4단계 확인, 두 서버 중 먼저 응답한 서버가 임대 | [dhcp](br2/distribution/dhcp.md) |
+| DHCP(HQ·BR2 Cisco, BR1 Aruba) | DORA 4단계 확인. 두 서버가 모두 Offer를 보내고 먼저 도착한 Offer로 임대(HQ, BR1은 SW-1, BR2는 SW-2). BR1(Aruba)은 VIP 출발지 Offer까지 3개 관찰. lease 86400 | [HQ](hq/distribution/dhcp.md), [BR1](br1/distribution/dhcp.md), [BR2](br2/distribution/dhcp.md) |
+| DNS(BR1-PC1 → DC-DNS-1) | DHCP로 받은 주소로 질의, A 질의에 `dc-r1.lab.local` → `10.10.10.1` 응답(약 5.9ms, 반복 시 0.3ms) | [dns](dc/host/dns.md) |
 | MPLS 레이블 | Hub 장애로 ISP 경유 시 `12004`(LDP) + `14007`(VPN) 두 레이블, PHP로 마지막 홉 전 바깥 레이블 제거 | [mpls-label-path](scenarios/mpls-label-path.md) |
 
 ## 트러블슈팅
