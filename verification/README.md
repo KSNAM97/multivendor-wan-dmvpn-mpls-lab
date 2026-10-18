@@ -83,7 +83,7 @@ verification/
 | KAN-30 | 3주 화 | DMVPN Hub 장애 | `scenarios/dmvpn-hub-failure.md` | 검증 완료 |
 | KAN-15, 16 | 3주 수 | ISP 내부 OSPF, iBGP RR | `isp1/core/bgp.md`, `isp2/core/bgp.md` | 검증 완료 |
 | KAN-17 | 3주 목 | PE 정책(prefix-list, next-hop-self) | `isp*/core/bgp.md` | 검증 완료 |
-| KAN-29 | 3주 목 | ISP-1 장애 시 전환 | `scenarios/isp1-failure.md` | 검증 진행(5행 경로 복귀 미확인) |
+| KAN-29 | 3주 목 | ISP-1 장애 시 전환 | `scenarios/isp1-failure.md` | 검증 완료 |
 | KAN-25 | 3주 금 | QoS | `*/core/qos.md`, `scenarios/qos-verification.md` | 검증 완료 |
 | KAN-31 | 3주 금 | 트러블슈팅 로그 | 검증 중 나온 불일치와 조치를 정리 | - |
 
