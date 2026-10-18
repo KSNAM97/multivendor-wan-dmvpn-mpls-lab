@@ -64,3 +64,33 @@ DC-SW3-L3 show mlag detail
 
 DC-SW4-L3 show mlag detail
 ![DC-SW4-L3 show mlag detail](images/mlag-dc-sw4-l3-detail.png)
+
+## Wireshark 확인(MLAG LACPDU)
+
+- 검증일: 2026-10-19
+- 캡처 링크 37: `DC-SW3-L3 Ethernet7 ↔ DC-SW1-L2 Ethernet1`, 링크 39: `DC-SW4-L3 Ethernet7 ↔ DC-SW1-L2 Ethernet2`(둘 다 Po10 멤버), 필터 `slow`
+
+| 링크 | 보낸 쪽 | Actor System ID | Actor Key / Port | Partner System | Partner Key / Port |
+|---|---|---|---|---|---|
+| 37 | DC-SW3-L3(`0c:06:2e:4d:00:07`) | `0e:06:2e:cc:02:b8` | 10 / 7 | `0c:00:a4:35:1b:54`(DC-SW1-L2) | 10 / 1 |
+| 37 | DC-SW1-L2(`0c:00:a4:e2:00:01`) | `0c:00:a4:35:1b:54` | 10 / 1 | `0e:06:2e:cc:02:b8` | 10 / 7 |
+| 39 | DC-SW4-L3(`0c:0d:0b:5d:00:07`) | **`0e:06:2e:cc:02:b8`** | 10 / 32775 | `0c:00:a4:35:1b:54`(DC-SW1-L2) | 10 / 2 |
+| 39 | DC-SW1-L2 | `0c:00:a4:35:1b:54` | 10 / 2 | `0e:06:2e:cc:02:b8` | 10 / 32775 |
+
+- **핵심**: DC-SW3-L3과 DC-SW4-L3이 서로 다른 장비인데도 DC-SW1-L2에 **같은 Actor System ID `0e:06:2e:cc:02:b8`와 같은 Key 10**을 광고함. DC-SW1-L2는 두 스위치를 하나의 파트너로 보고 Eth1, Eth2를 하나의 LAG(Po10)로 묶음.
+- Actor Port 값만 다름(DC-SW3-L3 `7`, DC-SW4-L3 `32775`)으로 두 MLAG 피어의 포트가 구분됨.
+- 상태 `0x3d`(`**DCSG*A**`): LACP Activity, Aggregation, Synchronization, Collecting, Distributing. Partner 상태도 같음.
+- 전송 간격: 링크 39에서 0, 33.06, 63.08, 97.11, 127.14초로 약 30초 간격(LACP slow).
+- 장애 시 재분산(멤버 `shutdown`)은 이 캡처에 포함하지 않음.
+
+링크 37 Wireshark(`slow`)
+![링크 37 LACP](images/mlag-wireshark-link37-list.webp)
+
+링크 37 LACPDU 상세(DC-SW3-L3)
+![링크 37 LACPDU](images/mlag-wireshark-link37-lacpdu.webp)
+
+링크 39 Wireshark(`slow`): 30초 간격
+![링크 39 LACP](images/mlag-wireshark-link39-list.webp)
+
+링크 39 LACPDU 상세(DC-SW4-L3, 같은 Actor System ID)
+![링크 39 LACPDU](images/mlag-wireshark-link39-lacpdu.webp)
