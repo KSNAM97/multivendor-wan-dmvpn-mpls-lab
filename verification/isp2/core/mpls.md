@@ -81,5 +81,17 @@ ISP-2-PE-B VPNv4 summary
 
 | 장비 | 명령 | 기대 결과 | 실제 결과 | 판정 |
 |---|---|---|---|---|
-| ISP-2-PE-A, PE-B | `show ip route vrf corp` | 사이트 /16(CE에서 eBGP, 상대 PE에서 vpnv4) | - | 미확인 |
-| 사이트 호스트 | `traceroute <다른 사이트 호스트>` | ISP 구간에 `[MPLS: Label ...]` 표시 | - | 미확인 |
+| ISP-2-PE-A, PE-B | `show ip route vrf corp` | 사이트 /16(CE에서 eBGP, 상대 PE에서 vpnv4) | PE-A: `10.1.0.0`(via 100.2.12.1)와 `10.2.0.0`(via 100.2.22.1)은 `B [20/0]`(eBGP, 사이트 링크 주소), `10.3.0.0`, `10.4.0.0`은 `B [200/0]`(iBGP, via 200.200.200.4=PE-B Loopback0). PE-B: `10.3.0.0`(via 100.2.32.1)와 `10.4.0.0`(via 100.2.42.1)은 `B [20/0]`, `10.1.0.0`, `10.2.0.0`은 `B [200/0]`(via 200.200.200.1=PE-A Loopback0). 연결 경로 `C`는 사이트 링크 2개 | 통과 |
+| ISP-2-PE-B | `show ip cef vrf corp 10.1.0.0`, `traceroute mpls ipv4 200.200.200.1 255.255.255.255` | 사이트 경로가 LDP 레이블과 VPN 레이블 2개로 전달되고, 코어 LSP가 PE-A까지 이어짐(일반 `traceroute vrf corp`는 코어 홉 응답이 돌아오지 않아 `* * *`로 표시되며, 출발 주소가 VRF 밖이라 응답 경로가 없는 것으로 추정) | `show ip cef vrf corp 10.1.0.0`: next-hop `100.2.0.9 Gi0/0 label 22002 21006`(P1 경유)와 `100.2.0.13 Gi1/0 label 23002 21006`(P2 경유). 바깥 LDP 레이블(22002, 23002)과 안쪽 VPN 레이블 21006의 2단 스택. `traceroute mpls ipv4 200.200.200.1/32`: `0 100.2.0.10 [Labels: 22002]` → `L 1 100.2.0.9 [Labels: implicit-null] 48ms` → `! 2 100.2.0.1 120ms`로 PE-B에서 P를 거쳐 PE-A까지 LSP 성공(P에서 PHP) | 통과 |
+
+ISP-2-PE-A show ip route vrf corp
+![ISP-2-PE-A show ip route vrf corp](images/mpls-vrf-route-pe-a.webp)
+
+ISP-2-PE-B show ip route vrf corp
+![ISP-2-PE-B show ip route vrf corp](images/mpls-vrf-route-pe-b.webp)
+
+ISP-2-PE-B show ip cef vrf corp 10.1.0.0
+![ISP-2-PE-B show ip cef vrf corp 10.1.0.0](images/mpls-label-stack-cef.png)
+
+ISP-2-PE-B traceroute mpls ipv4 200.200.200.1
+![ISP-2-PE-B traceroute mpls ipv4 200.200.200.1](images/mpls-label-stack-lsp.webp)
