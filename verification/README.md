@@ -77,13 +77,13 @@ verification/
 | KAN-22, 23, 33 | 2주 수 | DMVPN Spoke(BR1, BR2, HQ) | `br1/core/dmvpn.md`, `br2/core/dmvpn.md`, `hq/core/dmvpn.md` | 검증 완료 |
 | KAN-24 | 2주 목 | DNS 서버, 호스트 DHCP 할당 | `dc/host/dns.md` | 검증 완료 |
 | KAN-26 | 2주 금 | DNS 서버 VLAN ACL | `dc/core/acl.md` | 검증 완료 |
-| KAN-27 | 3주 월 | VRRP 장애 전환 | `scenarios/vrrp-failover.md` | 서식 준비(HQ, DC 전환 동작은 확인) |
+| KAN-27 | 3주 월 | VRRP 장애 전환 | `scenarios/vrrp-failover.md` | 검증 완료(벤더별 대표 시험) |
 | KAN-28 | 3주 월 | EtherChannel 멤버 다운 | `scenarios/etherchannel-link-down.md` | 검증 완료(벤더별 대표 시험) |
 | KAN-37 | 선택(10/19~10/21) | DC MLAG | `dc/distribution/mlag.md` | 검증 완료 |
-| KAN-30 | 3주 화 | DMVPN Hub 장애 | `scenarios/dmvpn-hub-failure.md` | 서식 준비 |
+| KAN-30 | 3주 화 | DMVPN Hub 장애 | `scenarios/dmvpn-hub-failure.md` | 검증 완료 |
 | KAN-15, 16 | 3주 수 | ISP 내부 OSPF, iBGP RR | `isp1/core/bgp.md`, `isp2/core/bgp.md` | 검증 완료 |
 | KAN-17 | 3주 목 | PE 정책(prefix-list, next-hop-self) | `isp*/core/bgp.md` | 검증 완료 |
-| KAN-29 | 3주 목 | ISP-1 장애 시 전환 | `scenarios/isp1-failure.md` | 서식 준비 |
+| KAN-29 | 3주 목 | ISP-1 장애 시 전환 | `scenarios/isp1-failure.md` | 검증 진행(5행 경로 복귀 미확인) |
 | KAN-25 | 3주 금 | QoS | `*/core/qos.md`, `scenarios/qos-verification.md` | 검증 완료 |
 | KAN-31 | 3주 금 | 트러블슈팅 로그 | 검증 중 나온 불일치와 조치를 정리 | - |
 
