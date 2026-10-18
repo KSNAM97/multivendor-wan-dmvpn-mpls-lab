@@ -6,10 +6,10 @@
 
 | 시험 | 대상 | 핵심 결과 | 문서 |
 |---|---|---|---|
-| VRRP 전환 | HQ(Cisco) | 약 1초, `ping` 손실 1개 | [vrrp-failover](scenarios/vrrp-failover.md) |
+| VRRP 전환 | HQ(Cisco) | `ping` 손실 1개(Wireshark 광고 공백은 측정하지 못함) | [vrrp-failover](scenarios/vrrp-failover.md) |
 | VRRP 전환 | DC(Arista) | Wireshark 광고 공백 약 3.2초, `ping` 손실 5개 | [vrrp-failover](scenarios/vrrp-failover.md) |
-| VRRP 전환 | BR1(Aruba) | Wireshark 광고 공백 약 4.0초 | [vrrp-failover](scenarios/vrrp-failover.md) |
-| EtherChannel 링크 다운 | HQ Po1 | 손실 1개(약 1초) | [etherchannel-link-down](scenarios/etherchannel-link-down.md) |
+| VRRP 전환 | BR1(Aruba) | Wireshark 광고 공백 약 4.0초(`ping` 손실은 복구 구간 포함 값이라 제외) | [vrrp-failover](scenarios/vrrp-failover.md) |
+| EtherChannel 링크 다운 | HQ Po1 | 손실 1개 | [etherchannel-link-down](scenarios/etherchannel-link-down.md) |
 | EtherChannel 링크 다운 | BR1 LAG 1(Aruba) | 손실 5개, 최대 응답 5015 ms | [etherchannel-link-down](scenarios/etherchannel-link-down.md) |
 | MLAG 링크 다운 | DC | 손실 1개, 복구 후 Active-full 2 | [etherchannel-link-down](scenarios/etherchannel-link-down.md), [mlag](dc/distribution/mlag.md) |
 | ISP-1 장애 | HQ-R1 ↔ ISP-1-PE-A | BGP hold-time 9초, 마지막 Keepalive 후 약 9.7초에 `NOTIFICATION`. 기본 경로는 ISP-2 쪽 OSPF E1 metric 201로 전환, 복구 후 세션 수립 약 1.6초 | [isp1-failure](scenarios/isp1-failure.md) |
@@ -23,6 +23,18 @@
 | DHCP(HQ·BR2 Cisco, BR1 Aruba) | DORA 4단계 확인. 두 서버가 모두 Offer를 보내고 먼저 도착한 Offer로 임대(HQ, BR1은 SW-1, BR2는 SW-2). BR1(Aruba)은 VIP 출발지 Offer까지 3개 관찰. lease 86400 | [HQ](hq/distribution/dhcp.md), [BR1](br1/distribution/dhcp.md), [BR2](br2/distribution/dhcp.md) |
 | DNS(BR1-PC1 → DC-DNS-1) | DHCP로 받은 주소로 질의, A 질의에 `dc-r1.lab.local` → `10.10.10.1` 응답(약 5.9ms, 반복 시 0.3ms) | [dns](dc/host/dns.md) |
 | MPLS 레이블 | Hub 장애로 ISP 경유 시 `12004`(LDP) + `14007`(VPN) 두 레이블, PHP로 마지막 홉 전 바깥 레이블 제거 | [mpls-label-path](scenarios/mpls-label-path.md) |
+
+## 프로토콜 패킷 캡처(Wireshark)
+
+| 프로토콜 | 확인한 것 | 문서 |
+|---|---|---|
+| OSPF | Hello 10초, Dead 40초, point-to-point(DR 없음). HQ Area `0.0.0.1`, DC Area `0.0.0.0`. 이웃 수립(Hello, DBD, LSR, LSU, LSAck) | [HQ](hq/core/ospf.md), [DC](dc/core/ospf.md) |
+| eBGP | OPEN(사이트 AS 65001, ISP AS 65100, Hold 9), 광고 UPDATE(`10.1.0.0/16`, `0.0.0.0/0`), 철회 UPDATE, Keepalive 3초 | [bgp](isp1/core/bgp.md) |
+| iBGP vpnv4, LDP | vpnv4 UPDATE(RD 65100:1, VPN 레이블 11007, 11006), LDP Label Mapping(PE-B Loopback 12004) | [bgp](isp1/core/bgp.md), [mpls](isp1/core/mpls.md) |
+| LACP | DC MLAG 두 스위치가 같은 Actor System ID `0e:06:2e:cc:02:b8`로 광고, BR1 LAG Active | [mlag](dc/distribution/mlag.md), [po-channel](br1/distribution/po-channel.md) |
+| MLAG 피어링 | VLAN 4094, TCP·UDP 4432, DSCP CS7 | [mlag](dc/distribution/mlag.md) |
+| VLAN, STP | 802.1Q 태그(HQ 10, DC 50, BR1 10·20), MST 이름·digest(hq, dc, br1), 인스턴스 1 루트 우선순위 4096 | [HQ](hq/distribution/stp.md), [DC](dc/distribution/stp.md), [BR1](br1/distribution/stp.md) |
+| IKE, ESP | Hub 장애 시 ESP 중단과 IKE 재협상 | [dmvpn-hub-failure](scenarios/dmvpn-hub-failure.md) |
 
 ## 트러블슈팅
 

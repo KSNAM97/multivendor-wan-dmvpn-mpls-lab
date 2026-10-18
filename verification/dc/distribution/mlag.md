@@ -94,3 +94,29 @@ DC-SW4-L3 show mlag detail
 
 링크 39 LACPDU 상세(DC-SW4-L3, 같은 Actor System ID)
 ![링크 39 LACPDU](images/mlag-wireshark-link39-lacpdu.webp)
+
+## Wireshark 확인(MLAG 피어링, VLAN 4094)
+
+- 검증일: 2026-10-19
+- 캡처 링크: `DC-SW3-L3 Ethernet6 ↔ DC-SW4-L3 Ethernet6`(peer-link Po1 멤버), 필터 `vlan.id == 4094`
+
+| 항목 | 결과 |
+|---|---|
+| VLAN | 모든 프레임이 `802.1Q ID: 4094`(MLAG 피어 전용 VLAN), 출발지·목적지 `10.2.254.1`(DC-SW3-L3) ↔ `10.2.254.2`(DC-SW4-L3). 112개 캡처 중 77개 표시 |
+| TCP 세션 | 포트 **4432**(`45040 → 4432`, `4432 → 58348` 등) ACK가 계속 오감. `[TCP Keep-Alive]`와 `Dup ACK`도 섞여 보임 |
+| 데이터 TCP | `4432 → 58348 [PSH, ACK]` Len=9(프레임 72), 약 4초 간격(20.02, 24.02, 28.03초). 페이로드 `4040daaced74f041f2` |
+| UDP | `4432 → 4432` Len=79(프레임 74), 약 4초 간격(20.05, 24.01, 28.02초, 직전 프레임과 4.04초 간격). 페이로드 79바이트(`02247215924e2000756470486561727…`) |
+| IP/QoS | TTL 255, `DSCP: CS7`(제어 트래픽 최우선), 802.1Q Priority 7, Don't fragment, DC-SW3-L3 MAC `0c:06:2e:cc:02:b8`(MLAG system-id와 같은 값 계열) |
+
+- MLAG 피어링이 별도 VLAN 4094와 TCP·UDP 4432로 이루어지고, 제어 트래픽이 CS7, Priority 7로 표시되어 QoS 정책(`cm-control`이 `cs6`을 분류)과 별개의 최우선 등급으로 전송됨.
+- Arista MLAG 프로토콜은 Wireshark가 해석하지 못해(`Data`로 표시) 페이로드 의미는 확인하지 못함. UDP 4초 주기는 피어 하트비트로 추정(확인하지 못함).
+- `Dup ACK`와 `Keep-Alive`가 보이는 원인은 확인하지 못함.
+
+피어 VLAN 목록
+![MLAG 피어 VLAN 4094](images/mlag-wireshark-peer-vlan4094.webp)
+
+UDP 4432(프레임 74)
+![UDP 4432](images/mlag-wireshark-peer-udp4432.webp)
+
+TCP 4432 데이터(프레임 72)
+![TCP 4432](images/mlag-wireshark-peer-tcp4432.webp)

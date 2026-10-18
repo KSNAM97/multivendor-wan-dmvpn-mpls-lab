@@ -23,3 +23,24 @@ DC-R3 OSPF
 DC-R4 OSPF
 ![DC-R4 OSPF](images/Pasted%20image%2020261012191853.png)
 
+## Wireshark 확인(OSPF Hello, Area 0)
+
+- 검증일: 2026-10-19
+- 캡처 링크: DC 라우터 간 링크(`10.2.0.52/30`, 양쪽 `10.2.0.53`, `10.2.0.54`), 필터 `ospf.msg.hello`
+
+| 항목 | 값 |
+|---|---|
+| 전송 | `10.2.0.54`가 1.69, 11.65, 20.68초(약 9~10초 간격), `10.2.0.53`이 3.52, 12.83, 22.11초. 목적지 `224.0.0.5` |
+| Source OSPF Router | `10.10.10.4`(DC-R4) |
+| Area ID | `0.0.0.0 (Backbone)` |
+| Version / Type | 2 / Hello Packet, Auth Type Null |
+| Network Mask | `255.255.255.252`(`/30`) |
+| Hello Interval / Dead Interval | 10초 / 40초 |
+| Router Priority / DR / BDR | 1 / `0.0.0.0` / `0.0.0.0`(point-to-point) |
+| Active Neighbor | `10.10.10.3`(DC-R3) |
+
+- DC가 Area 0(백본)임이 `Area ID: 0.0.0.0 (Backbone)`으로 확인됨(HQ는 Area 1). 타이머와 point-to-point 특성은 HQ와 같음.
+
+![DC OSPF Hello 목록](images/ospf-wireshark-hello-list.webp)
+
+![DC OSPF Hello 상세](images/ospf-wireshark-hello-detail.webp)

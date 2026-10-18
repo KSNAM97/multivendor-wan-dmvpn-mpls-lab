@@ -66,7 +66,7 @@ BR1-PC1 `udhcpc -i eth0`
 | 613 | `10.3.10.1` / `IETF-VRRP-VRID_0a`(`00:00:5e:00:01:0a`, VRRP 가상 MAC) | `10.3.10.1` | `10.3.10.153` |
 | 619 | `10.3.10.3` / `HewlettPacka_ff:26:f3`(SW-2 포트 MAC) | `10.3.10.3` | `10.3.10.217` |
 
-- 세 Offer 모두 옵션 구성이 같음: 53(Message Type), 54(Server Identifier), 51(Lease Time), 58(Renewal), 59(Rebinding), 1(Subnet Mask `255.255.255.0`), 28(Broadcast `10.3.10.255`), 3(Router), 15(Domain Name), 6(Domain Name Server). 옵션 3, 6, 15의 값은 펼친 화면이 없어 확인하지 못함.
+- 세 Offer 모두 옵션 구성이 같음: 53(Message Type), 54(Server Identifier), 51(Lease Time), 58(Renewal), 59(Rebinding), 1(Subnet Mask `255.255.255.0`), 28(Broadcast `10.3.10.255`), 3(Router), 15(Domain Name), 6(Domain Name Server). BR1(Aruba) Offer의 옵션 값: Router `10.3.10.1`(VRRP VIP), Domain Name `lab.local`, Domain Name Server `10.2.50.10`과 `10.2.50.11`(옵션 순서는 3, 15, 6).
 - VRRP Master(SW-1)가 VIP 주소로도 서버 역할을 해서, 장애 전환 후에는 SW-2가 VIP로 응답하게 되고 Server Identifier `10.3.10.1`은 유지될 것으로 예상되나 실측하지 않음.
 
 Offer 프레임 611(`10.3.10.2`)
@@ -77,3 +77,6 @@ Offer 프레임 613(VIP `10.3.10.1`, VRRP 가상 MAC)
 
 Offer 프레임 619(`10.3.10.3`)
 ![Offer SW-2](images/dhcp-offer-sw2-detail.webp)
+
+Offer 옵션 3, 15, 6 펼친 화면(프레임 611)
+![BR1 Offer 옵션](images/dhcp-offer-options.webp)

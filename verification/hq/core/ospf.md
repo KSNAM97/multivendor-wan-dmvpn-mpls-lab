@@ -41,10 +41,28 @@ HQ-R2 OSPF
 | 25.44, 25.56 | Hello(94바이트) | 수립 후 Hello 재개(이후 약 10초 간격) |
 
 - Hello 간격: 이웃 수립 후 `10.1.0.17`의 Hello가 41.99, 51.75, 61.35, 70.88초(약 9.5~10초 간격), `10.1.0.18`이 42.37, 52.07, 61.98초로 설계의 10초와 일치(아래 첫 번째 캡처).
-- 이웃 상태 `FULL`은 패킷이 아니라 `show ip ospf neighbor` 출력(위 표)으로 확인. Hello 패킷 안의 Area, Dead 간격(40초), DR 값은 아직 펼친 화면이 없음.
+- 이웃 상태 `FULL`은 패킷이 아니라 `show ip ospf neighbor` 출력(위 표)으로 확인. Hello 패킷 안의 값은 아래 "Hello 패킷 상세" 참조.
 
 Wireshark(`ospf`): 이웃 수립 과정(Hello → DBD → LSR → LSU → LSAck)
 ![HQ OSPF 이웃 수립](images/ospf-wireshark-adjacency.webp)
 
 Wireshark(`ospf`): 수립 후 Hello 10초 간격, LS Update, LS Acknowledge
 ![HQ OSPF Hello, LSU](images/ospf-wireshark-hello-lsu.webp)
+
+### Hello 패킷 상세(프레임 863, HQ-R2 `10.1.0.18` → `224.0.0.5`)
+
+| 항목 | 값 | 의미 |
+|---|---|---|
+| Network Mask | `255.255.255.252` | `/30` 링크 |
+| Hello Interval | 10초 | 설계와 일치 |
+| Router Dead Interval | 40초 | Hello의 4배, 설계와 일치 |
+| Router Priority | 1 | 기본값 |
+| Designated Router / Backup DR | `0.0.0.0` / `0.0.0.0` | DR 선출이 없는 point-to-point 네트워크 |
+| Active Neighbor | `11.11.11.1`(HQ-R1) | HQ-R2가 HQ-R1을 이웃으로 인식(양방향) |
+| Options | `0x12`, (L) LLS Data block, (E) External Routing | |
+| Router ID, Area ID(패킷 바이트에서 해석) | `11.11.11.2`(`0b 0b 0b 02`), `0.0.0.1`(`00 00 00 01`) | HQ-R2, Area 1 |
+
+- Area ID는 `OSPF Header`를 펼친 화면이 아니라 패킷 바이트에서 읽은 값.
+
+Wireshark(`ospf.msg.hello`): Hello 패킷 상세
+![HQ OSPF Hello 상세](images/ospf-wireshark-hello-detail.webp)

@@ -56,3 +56,23 @@ HQ-PC1 Wireshark(`dhcp`): Discover, Offer, Request, ACK
 
 HQ-PC1 `udhcpc -i eth0`
 ![HQ-PC1 udhcpc](images/dhcp-udhcpc-hq-pc1.webp)
+
+### Offer 패킷 상세(프레임 23, HQ-SW-2 `10.1.10.2` → `10.1.10.100`)와 Aruba 비교
+
+| 항목 | HQ(Cisco, 프레임 23) | BR1(Aruba, 프레임 611) |
+|---|---|---|
+| Offer 길이 | 343바이트 | 349바이트 |
+| Next server IP address | `0.0.0.0` | 서버 주소(`10.3.10.2`) |
+| 옵션 구성과 순서 | 53, 54, 51, 58, 59, 1, 3, 6, 15 | 53, 54, 51, 58, 59, 1, **28**, 3, **15, 6** |
+| Option 28(Broadcast Address) | 없음 | 있음(`10.3.10.255`) |
+| Server Identifier(54) | `10.1.10.2` | `10.3.10.2` |
+| Subnet Mask(1) | `255.255.255.0` | `255.255.255.0` |
+
+- Cisco와 Aruba 모두 게이트웨이(3), DNS(6), 도메인(15)을 Offer로 전달함. HQ(Cisco)의 값: Router `10.1.10.1`, Domain Name Server `10.2.50.10`과 `10.2.50.11`, Domain Name `lab.local`(옵션 순서는 3, 6, 15).
+- 같은 설계 값을 주지만 벤더별로 옵션 구성(Aruba는 Option 28 포함)과 Next server 필드가 다름.
+
+Offer 프레임 23(HQ-SW-2, Cisco)
+![HQ Offer 상세](images/dhcp-offer-detail.webp)
+
+Offer 옵션 3, 6, 15 펼친 화면(프레임 23)
+![HQ Offer 옵션](images/dhcp-offer-options.webp)

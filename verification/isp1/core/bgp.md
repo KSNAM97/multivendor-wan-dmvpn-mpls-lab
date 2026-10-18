@@ -159,7 +159,7 @@ ISP-1-PE-B vpnv4 all 10.1.0.0 상세
 | 24.91 이후 | 양방향 | KEEPALIVE | 약 3초 간격 재개 |
 
 - OPEN 이후 UPDATE 교환 완료까지 약 1.3초(22.27 ~ 23.56초).
-- OPEN 안의 사이트 AS(`65001`), Hold Time(9), UPDATE의 NLRI(`10.1.0.0/16`, 기본 경로)는 패킷을 펼친 화면이 없어 아직 확인하지 못함. OPEN 이전 `NOTIFICATION`도 이 화면에는 없음.
+- 펼친 화면은 아래 "OPEN, UPDATE 상세" 참조. 광고 UPDATE의 펼친 화면은 아래 "광고 UPDATE 상세" 참조. OPEN 이전 `NOTIFICATION`도 이 화면에는 없음.
 
 Wireshark(`bgp`): KEEPALIVE 3초 간격, OPEN, UPDATE
 ![사이트 eBGP 세션 수립](images/bgp-wireshark-ebgp-session.webp)
@@ -199,3 +199,43 @@ Wireshark(`bgp.type == 2`): vpnv4 UPDATE
 
 Wireshark 패킷 바이트(프레임 257): vpnv4 UPDATE
 ![iBGP UPDATE 패킷 바이트](images/bgp-wireshark-ibgp-update-bytes.webp)
+
+### OPEN, UPDATE 상세(PE-A → HQ-R1)
+
+| 프레임 | 시각(초) | 내용 |
+|---|---|---|
+| 40 | 23.649 | PE-A(`100.1.11.2`) → HQ-R1(`100.1.11.1`) **OPEN**(107바이트): Version 4, **My AS 65100**, **Hold Time 9**, BGP Identifier `100.100.100.1`(PE-A Loopback), Optional Parameters Length 24(Capability) |
+| 39 | 23.6 | HQ-R1(`100.1.11.1`) → PE-A(`100.1.11.2`) **OPEN**(107바이트): Version 4, **My AS 65001**, **Hold Time 9**, BGP Identifier `11.11.11.1`(HQ-R1 Loopback), Optional Parameters Length 24(Capability) |
+| 48 | 25.285 | PE-A → HQ-R1 **UPDATE**(89바이트): Withdrawn Routes Length 12, Total Path Attribute Length 0. 경로 광고가 아니라 **철회만 담은 UPDATE**. 철회 prefix는 `10.3.0.0/16`, `10.2.0.0/16`, `10.4.0.0/16`, `10.1.0.0/16`(사이트 prefix 4개 전체) |
+
+- 양쪽 OPEN으로 사이트 AS `65001`(HQ), ISP AS `65100`, Hold Time 9(설계 값)가 확정됨. 사이트 eBGP는 서로 다른 AS 사이의 세션(eBGP)임을 보여 줌.
+- 프레임 48은 세션 초기화 직후 PE-A가 사이트 prefix 4개를 철회하는 UPDATE라서(재광고 전 단계로 보이나 확인하지 못함) `10.1.0.0/16`이나 기본 경로를 광고하는 UPDATE(앞선 목록의 105, 107바이트)는 아직 펼친 화면이 없음.
+
+PE-A OPEN 상세(프레임 40)
+![PE-A OPEN](images/bgp-wireshark-ebgp-open-pe-a.webp)
+
+PE-A UPDATE 상세(프레임 48, 철회)
+![PE-A UPDATE 철회](images/bgp-wireshark-ebgp-update-withdraw.webp)
+
+PE-A UPDATE 철회 prefix 펼친 화면(프레임 48)
+![PE-A UPDATE 철회 prefix](images/bgp-wireshark-ebgp-update-withdraw-detail.webp)
+
+HQ-R1 OPEN 상세(프레임 39)
+![HQ-R1 OPEN](images/bgp-wireshark-ebgp-open-hq-r1.webp)
+
+### 광고 UPDATE 상세(HQ-R1 ↔ PE-A)
+
+| 프레임 | 시각(초) | 방향 | Origin | AS_PATH | NEXT_HOP | MED | NLRI |
+|---|---|---|---|---|---|---|---|
+| 42 | 22.690 | HQ-R1(`100.1.11.1`) → PE-A | IGP | **65001** | `100.1.11.1` | 0 | **`10.1.0.0/16`**(HQ 사이트 prefix) |
+| 45 | 23.172 | PE-A(`100.1.11.2`) → HQ-R1 | IGP | **65100** | `100.1.11.2` | 0 | **`0.0.0.0/0`**(기본 경로) |
+
+- 두 UPDATE 모두 Withdrawn Routes Length 0, Total Path Attribute Length 27로 철회 없이 광고만 담음. 속성은 ORIGIN(Well-known, Transitive), AS_PATH, NEXT_HOP, MULTI_EXIT_DISC.
+- eBGP라서 광고하는 쪽이 자기 AS를 AS_PATH에 넣고 NEXT_HOP이 자기 링크 주소임. HQ-R1은 사이트 prefix `10.1.0.0/16`을, PE-A(ISP)는 기본 경로 `0.0.0.0/0`을 광고하는 것이 설계(PE의 `default-information originate`, 사이트의 `network 10.x.0.0/16`)와 일치.
+- 세션 수립 순서: OPEN 교환(22.63, 22.66초) → 프레임 42(HQ-R1 광고, 22.69초) → 프레임 45(PE-A 광고, 23.17초) → 프레임 46(PE-A 철회, 23.17초).
+
+HQ-R1 UPDATE(프레임 42)
+![HQ-R1 UPDATE](images/bgp-wireshark-ebgp-update-hq-r1.webp)
+
+PE-A UPDATE(프레임 45)
+![PE-A UPDATE](images/bgp-wireshark-ebgp-update-pe-a-default.webp)
