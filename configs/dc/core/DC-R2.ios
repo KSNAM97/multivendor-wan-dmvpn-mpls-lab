@@ -56,3 +56,40 @@ int gi2/0
  ip ospf 2 area 100
  ip ospf network point-to-point
 !
+crypto isakmp policy 10
+ encryption aes 256
+ hash sha
+ authentication pre-share
+ group 5
+ lifetime 86400
+crypto isakmp key dmvpn-hub address 0.0.0.0 0.0.0.0
+crypto isakmp keepalive 10 3
+crypto ipsec transform-set ts-aes256 esp-aes 256 esp-sha-hmac
+ mode tunnel
+crypto ipsec profile dmvpn-profile
+ set transform-set ts-aes256
+ set pfs group5
+ set security-association lifetime seconds 3600
+!
+int tunnel 0
+ desc dmvpn hub
+ ip addr 172.16.0.1 255.255.255.0
+ ip mtu 1400
+ ip tcp adjust-mss 1360
+ tunnel source gi2/0
+ tunnel mode gre multipoint
+ tunnel key 100
+ ip nhrp network-id 100
+ ip nhrp holdtime 600
+ ip nhrp authentication nhrpkey1
+ ip nhrp map multicast dynamic
+ ip nhrp redirect
+ ip ospf network broadcast
+ ip ospf priority 255
+ ip ospf 10 area 0
+ tunnel protection ipsec profile dmvpn-profile shared
+ no sh
+!
+router ospf 10
+ no passive-interface tunnel 0
+!
