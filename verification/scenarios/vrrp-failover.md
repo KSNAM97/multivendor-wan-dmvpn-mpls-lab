@@ -126,3 +126,25 @@ Wireshark: SW-1 마지막 광고에서 SW-2 첫 광고로 전환(약 3.97초)
 
 복구 후 BR1-SW2-L3
 ![BR1-SW2-L3 복구](images/vrrp-br1-sw2-restored.webp)
+
+## HQ 재시험(2026-10-19, 장비 로그 기준)
+
+- HQ-SW-2 `interface vlan 10` shutdown 후 전환 시각을 장비 로그로 확인.
+
+| 장비 | 로그 시각 | 내용 |
+|---|---|---|
+| HQ-SW-2 | 00:13:56.227 | `%VRRP-6-STATECHANGE: Vl10 Grp 10 state Master -> Init` |
+| HQ-SW-3 | 00:13:56.415 | `%VRRP-6-STATECHANGE: Vl10 Grp 10 state Backup -> Master` |
+
+- 전환 시간: 약 0.19초(0.188초). 두 장비의 시계가 같은지는 확인하지 못해 장비 로그 기준 값으로만 기록.
+- Wireshark 프레임 564(331.03초): `10.1.10.3` → `224.0.0.18`, VRID 10, Priority 90, VIP `10.1.10.1`의 HQ-SW-3 광고. 직전 `10.1.10.2`의 마지막 광고 프레임은 이 재시험에서 아직 확인하지 못함.
+- 시험 전 광고 프레임 109: `10.1.10.2`, Priority 110.
+
+HQ-SW-2 로그
+![HQ-SW-2 Master에서 Init](images/vrrp-hq-retest-sw2-log.png)
+
+HQ-SW-3 로그
+![HQ-SW-3 Backup에서 Master](images/vrrp-hq-retest-sw3-log.png)
+
+Wireshark 프레임 564(HQ-SW-3 광고)
+![프레임 564](images/vrrp-hq-retest-sw3-ad.png)

@@ -6,7 +6,7 @@
 
 | 시험 | 대상 | 핵심 결과 | 문서 |
 |---|---|---|---|
-| VRRP 전환 | HQ(Cisco) | `ping` 손실 1개(Wireshark 광고 공백은 측정하지 못함) | [vrrp-failover](scenarios/vrrp-failover.md) |
+| VRRP 전환 | HQ(Cisco) | 장비 로그 기준 약 0.19초(Master → Init 00:13:56.227, Backup → Master 00:13:56.415), `ping` 손실 1개. 두 장비 시계 일치는 미확인 | [vrrp-failover](scenarios/vrrp-failover.md) |
 | VRRP 전환 | DC(Arista) | Wireshark 광고 공백 약 3.2초, `ping` 손실 5개 | [vrrp-failover](scenarios/vrrp-failover.md) |
 | VRRP 전환 | BR1(Aruba) | Wireshark 광고 공백 약 4.0초(`ping` 손실은 복구 구간 포함 값이라 제외) | [vrrp-failover](scenarios/vrrp-failover.md) |
 | EtherChannel 링크 다운 | HQ Po1 | 손실 1개 | [etherchannel-link-down](scenarios/etherchannel-link-down.md) |
