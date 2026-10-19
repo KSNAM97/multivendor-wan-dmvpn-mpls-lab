@@ -131,3 +131,31 @@ Address Message와 Label Mapping Message 여러 개가 한 TCP 세그먼트에 �
 
 Wireshark 패킷 바이트(프레임 83): LDP Address, Label Mapping
 ![LDP Label Mapping 패킷 바이트](images/mpls-wireshark-ldp-mapping-bytes.webp)
+
+### LDP 메시지 펼침(프레임 30, 122, 316)
+
+같은 링크(링크 71)에서 메시지별로 펼친 화면. 앞 절의 표(Hello, Initialization, Keep Alive, Label Mapping)에 대응.
+
+| 프레임 | 시각(초) | 메시지 | 확인한 값 |
+|---|---|---|---|
+| 30 | 16.33 | Hello | UDP 646 → 646, 목적지 `224.0.0.2`, LSR ID `100.100.100.1`(PE-A), Hold Time 15, Link Hello, IPv4 Transport Address `100.100.100.1` |
+| 122 | 58.53 | Keep Alive | `100.100.100.1` → `100.100.100.2`, TCP 646 → 22428, Keep Alive Message(0x201) |
+| 316 | 136.62 | Address Message + Label Mapping 9개 | P1(`100.100.100.2`) → PE-A. 주소 `100.1.0.2`, `100.100.100.2`, `100.1.0.9`, `100.1.0.17`. 아홉 번째 Label Mapping(Message ID 0x43)의 Generic Label **12004**(0x02ee4) |
+
+- 12004는 앞 절의 패킷 바이트 해석(`100.100.100.4/32` → 12004)과 같은 값. 이 화면에서는 `FEC Element 1`을 펼치지 않아 prefix는 보이지 않고, 바이트(`2e e4`)로 일치를 확인.
+
+Wireshark(프레임 30): LDP Hello
+![LDP Hello](images/mpls-wireshark-ldp-hello.webp)
+
+Wireshark(프레임 122): LDP Keep Alive
+![LDP Keep Alive](images/mpls-wireshark-ldp-keepalive.webp)
+
+Wireshark(프레임 316): Address Message 펼침
+![LDP Address Message](images/mpls-wireshark-ldp-address.webp)
+
+Wireshark(프레임 316): Label Mapping Message 9개
+![LDP Label Mapping 목록](images/mpls-wireshark-ldp-mapping-list.webp)
+
+Wireshark(프레임 316): 아홉 번째 Label Mapping, Generic Label 12004
+![LDP Label Mapping 12004](images/mpls-wireshark-ldp-mapping-expanded.webp)
+
