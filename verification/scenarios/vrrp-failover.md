@@ -148,3 +148,24 @@ HQ-SW-3 로그
 
 Wireshark 프레임 564(HQ-SW-3 광고)
 ![프레임 564](images/vrrp-hq-retest-sw3-ad.png)
+
+### HQ 재시험 복구 구간(`no shutdown`, 장비 로그 기준)
+
+| 장비 | 로그 시각 | 내용 |
+|---|---|---|
+| HQ-SW-2 | 00:34:47.639 | Vl10 `Init -> Backup` |
+| HQ-SW-2 | 00:34:49.635, 00:34:50.634 | Vlan10 인터페이스 up, 라인 프로토콜 up |
+| HQ-SW-2 | 00:34:51.209 | Vl10 `Backup -> Master`(`preempt`로 복귀) |
+| HQ-SW-3 | 00:34:53.934 | Vl10 `Master -> Backup` |
+
+- HQ-SW-2는 Backup 진입 후 약 3.6초(47.639 ~ 51.209) 만에 Master로 복귀. HQ-SW-3이 Backup으로 내려간 시각(53.934)은 그보다 약 2.7초 뒤이며, 이 사이에 두 장비 모두 Master로 표시된 구간이 있는 것으로 로그에서 읽히나 두 장비 시계 일치는 확인하지 못함.
+- 복구 구간 HQ-PC1 `ping 10.1.10.1`: 16개 전송, 15개 응답(손실 1개, 6%), 최대 28.201 ms. 응답은 seq 0~14가 모두 성공하여 손실 1개는 마지막 전송 패킷으로 보이며(`Ctrl+C` 직전으로 추정, 확인하지 못함) 복구 중 응답 중단은 보이지 않음.
+
+HQ-SW-2 복구 로그
+![HQ-SW-2 복구 로그](images/vrrp-hq-retest-restore-sw2-log.png)
+
+HQ-SW-3 복구 로그
+![HQ-SW-3 복구 로그](images/vrrp-hq-retest-restore-sw3-log.png)
+
+복구 구간 ping 통계
+![복구 ping](images/vrrp-hq-retest-restore-ping.png)
