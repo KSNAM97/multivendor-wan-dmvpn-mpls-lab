@@ -53,7 +53,7 @@ DC ←── DMVPN Phase3 (mGRE over IPsec, Private Internet 경유) ──→ H
 ## 📁 폴더 구조
 
 ```
-network-project/
+multivendor-wan-dmvpn-mpls-lab/
 ├── configs/                  사이트/계층(core, distribution, access)/장비
 │   ├── hq/
 │   │   ├── core/             HQ-R1.ios, HQ-R2.ios

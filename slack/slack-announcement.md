@@ -39,7 +39,7 @@ BR → HQ → DC 순서로 나눠서 켜고, 작업할 사이트만 기동하는
 3.5주(10/12~11/4), "완주"보다 "각자 결과물 하나씩" 우선. 취업활동으로 잠시 손 놓아도 괜찮습니다.
 
 ■ 문서·링크
-- GitHub: KSNAM97/network-project
+- GitHub: KSNAM97/multivendor-wan-dmvpn-mpls-lab
   README.md, docs/README.md(문서 목차), docs/network-project-final.md(전체 설계), docs/schedule.md(일정), verification/(장비 검증 기록)
 - Jira: KAN 프로젝트 (티켓 목록은 jira/jira-tickets-3person.csv 기준으로 등록)
 #team-net-cloud #team-policy #dev-issues

@@ -4,7 +4,7 @@
 프로젝트를 시작할 수 있도록 저장소, 티켓, 채널을 모두 준비했습니다. 각자 아래 "할 일"만 하면 바로 작업 가능합니다.
 
 ■ 1. GitHub
-- 저장소: KSNAM97/network-project
+- 저장소: KSNAM97/multivendor-wan-dmvpn-mpls-lab
 - README.md: 구조, 단계, 설계 요약 / docs/: 전체 설계와 일정
 - 컨피그 저장: configs/<사이트>/<장비명>.cfg
 - 브랜치: feature/<역할>-<내용>, PR 후 본인 검토를 거쳐 main에 merge
