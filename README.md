@@ -1,4 +1,4 @@
-# 🏆 멀티벤더 하이브리드 네트워크 구축
+﻿# 🏆 멀티벤더 하이브리드 네트워크 구축
 
 [![Cisco](https://img.shields.io/badge/Cisco-IOS-blue?logo=cisco)](https://github.com/KSNAM97)
 [![Arista](https://img.shields.io/badge/Arista-vEOS--lab-orange)](https://github.com/KSNAM97)
@@ -20,7 +20,6 @@
 | 시뮬레이터 | GNS3 (Cisco 7200 / IOU, Arista vEOS-lab, Aruba AOS-CX) |
 | 일정 | 실제 2주(2026-10-12 - 10-23, 평일 10일), 계획 3.5주(11-04까지) 대비 단축, 1인 체제 (남기석) |
 | 검증 | 이중화 장애 실측 (FHRP, EtherChannel, ISP 장애, DMVPN Hub 장애), 트러블슈팅 로그 |
-| 발표 자료 | [PDF 보기(68장)](ppt/%EC%B5%9C%EC%A2%85/%EB%A9%80%ED%8B%B0%EB%B2%A4%EB%8D%94_%ED%95%98%EC%9D%B4%EB%B8%8C%EB%A6%AC%EB%93%9C_WAN_%EA%B5%AC%EC%B6%95_%EB%82%A8%EA%B8%B0%EC%84%9D_261020.pdf) · [PPTX](ppt/%EC%B5%9C%EC%A2%85/%EB%A9%80%ED%8B%B0%EB%B2%A4%EB%8D%94_%ED%95%98%EC%9D%B4%EB%B8%8C%EB%A6%AC%EB%93%9C_WAN_%EA%B5%AC%EC%B6%95_%EB%82%A8%EA%B8%B0%EC%84%9D_261020.pptx) |
 
 ---
 
